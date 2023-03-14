@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load generic %}
+{% block page_content %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'countrycodepicker/build/css/intlTelInput.css' %}">
+{% endblock %}
+
+<div id="kt_app_content" class="app-content flex-column-fluid">
+	<!--begin::Content container-->
+	<div id="kt_app_content_container" class="app-container container-xxl">
+		<!--begin::details View-->
+		<div class="card mt-10 mb-2 mb-xl-10" id="kt_profile_details_view">
+			{% include 'includes/generic_form.html' with form=form form_heading='Edit Profile' button_text="Save" %}
+		</div>
+		<!--end::details View-->
+	</div>
+	<!--end::Content container-->
+</div>
+
+{% endblock %}
+
+{% block extra_script %}
+	<script src="{% static 'countrycodepicker/build/js/intlTelInput.min.js' %}"></script>
+	<script src="{% static 'countrycodepicker/build/js/intlTelInput-jquery.min.js' %}"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBa4bVgGOSF1kObphcLDecXCRwVS3E9MGo&libraries=places,geometry,drawing&callback=initMap" async defer></script>
+
+	<script>
+		// Vanilla Javascript
+		var place;
+		var input = document.querySelector("#id_contact");
+		var country;
+
+		if($("#id_country_code").val() == "+92"){
+			country = 'pk';
+		}
+		else{
+			country = 'ae';
+		}
+
+		window.intlTelInput(input, ({initialCountry : country, onlyCountries: ['ae', 'pk'], separateDialCode: true}));
+		
+		input.addEventListener("countrychange", function() {
+			// do something with iti.getSelectedCountryData()
+			var countryCode = $(".iti__selected-flag").children().eq(1).html();
+			$("#id_country_code").val(countryCode)
+		});
+
+		$('input[name="i_subcategory"]').on('change', function(e){
+			e.preventDefault();
+			if(this.checked){
+				$('input[name="i_subcategory"]').not(this).prop('required', false);
+			}
+		})
+
+		function initMap() {
+			var input = document.getElementById('id_address');
+			var autocomplete = new google.maps.places.Autocomplete(input);
+			autocomplete.setComponentRestrictions({'country': ['AE']});
+			autocomplete.addListener('place_changed', function() {
+				place = autocomplete.getPlace();
+				console.log(place.geometry.location.lat())
+				console.log(typeof(place.geometry.location.lat()))
+				document.getElementById("id_lat").value = place.geometry.location.lat();
+				document.getElementById("id_long").value = place.geometry.location.lng();
+			})
+		}
+		
+		var defaultThemeMode = "light"; var themeMode; if (document.documentElement) { if (document.documentElement.hasAttribute("data-theme-mode")) { themeMode = document.documentElement.getAttribute("data-theme-mode"); } else { if (localStorage.getItem("data-theme") !== null) { themeMode = localStorage.getItem("data-theme"); } else { themeMode = defaultThemeMode; } } if (themeMode === "system") { themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; } document.documentElement.setAttribute("data-theme", themeMode); }
+	</script>
+{% endblock %}

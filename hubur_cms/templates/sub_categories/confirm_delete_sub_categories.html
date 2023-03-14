@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<!-- 
+<div class="row">
+    <div class="col-12">
+        <div class="iq-card">
+            <div class="iq-card-header">
+                <h4>Delete <em><strong>"{{ object.name }}"</strong></em></h4>
+            </div>
+            <form method="post" enctype="multipart/form-data">
+                <div class="iq-card-body">
+                    {% csrf_token %}
+                    <p>Are you sure you want to delete "{{ object.name }}"?</p>
+                </div>
+                <div class="card-footer text-right">
+                    <a href="{{ RETURN_URL }}" class="btn btn-primary">Back</a>
+                    <input type="submit" value="delete" class="btn btn-danger">
+                </div>
+            </form>
+        </div>
+    </div>
+</div> -->
+
+
+<div id="kt_app_content" class="app-content flex-column-fluid">
+	<!--begin::Content container-->
+	<div id="kt_app_content_container" class="app-container container-xxl">
+		<!--begin::details View-->
+		<div class="card mt-10 mb-2 mb-xl-10" id="kt_profile_details_view">
+			{% include "includes/confirm_delete.html" %}
+		</div>
+		<!--end::details View-->
+	</div>
+	<!--end::Content container-->
+</div>
+
+{% endblock %}

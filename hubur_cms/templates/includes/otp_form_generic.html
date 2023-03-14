@@ -1,0 +1,77 @@
+{% load generic %}
+{% load static %}
+
+<style>
+  .digit-group input {
+    width: 80px;
+    height: 80px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 200;
+    color: black;
+    margin: 0 2px;
+    border: 1px solid #dadce6;
+    box-sizing: border-box;
+    border-radius: 6px;
+    margin-right: 20px;
+    outline: none;
+  }
+
+  .digit-group input:focus-visible {
+      border: 1px solid #dadce6;
+      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+      outline: none;
+  }
+
+  .text-gray-500 {
+    padding: 0px 80px;
+  }
+
+</style>
+
+<!--begin::Form-->
+<form class="form w-100 digit-group" id="otpForm" method="POST" data-group-name="digits" data-autosubmit="false" accept-charset="utf-8" autocomplete="off">
+  {% csrf_token %}
+  <!--begin::Heading-->
+  <div class="text-center mb-11">
+    {% if form_heading %}
+      <!--begin::Title-->
+      <h1 class="text-dark fw-bolder mb-3">{{ form_heading }}</h1>
+      <!--end::Title-->
+    {% endif %}
+
+    {% if form_sub_heading %}
+      <!--begin::Subtitle-->
+      <div class="text-gray-500 fw-semibold fs-6">{{ form_sub_heading }}</div>
+      <!--end::Subtitle=-->
+    {% endif %}
+  </div>
+
+  <div class="row text-center">
+    <div class="col-sm-12 col-md-12">
+      <input type="text" id="digit-1" name="digit-1" data-next="digit-2" />
+      <input type="text" id="digit-2" name="digit-2" data-next="digit-3" data-previous="digit-1" />
+      <input type="text" id="digit-3" name="digit-3" data-next="digit-4" data-previous="digit-2" />
+      <input type="text" id="digit-4" name="digit-4" data-previous="digit-3" /> 
+      <input type="hidden" id="otp_code" name="otp_code"/> 
+    </div>
+  </div> 
+
+  {% if error %}
+  <div class="text-center mt-2" style="color: red;">
+    {{ error }}
+  </div>
+  {% endif %}
+
+  <!--begin::Submit button-->
+  <div class="d-grid mt-2">
+     
+  </div>
+  <!--end::Submit button-->
+</form>
+<!--end::Form-->
+
+<script>
+  
+</script>

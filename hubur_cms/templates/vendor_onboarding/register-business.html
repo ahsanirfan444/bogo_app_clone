@@ -1,0 +1,136 @@
+{% load static %}
+{% load generic %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Hubur | Sign Up</title>
+    <meta charset="utf-8" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="" />
+    <meta property="og:title" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:site_name" content="" />
+    <link rel="canonical" href="" />
+    <link rel="shortcut icon" href="{% static 'assets/media/logos/favicon.png' %}" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+    <link href="{% static 'assets/plugins/global/plugins.bundle.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'assets/css/style.bundle.css' %}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{% static 'countrycodepicker/build/css/intlTelInput.css' %}">
+
+</head>
+
+<body id="kt_body" class="app-blank app-blank bgi-size-initial bgi-position-center bgi-no-repeat">
+
+    <!--begin::Root-->
+    <div class="d-flex flex-column flex-root" id="kt_app_root">
+        <!--begin::Page bg image-->
+        <style>
+            body {
+                background-image: url('../../static/assets/media/auth/bg7.jpg');
+            }
+
+            [data-theme="dark"] body {
+                background-image: url('../../static/assets/media/auth/bg4-dark.jpg');
+            }
+
+            /* #id_i_subcategory{
+                display: none;
+            } */
+        </style>
+        <!--end::Page bg image-->
+        <!--begin::Authentication - Sign-in -->
+        <div class="d-flex flex-column flex-column-fluid flex-lg-row">
+            <!--begin::Aside-->
+            <div class="d-flex flex-center w-lg-50 pt-15 pt-lg-0 px-10">
+                <!--begin::Aside-->
+                <div class="d-flex flex-center flex-lg-start flex-column">
+                    <!--begin::Logo-->
+                    <a href="#" class="mb-7">
+                        <img alt="Logo" src="{% static 'assets/media/logos/logo.png' %}" />
+                    </a>
+                    <!--end::Logo-->
+                    <!--begin::Title-->
+                    <h2 class="text-white fw-normal m-0">Treat yourself with our biggest offers ever</h2>
+                    <!--end::Title-->
+                </div>
+                <!--begin::Aside-->
+            </div>
+            <!--begin::Aside-->
+            <!--begin::Body-->
+            <div class="d-flex flex-center w-lg-55 p-10">
+                <!--begin::Card-->
+                <div class="card rounded-3 w-md-750px">
+                    <!--begin::Card body-->
+                    <div class="card-body p-10 p-lg-20">
+                        {% include 'includes/register_form_generic.html' with form=form form_heading='Claim Your Business' form_sub_heading='Please provide all required details to claim your business with us' button_text="Submit" %}
+                    </div>
+                    <!--end::Card body-->
+                </div>
+                <!--end::Card-->
+            </div>
+            <!--end::Body-->
+        </div>
+        <!--end::Authentication - Sign-in-->
+    </div>
+    <!--end::Root-->
+    <!--begin::Javascript-->
+    <script>var hostUrl = "assets/";</script>
+    <!--begin::Global Javascript Bundle(mandatory for all pages)-->
+    <script src="{% static 'assets/plugins/global/plugins.bundle.js' %}"></script>
+    <script src="{% static 'assets/js/scripts.bundle.js' %}"></script>
+    <!--end::Global Javascript Bundle-->
+    <!--begin::Custom Javascript(used for this page only)-->
+    <script src="{% static 'assets/js/custom/authentication/sign-in/general.js' %}"></script>
+    <!-- Theme Custom -->
+    <script src="{% static 'countrycodepicker/build/js/intlTelInput.min.js' %}"></script>
+    <script src="{% static 'countrycodepicker/build/js/intlTelInput-jquery.min.js' %}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBa4bVgGOSF1kObphcLDecXCRwVS3E9MGo&libraries=places,geometry,drawing&callback=initMap" async defer></script>
+    <!--end::Custom Javascript-->
+    <!--end::Javascript-->
+
+    <script>
+        // Vanilla Javascript
+        var place;
+        var input = document.querySelector("#id_contact");
+
+        window.intlTelInput(input, ({initialCountry : 'ae', onlyCountries: ['ae'], separateDialCode: true}));
+        
+        input.addEventListener("countrychange", function() {
+            // do something with iti.getSelectedCountryData()
+            var countryCode = $(".iti__selected-flag").children().eq(1).html();
+            $("#id_country_code").val(countryCode)
+        });
+
+        $('input[name="i_subcategory"]').on('change', function(e){
+            e.preventDefault();
+            if(this.checked){
+                $('input[name="i_subcategory"]').not(this).prop('required', false);
+            }
+        })
+
+        function initMap() {
+            var input = document.getElementById('id_address');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+            autocomplete.setComponentRestrictions({'country': ['AE']});
+            autocomplete.addListener('place_changed', function() {
+                place = autocomplete.getPlace();
+                console.log(place.geometry.location.lat())
+                console.log(typeof(place.geometry.location.lat()))
+                document.getElementById("id_lat").value = place.geometry.location.lat();
+                document.getElementById("id_long").value = place.geometry.location.lng();
+            })
+        }
+        
+        var defaultThemeMode = "light"; var themeMode; if (document.documentElement) { if (document.documentElement.hasAttribute("data-theme-mode")) { themeMode = document.documentElement.getAttribute("data-theme-mode"); } else { if (localStorage.getItem("data-theme") !== null) { themeMode = localStorage.getItem("data-theme"); } else { themeMode = defaultThemeMode; } } if (themeMode === "system") { themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; } document.documentElement.setAttribute("data-theme", themeMode); }
+    </script>
+
+</body>
+<!--end::Body-->
+
+</html>
