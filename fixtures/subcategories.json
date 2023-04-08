@@ -1,0 +1,446 @@
+[
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 1,
+  "fields": {
+    "name": "Bakery",
+    "image": "category_images/bakery.jpg",
+    "i_category": 1,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.460Z",
+    "updated_at": "2023-03-20T13:00:07.707Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 2,
+  "fields": {
+    "name": "Bar",
+    "image": "category_images/bar.jfif",
+    "i_category": 1,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.467Z",
+    "updated_at": "2023-03-20T13:00:02.749Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 3,
+  "fields": {
+    "name": "Cafe",
+    "image": "category_images/cafe.jpg",
+    "i_category": 1,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.475Z",
+    "updated_at": "2023-03-20T12:59:23.632Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 4,
+  "fields": {
+    "name": "Casino",
+    "image": "category_images/casino.jpg",
+    "i_category": 1,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.483Z",
+    "updated_at": "2023-03-20T12:59:18.870Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 5,
+  "fields": {
+    "name": "Beverages",
+    "image": "category_images/beverages.jfif",
+    "i_category": 1,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.491Z",
+    "updated_at": "2023-03-20T12:59:09.806Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 6,
+  "fields": {
+    "name": "Beauty Salon",
+    "image": "category_images/beauty_salon.jpg",
+    "i_category": 2,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.503Z",
+    "updated_at": "2023-03-20T12:57:23.913Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 7,
+  "fields": {
+    "name": "Car Rental",
+    "image": "category_images/car_rental.jfif",
+    "i_category": 2,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.510Z",
+    "updated_at": "2023-03-20T12:54:52.763Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 8,
+  "fields": {
+    "name": "Car Repair",
+    "image": "category_images/car.jpg",
+    "i_category": 2,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.517Z",
+    "updated_at": "2023-03-20T12:54:46.915Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 9,
+  "fields": {
+    "name": "Car Wash",
+    "image": "category_images/Car_Wash.jpeg",
+    "i_category": 2,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.525Z",
+    "updated_at": "2023-03-20T12:53:20.183Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 10,
+  "fields": {
+    "name": "Electrician",
+    "image": "category_images/electriction.jfif",
+    "i_category": 2,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.533Z",
+    "updated_at": "2023-03-20T12:53:12.656Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 11,
+  "fields": {
+    "name": "Laundry",
+    "image": "category_images/laundry.jpg",
+    "i_category": 2,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.540Z",
+    "updated_at": "2023-03-20T12:53:07.822Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 12,
+  "fields": {
+    "name": "Painter",
+    "image": "category_images/painter.webp",
+    "i_category": 2,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.547Z",
+    "updated_at": "2023-03-20T12:53:02.987Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 13,
+  "fields": {
+    "name": "Plumber",
+    "image": "category_images/plumber.jfif",
+    "i_category": 2,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.554Z",
+    "updated_at": "2023-03-20T12:51:24.883Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 14,
+  "fields": {
+    "name": "Bicycle Store",
+    "image": "category_images/bicycle_store.jpg",
+    "i_category": 3,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.567Z",
+    "updated_at": "2023-03-20T12:51:19.869Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 15,
+  "fields": {
+    "name": "Book Store",
+    "image": "category_images/book_store.jpg",
+    "i_category": 3,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.573Z",
+    "updated_at": "2023-03-20T12:51:12.653Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 16,
+  "fields": {
+    "name": "Cemetery",
+    "image": "",
+    "i_category": 3,
+    "is_active": false,
+    "created_at": "2023-03-09T06:39:39.581Z",
+    "updated_at": "2023-03-20T12:51:04.469Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 17,
+  "fields": {
+    "name": "Clothing",
+    "image": "category_images/clothing_store.jpg",
+    "i_category": 3,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.589Z",
+    "updated_at": "2023-03-20T12:59:34.494Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 18,
+  "fields": {
+    "name": "Convenience Store",
+    "image": "category_images/Convenience_Store.jpeg",
+    "i_category": 3,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.596Z",
+    "updated_at": "2023-03-20T12:50:53.051Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 19,
+  "fields": {
+    "name": "Electronics",
+    "image": "category_images/electronics_store.jpg",
+    "i_category": 3,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.604Z",
+    "updated_at": "2023-03-20T12:43:46.259Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 20,
+  "fields": {
+    "name": "Furniture Store",
+    "image": "category_images/furniture_store.jpg",
+    "i_category": 3,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.612Z",
+    "updated_at": "2023-03-20T13:01:38.773Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 21,
+  "fields": {
+    "name": "Florist",
+    "image": "category_images/florist.jpg",
+    "i_category": 3,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.620Z",
+    "updated_at": "2023-03-20T13:01:19.761Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 22,
+  "fields": {
+    "name": "Hardware Store",
+    "image": "category_images/hardware_store.jpg",
+    "i_category": 3,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.628Z",
+    "updated_at": "2023-03-20T12:49:48.893Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 23,
+  "fields": {
+    "name": "Home Goods Store",
+    "image": "category_images/department_store.jpg",
+    "i_category": 3,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.636Z",
+    "updated_at": "2023-03-20T12:49:07.583Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 24,
+  "fields": {
+    "name": "Jewelry Store",
+    "image": "category_images/jewelry_store.jpg",
+    "i_category": 3,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.642Z",
+    "updated_at": "2023-03-20T12:48:54.335Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 25,
+  "fields": {
+    "name": "Pet Store",
+    "image": "category_images/pet_store.jpg",
+    "i_category": 3,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.650Z",
+    "updated_at": "2023-03-20T12:48:39.115Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 26,
+  "fields": {
+    "name": "Shoe Store",
+    "image": "category_images/shoe_store.jpg",
+    "i_category": 3,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.657Z",
+    "updated_at": "2023-03-20T12:48:20.061Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 27,
+  "fields": {
+    "name": "Shopping Mall",
+    "image": "category_images/shopping_mall.jpg",
+    "i_category": 3,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.665Z",
+    "updated_at": "2023-03-20T12:47:27.916Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 29,
+  "fields": {
+    "name": "Super Market",
+    "image": "category_images/supermarket.jpg",
+    "i_category": 3,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.681Z",
+    "updated_at": "2023-03-20T12:46:43.705Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 30,
+  "fields": {
+    "name": "Dentist",
+    "image": "category_images/dentist.jfif",
+    "i_category": 4,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.693Z",
+    "updated_at": "2023-03-20T12:46:32.432Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 31,
+  "fields": {
+    "name": "Departmental Store",
+    "image": "category_images/department_store_KylwEVD.jpg",
+    "i_category": 4,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.700Z",
+    "updated_at": "2023-03-20T12:46:05.836Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 32,
+  "fields": {
+    "name": "Doctor",
+    "image": "category_images/doctor.jpg",
+    "i_category": 4,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.708Z",
+    "updated_at": "2023-03-23T18:50:09.678Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 33,
+  "fields": {
+    "name": "Drug Store",
+    "image": "category_images/drugstore.jpg",
+    "i_category": 4,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.716Z",
+    "updated_at": "2023-03-20T12:45:42.745Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 34,
+  "fields": {
+    "name": "Hair Care",
+    "image": "category_images/hair_care.jfif",
+    "i_category": 4,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.721Z",
+    "updated_at": "2023-03-20T12:45:29.924Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 35,
+  "fields": {
+    "name": "Hospital",
+    "image": "category_images/hospital-2_xBL24EQ.jpg",
+    "i_category": 4,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.728Z",
+    "updated_at": "2023-03-20T12:45:18.509Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 36,
+  "fields": {
+    "name": "Pharmacy",
+    "image": "category_images/pharmacy.jpg",
+    "i_category": 4,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.735Z",
+    "updated_at": "2023-03-20T12:45:04.908Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 37,
+  "fields": {
+    "name": "Spa",
+    "image": "",
+    "i_category": 4,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.743Z",
+    "updated_at": "2023-03-20T12:44:44.404Z"
+  }
+},
+{
+  "model": "hubur_apis.subcategories",
+  "pk": 38,
+  "fields": {
+    "name": "Veterinary Care",
+    "image": "category_images/veterinary_care.jpg",
+    "i_category": 4,
+    "is_active": true,
+    "created_at": "2023-03-09T06:39:39.751Z",
+    "updated_at": "2023-03-20T12:44:12.089Z"
+  }
+}
+]

@@ -6,14 +6,17 @@ from hubur_apis import models
 from django.conf import settings
 import datetime
 from hubur_cms.forms.profile_form import ProfileDetailsForm, BusinessDetailsForm
+from django.contrib import messages
 
 class ProfileOverview(AuthBaseViews):
     TEMPLATE_NAME = "profile/overview.html"
 
     def get(self, request, *args, **kwargs):
+        business_id = models.Business.objects.filter(i_user=request.user).values_list('id', flat=True)
+        total_checkins = models.Checkedin.objects.filter(i_business__in=business_id).count()
         
         return self.render({
-            
+            'total_checkins': total_checkins
         })
     
 
@@ -35,16 +38,18 @@ class EditProfileDetails(AuthBaseViews):
             instance = form.save(commit=False)
             instance.username = form.cleaned_data['email'].split('@')[0]
             instance.country_code = form.cleaned_data['country_code']
-            instance.role = 2
             instance.save()
             try:
                 form.save_m2m()
             except Exception as e:
                 pass
 
+            messages.success(request, "Changes Updated Successfully")
             return self.redirect(reverse_lazy('profile_overview'))
 
-        return self.render({'form': form})
+        else:
+            messages.error(request, "Please correct the errors below")
+            return self.render({"form": form})
         
 
 @method_decorator([vendor_required], name="dispatch")
@@ -53,9 +58,11 @@ class BusinessDetails(AuthBaseViews):
 
     def get(self, request, *args, **kwargs):
         vendor_business = models.Business.objects.get(i_user=request.user)
+        total_checkins = models.Checkedin.objects.filter(i_business=vendor_business).count()
 
         return self.render({
-            'vendor_business': vendor_business
+            'vendor_business': vendor_business,
+            'total_checkins': total_checkins
         })
     
 
@@ -85,9 +92,13 @@ class EditBusinessDetails(AuthBaseViews):
             except Exception as e:
                 pass
 
+            messages.success(request, "Changes Updated Successfully")
+
             return self.redirect(reverse_lazy('business_details'))
 
-        return self.render({'form': form})
+        else:
+            messages.error(request, "Please correct the errors below")
+            return self.render({"form": form})
     
     
 @method_decorator([vendor_required], name="dispatch")
@@ -97,12 +108,27 @@ class BusinessSchedule(AuthBaseViews):
     def get(self, request, *args, **kwargs):
         vendor_business = models.Business.objects.get(i_user=request.user)
         business_schedule = models.BusinessSchedule.objects.filter(i_business=vendor_business).order_by('-i_day')
+        total_checkins = models.Checkedin.objects.filter(i_business=vendor_business).count()
 
         return self.render({
             'vendor_business': vendor_business,
-            'business_schedule': business_schedule
-            
+            'business_schedule': business_schedule,
+            'total_checkins': total_checkins
         })
+    
+    def post(self, request, *args, **kwargs):
+        schedule_id = request.POST.get('schedule_id')
+        status = request.POST.get('status')
+        status = eval(status)
+
+        models.BusinessSchedule.objects.filter(id=schedule_id).update(is_active=status)
+
+        if status:
+            messages.success(request, "This business hours have enabled successfully")
+            return self.redirect(reverse_lazy("business_schedule"))
+        else:
+            messages.success(request, "This business hours have disabled successfully")
+            return self.redirect(reverse_lazy("business_schedule"))
     
 
 @method_decorator([vendor_required], name="dispatch")
@@ -156,10 +182,32 @@ class EditBusinessSchedule(AuthBaseViews):
                 else:
                     models.BusinessSchedule.objects.create(start_time=start_time, end_time=end_time, i_business_id=vendor_business.id, i_day_id=day)
 
+            messages.success(request, "Changes Updated Successfully")
             return self.redirect(reverse_lazy('business_schedule'))
 
         else:  
             return self.render({
                 'vendor_business': vendor_business,
-                'business_schedule': business_schedule
+                'business_schedule': business_schedule,
+                'error': 'Please select atleast one business schedule'
             })
+        
+@method_decorator([vendor_required], name="dispatch")
+class BusinessCheckInDetails(AuthBaseViews):
+    TEMPLATE_NAME = "profile/check_ins.html"
+
+    def get(self, request, *args, **kwargs):
+        interest_list = []
+        business_id = models.Business.objects.filter(i_user=request.user).values_list('id', flat=True)
+        total_checkins = models.Checkedin.objects.filter(i_business__in=business_id).count()
+        all_checkins = models.Checkedin.objects.filter(i_business__in=business_id)
+        for data in all_checkins:
+            interest = models.UserInterest.objects.filter(i_user=data.i_user).values_list('i_category__name', flat=True)
+            interest_list.append(interest)
+
+        all_data = zip(all_checkins, interest_list)
+        
+        return self.render({
+            'total_checkins': total_checkins,
+            'all_data': all_data
+        })

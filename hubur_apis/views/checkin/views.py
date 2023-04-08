@@ -14,6 +14,9 @@ class CheckInAPIView(APIView):
         serializer_class = CheckinSerializer(data=request.data, context = {'user_obj':request.user})
         if serializer_class.is_valid():
             serializer_class.save()
-            return Response({'error': '', 'error_code': '', 'data': "Sucessfully Check In",'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
+            return Response({'error': [], 'error_code': '', 'data': ["Sucessfully Check In"],'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
         else:
-            return Response({'error': serializer_class.errors, 'error_code': 'HD404', 'data': "",'status':status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+            error_list = []
+            for e in serializer_class.errors.values():
+                error_list.append(e[0])
+            return Response({'error': error_list, 'error_code': '', 'data': [],'status':status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)

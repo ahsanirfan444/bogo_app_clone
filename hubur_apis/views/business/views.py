@@ -1,14 +1,16 @@
 from rest_framework.response import Response
+from core.defaults import DefualtPaginationClass
 from hubur_apis import models
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import viewsets
 from rest_framework.views import APIView
 from hubur_apis.serializers.business_serializer import (
     ClaimBusinessSerializer,BusinessListSerializer
     )
 
 class ClaimBusinessAPIView(APIView):
-
+    pagination_class = DefualtPaginationClass
+    
     def post(self, request):
         serializer_class = ClaimBusinessSerializer(data=request.data)
         if serializer_class.is_valid():
@@ -23,14 +25,38 @@ class ClaimBusinessAPIView(APIView):
                     error.append(e[0])
             return Response({'error': error, 'error_code': 'HD404', 'data': [],'status':status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
 
+class GetAllBususiness(viewsets.ModelViewSet):
 
-    def get(self, request):
-
-        busines_obj = models.Business.objects.filter(is_active=True, is_claimed=1)
-        context = {'request': request}
-        busines_serializer = BusinessListSerializer(busines_obj, context= context,many=True)
-        if busines_serializer:
-
-            return Response({'error': [], 'error_code': '', 'data': busines_serializer.data,'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
+    serializer_class = BusinessListSerializer
+    queryset = models.Business.objects.filter(is_active=True)
+    pagination_class = DefualtPaginationClass
+    
+    def list(self,request):
+        if request.user.username:
+            user_cat_list = list(models.UserInterest.objects.filter(i_user=request.user).values_list('i_category',flat=True))
+            all_business_query = models.Business.objects.filter(is_active=True, i_category_id__in=user_cat_list, i_category__is_active=True)
         else:
-            return Response({'error': ['No Business found'], 'error_code': '', 'data': {},'status':status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+            all_business_query = models.Business.objects.filter(is_active=True, i_category__is_active=True)
+        if all_business_query:
+            all_business_query = self.paginate_queryset(all_business_query)
+            serializer = BusinessListSerializer(all_business_query, many=True)
+
+            if serializer:
+                return Response({'error': [], 'error_code': '', 'data': serializer.data,'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
+            
+        return Response({'error': ['No Result Found'], 'error_code': '', 'data': [],'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
+        
+    def create(self, request, *args, **kwargs):
+        return Response({'error': ['Method is not allowed'], 'error_code': '', 'data': [],'status':status.HTTP_405_METHOD_NOT_ALLOWED}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def update(self, request, pk, *args, **kwargs):
+        return Response({'error': ['Method is not allowed'], 'error_code': '', 'data': [],'status':status.HTTP_405_METHOD_NOT_ALLOWED}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+       
+    def perform_update(self, serializer):
+       return Response({'error': ['Method is not allowed'], 'error_code': '', 'data': [],'status':status.HTTP_405_METHOD_NOT_ALLOWED}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def retrieve(self, request, pk=None):
+        return Response({'error': ['Method is not allowed'], 'error_code': '', 'data': [],'status':status.HTTP_405_METHOD_NOT_ALLOWED}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def partial_update(self, request, pk=None):
+        return Response({'error': ['Method is not allowed'], 'error_code': '', 'data': [],'status':status.HTTP_405_METHOD_NOT_ALLOWED}, status=status.HTTP_405_METHOD_NOT_ALLOWED)

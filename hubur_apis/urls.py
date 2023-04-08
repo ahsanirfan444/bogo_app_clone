@@ -15,4 +15,6 @@ urlpatterns = [
     path("overall_search/", include('hubur_apis.views.search.urls')),
     path("interest/", include('hubur_apis.views.interest.urls')),
     path("home/", include('hubur_apis.views.home.urls')),
+    path("detail/", include('hubur_apis.views.entity_details.urls')),
+    path("trending_discount/", include('hubur_apis.views.trending_discount.urls')),
 ]

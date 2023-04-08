@@ -133,8 +133,8 @@
             <div class="image_outer">
               <span class="dragBox">
                   <img id="image" src="{% if f.data.value  %}{{ f.data.value.url }}{% else %}{% static 'assets/media/images/image.png' %}{% endif %}" {% if f.data.value  %}style="width:100px;height:100px"{% endif %}>
-                  <h1>Drop your image here</h1>
-                  <input type="file" onchange="dragNdrop(event)"  ondragover="drag('id_{{ field.name }}')" ondrop="drop('id_{{ field.name }}')" name="{{ field.name }}" id="id_{{ field.name }}" {% if field.field.widget.attrs.accept %}accept="{{field.field.widget.attrs.accept}}"{% endif %} />
+                  <h1>Drop your image(s) here</h1>
+                  <input type="file" onchange="dragNdrop(event)"  ondragover="drag('id_{{ field.name }}')" ondrop="drop('id_{{ field.name }}')" name="{{ field.name }}" id="id_{{ field.name }}" {% if field.field.widget.attrs.accept %}accept="{{field.field.widget.attrs.accept}}"{% endif %} {% if field.value %}{{ field.value }}{% endif %} />
                 </span>
             </div>
           {% endfor %}
@@ -178,7 +178,7 @@
           class="form-control form-control-user" id="id_{{ field.name }}" name="{{ field.name }}"
           value="{% if field.value and field.field.widget.input_type != 'date' %}{{ field.value }}{% elif field.field.widget.input_type == 'date' and field.value %}{#{{ field.value|date:'Y-m-d' }}#}{{field.value|format_date}}{% endif %}"
           autocomplete="new-password" {% if field.field.required %} required {% endif %} {% if field.field.disabled %}
-          readonly {% endif %}>
+          disabled {% endif %} {% if field.field.disabled %} readonly {% endif %}>
 
         {% endif %}
 

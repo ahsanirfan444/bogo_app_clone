@@ -11,7 +11,7 @@
             <div class="card-header border-0 pt-5">
                 <h3 class="card-title align-items-start flex-column">
                     <span class="card-label fw-bold fs-3 mb-1">Categories</span>
-                    <span class="text-muted mt-1 fw-semibold fs-7">View your business Categories.</span>
+                    <span class="text-muted mt-1 fw-semibold fs-7">Manage and Control the Business Categories.</span>
                 </h3>
             </div>
             <!--end::Header-->
@@ -27,8 +27,11 @@
                             <!--begin::Table head-->
                             <thead>
                                 <tr class="fw-bold text-muted">
+                                    <th class="min-w-50px">S.No</th>
+                                    <th class="min-w-100px">Image</th>
                                     <th class="min-w-100px">Name</th>
                                     <th class="min-w-100px">Status</th>
+                                    <th class="min-w-100px">Actions</th>
                                 </tr>
                             </thead>
                             <!--end::Table head-->
@@ -36,6 +39,19 @@
                             <tbody>
                                 {% for category in categories_list %}
                                     <tr>
+                                        <td>
+                                            <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
+                                            <span class="fw-semibold  d-block fs-7">{{ forloop.counter }}</span>
+                                        </td>
+
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="symbol symbol-45px me-5">
+                                                    <img src="{% if category.image %}{{ category.image.url }}{% else %}{% static 'assets/media/misc/image.png' %}{% endif %}" alt="">
+                                                </div>
+                                            </div>
+                                        </td>
+
                                         <td>
                                             <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
                                             <span class="fw-semibold  d-block fs-7">{{ category.name }}</span>
@@ -50,6 +66,14 @@
                                                 <span class="fw-semibold  d-block fs-7" style="color:#f1416c">In-Active</span>
                                             </td>
                                         {% endif %}
+
+                                        <td>
+                                            <div class="justify-content-between flex-shrink-0">
+                                                <a href="{{ category.get_edit_url }}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                                                    <i data-feather="edit" data-toggle="tooltip" data-placement="top" title="Edit {{ category.name }}"></i>
+                                                </a>
+                                            </div>
+                                        </td>
                                     </tr>
                                 {% endfor %}
                             </tbody>

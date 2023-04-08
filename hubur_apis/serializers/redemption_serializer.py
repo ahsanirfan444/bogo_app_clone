@@ -12,7 +12,7 @@ class RedemptionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Redemption
-        fields = ['i_sub_categories', 'i_business', 'code']
+        fields = ['i_content', 'code']
 
     def create(self, validated_data):
         user_obj = self.context.get('user_obj')
@@ -24,10 +24,9 @@ class RedemptionSerializer(serializers.ModelSerializer):
         return validated_data
 
     def validate(self, attrs):
-        sub_categories = attrs['i_sub_categories']
-        business = attrs['i_business']
+        content = attrs['i_content']
         user_obj = self.context.get('user_obj')
-        query = Q(i_sub_categories=sub_categories, i_business=business, i_user=user_obj)
+        query = Q(i_content=content, i_user=user_obj)
         query_main = (Q(query, is_expired=False) | Q(query, is_redeemed=False, is_expired=False))
         redeem_obj = models.Redemption.objects.filter(query_main)
         if redeem_obj:

@@ -1,6 +1,7 @@
 
 from hubur_apis import models
 from rest_framework import serializers
+from datetime import datetime, timedelta, timezone
 
 
 class ImageSerializer(serializers.ModelSerializer):
@@ -57,3 +58,90 @@ class ImageSerializer(serializers.ModelSerializer):
             return value
         else:
             raise serializers.ValidationError("No Business Found")
+
+
+    def validate(self, data):
+            user_obj = self.context.get('user_obj')
+            checkin_exist = models.Story.objects.filter(i_user=user_obj,i_business=data['i_business'])
+            if checkin_exist:
+                checkin_exist = checkin_exist.order_by('-created_at').first()
+                cr_time = checkin_exist.created_at
+                t2 = cr_time + timedelta(hours=24)
+                now = datetime.now(timezone.utc)
+                if now < t2:
+                    raise serializers.ValidationError("Story already uploaded for this business")
+                else:
+                    return super().validate(data)
+                
+            else:
+                return super().validate(data)
+
+class StoriesSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(source = "i_user.first_name")
+    last_name = serializers.CharField(source = "i_user.last_name")
+    class Meta:
+        model = models.Story
+        fields = ("caption","video","image","updated_at","first_name","last_name",)
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        from django.utils.timesince import timesince
+
+        now = datetime.now(timezone.utc) 
+        story_creation_time = datetime.strptime(response['updated_at'], "%Y-%m-%dT%H:%M:%S.%f%z")
+
+        time_difference = timesince(story_creation_time, now)
+        response['created_at'] = time_difference
+        del response['updated_at']
+
+        response['user'] = response['first_name'] + " " + response['last_name']        
+        del response['first_name'],response['last_name']
+
+        return response
+        
+
+
+class StoryListSerializer(serializers.ModelSerializer):
+    category = serializers.CharField(source="i_category")
+
+    class Meta:
+        model = models.Business
+        fields = ("id","name","address","long","lat","category",)
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.get('context')
+        super().__init__(*args, **kwargs)
+
+    def get_full_url(self):
+        request = self.context.get('request')
+        url = models.Business.logo_pic.url
+        return request.build_absolute_uri(url)
+    
+    def to_representation(self, data):
+        response = super().to_representation(data)
+        story_obj = models.Story.objects.filter(i_business=data).order_by("-created_at")[:2]
+        serializer = StoriesSerializer(story_obj, many=True)
+        response['story'] =  serializer.data
+        
+
+        return response
+    
+
+class BusinessStoryListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Business
+        fields = ("id","name","address",)
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.get('context')
+        super().__init__(*args, **kwargs)
+
+    def get_full_url(self):
+        request = self.context.get('request')
+        url = models.Business.logo_pic.url
+        return request.build_absolute_uri(url)
+    
+    def to_representation(self, data):
+        response = super().to_representation(data)
+        return response

@@ -1,3 +1,4 @@
+import os
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from global_methods import file_size
@@ -62,11 +63,11 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     is_verified = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    contact = models.CharField(max_length=15)
+    contact = models.CharField(max_length=15, unique=True)
     country_code = models.CharField(max_length=5)
     dob = models.DateField(null=True, blank=True)
     address = models.CharField(max_length=225,null=True,blank=True)
-    profile_picture = models.ImageField(upload_to="profile_pictures/", null=True, blank=True)
+    profile_picture = models.ImageField(upload_to="profile_pictures/", default='profile_pictures/logo_min.png', null=True, blank=True)
     long = models.FloatField(null=True, blank=True)
     lat = models.FloatField(null=True, blank=True)
     terms_conditions = models.BooleanField(default=False)
@@ -95,6 +96,12 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
     def is_superuser(self):
         return self.role == 4
+    
+
+    class Meta:
+        db_table = 'Users'
+        ordering = ['-created_at']
+        verbose_name_plural = "Users"
 
 
 
@@ -121,14 +128,17 @@ class OtpToken(models.Model):
 
 
 class Category(models.Model):
-    image = models.ImageField(upload_to="category_images/", null=True,blank=True)
     name = models.CharField(max_length=255, unique=True)
+    image = models.ImageField(upload_to="category_images/", null=True,blank=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
+    
+    def get_edit_url(self):
+        return reverse_lazy("edit_category", kwargs={"cat_id": self.id})
 
     class Meta:
         db_table = 'categories'
@@ -137,8 +147,8 @@ class Category(models.Model):
 
 
 class SubCategories(models.Model):
-    image = models.ImageField(upload_to="category_images/", null=True,blank=True)
     name = models.CharField(max_length=255, unique=True)
+    image = models.ImageField(upload_to="category_images/", null=True,blank=True)
     i_category = models.ForeignKey(Category, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -158,34 +168,6 @@ class SubCategories(models.Model):
         ordering = ['-created_at']
         verbose_name_plural = "Sub Categories"
 
-class Content(models.Model):
-    CONTENT_TYPE_CHOICE = (	
-        (1, "Product"),	
-        (2, "Service"),	
-        (3, "Restaurant"),	
-        (4, "Health Care"),	
-    )
-    name = models.CharField(max_length=255)
-    disc = models.CharField(max_length=255, null=True, blank=True)
-    picture = models.ImageField(upload_to="product_images/")
-    content_type = models.IntegerField(choices=CONTENT_TYPE_CHOICE, default=1)
-    i_sub_category = models.ForeignKey(SubCategories, on_delete=models.CASCADE)
-    price = models.FloatField()
-    i_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f"{self.id} | {self.name} | {self.i_sub_category.name} | {self.price} | {self.i_user.get_name()} | {self.is_active}"
-
-    class Meta:
-        db_table = 'contents'
-        ordering = ['-created_at']
-        verbose_name_plural = "Contents"
-        unique_together = ('name', 'i_user',)
-
-
 class Business(models.Model):
     IS_CLAIM_CHOICE = (
         (1, "No"),
@@ -199,7 +181,7 @@ class Business(models.Model):
     lat = models.FloatField(default=0.0)
     is_active = models.BooleanField(default=True)
     website = models.URLField(max_length=255, null=True, blank=True)
-    logo_pic = models.ImageField(upload_to="business_images/")
+    logo_pic = models.ImageField(upload_to="business_images/", default='business_images/bag.png')
     i_category = models.ForeignKey(Category, on_delete=models.CASCADE)
     i_subcategory = models.ManyToManyField(SubCategories)
     i_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True)
@@ -216,9 +198,37 @@ class Business(models.Model):
 
     class Meta:
         db_table = 'business_db'
-        ordering = ['-created_at']
+        ordering = ['-updated_at']
         verbose_name_plural = "Businesses"
 
+
+class Content(models.Model):
+    CONTENT_TYPE_CHOICE = (	
+        (1, "Product"),	
+        (2, "Service"),	
+        (3, "Restaurant"),	
+        (4, "Health Care"),	
+    )
+    name = models.CharField(max_length=255)
+    disc = models.CharField(max_length=255, null=True, blank=True)
+    i_business = models.ForeignKey(Business, on_delete=models.CASCADE, null=True, blank=True)
+    picture = models.ImageField(upload_to="product_images/")
+    content_type = models.IntegerField(choices=CONTENT_TYPE_CHOICE, default=1)
+    i_sub_category = models.ManyToManyField(SubCategories)
+    price = models.FloatField()
+    i_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.id} | {self.name} | {self.i_sub_category.name} | {self.price} | {self.i_user.get_name()} | {self.is_active}"
+
+    class Meta:
+        db_table = 'contents'
+        ordering = ['-created_at']
+        verbose_name_plural = "Contents"
+        unique_together = ('name', 'i_user',)
 
 class ClaimBusiness(models.Model):
     first_name = models.CharField(max_length=255)
@@ -240,6 +250,10 @@ class ClaimBusiness(models.Model):
     def get_claim_reject_url(self):
         return reverse_lazy("reject_claim_business", kwargs={"claim_id": self.pk})
     
+    def extension(self):
+        name, extension = os.path.splitext(self.trade_license.name)
+        return extension
+    
     class Meta:
         db_table = 'claim_business_db'
         ordering = ['-created_at']
@@ -248,7 +262,14 @@ class ClaimBusiness(models.Model):
 
 
 class Images(models.Model):
-    image = models.ImageField(upload_to="images/")
+    TYPE_CHOICE = (	
+        (1, "Business_Catalog"),
+        (2, "Product"),
+        (3, "Service"),
+    )
+    type = models.IntegerField(choices=TYPE_CHOICE)
+    i_business = models.ForeignKey(Business, on_delete=models.CASCADE, null=True, blank=True)
+    image = models.ImageField(upload_to="other_images/")
     is_active = models.BooleanField(default=True)
     i_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -296,20 +317,15 @@ class BusinessSchedule(models.Model):
 
 
 class Banner(models.Model):
-    POSITION_CHOICE = (	
-        ("TOP", "Top"),	
-        ("MIDDLE", "Middle"),	
-        ("BOTTOM", "Bottom"),	
-        ("LEFT", "Left"),	
-        ("RIGHT", "Right")	
+    POSITION_CHOICE = (
+        (1, "Top"),
+        (2, "Middle"),
+        (3, "After Have You Been There"),
+        (4, "Before My Favourites"),
     )	
-    SUB_CATAGORY_TYPE_CHOICE = (	
-        ("SUB_CATAGORY","Sub Catagory"),	
-        ("IMAGE","Image")	
-    )	
-    sub_catagory_type = models.CharField(max_length=15, choices=SUB_CATAGORY_TYPE_CHOICE, null=True, blank=True)	
+    
     image = models.ImageField(upload_to="banner_images/", null=True, blank=True)	
-    position = models.CharField(choices=POSITION_CHOICE, max_length=7 , null=True, blank=True)	
+    position = models.IntegerField(choices=POSITION_CHOICE)	
     i_subcatagory = models.ForeignKey(SubCategories, on_delete=models.CASCADE, null=True, blank=True)
     i_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
@@ -318,6 +334,12 @@ class Banner(models.Model):
 
     def __str__(self):
         return f"{self.id} | {self.i_user.get_name()} | {self.is_active}"
+    
+    def get_edit_url(self):
+        return reverse_lazy("edit_banners", kwargs={"ban_id": self.id})
+    
+    def get_delete_url(self):
+        return reverse_lazy("delete_banners", kwargs={"pk": self.id})
 
     class Meta:
         db_table = 'banner_db'
@@ -326,8 +348,8 @@ class Banner(models.Model):
 
 
 class Brand(models.Model):
-    image = models.ImageField(upload_to="brand_images/")
     name = models.CharField(max_length=255, unique=True)
+    image = models.ImageField(upload_to="brand_images/")
     founded_year = models.DateField()
     founded_country = models.CharField(max_length=255)
     website = models.URLField(max_length=255, null=True, blank=True)
@@ -337,6 +359,12 @@ class Brand(models.Model):
 
     def __str__(self):
         return f"{self.id} | {self.name} | {self.is_active}"
+    
+    def get_edit_url(self):
+        return reverse_lazy("edit_brands", kwargs={"brand_id": self.id})
+    
+    def get_delete_url(self):
+        return reverse_lazy("delete_brands", kwargs={"pk": self.id})
 
     class Meta:
         db_table = 'brand_db'
@@ -382,9 +410,9 @@ class Checkedin(models.Model):
 
 
 class Redemption(models.Model):
+    
     code = models.CharField(max_length=255)
-    i_sub_categories = models.ForeignKey(SubCategories, on_delete=models.CASCADE)
-    i_business = models.ForeignKey(Business, on_delete=models.CASCADE)
+    i_content = models.ForeignKey(Content, on_delete=models.CASCADE)
     i_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     is_redeemed  = models.BooleanField(default=False)
     is_expired = models.BooleanField(default=False)
@@ -393,7 +421,7 @@ class Redemption(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.code} | {self.i_user.get_name()} | {self.i_sub_categories.name} | {self.i_business.name} | {self.is_redeemed} | {self.is_expired}"
+        return f"{self.code} | {self.i_user.get_name()} | {self.is_redeemed} | {self.is_expired}"
 
     class Meta:
         db_table = 'redemption_db'
@@ -404,6 +432,9 @@ class Redemption(models.Model):
 class PopularSearch(models.Model):
     name = models.CharField(max_length=255)
     url = models.URLField(max_length=255, null=True, blank=True)
+    type = models.CharField(max_length=20, null=True, blank=True)
+    catagory = models.CharField(max_length=20, null=True, blank=True)
+    type_id = models.IntegerField()
     count = models.IntegerField(default=1)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -431,3 +462,26 @@ class UserInterest(models.Model):
         db_table = 'user_interest_db'
         ordering = ['-created_at']
         verbose_name_plural = "User Interest"
+
+
+class TrendingDiscount(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    image = models.ImageField(upload_to="category_images/")
+    i_business = models.ManyToManyField(Business, related_name='trending_discount_business')
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.name} | {self.is_active}"
+    
+    def get_edit_url(self):
+        return reverse_lazy("edit_trending_discounts", kwargs={"discount_id": self.id})
+    
+    def get_delete_url(self):
+        return reverse_lazy("delete_trending_discounts", kwargs={"pk": self.id})
+
+    class Meta:
+        db_table = 'trending_discount_db'
+        ordering = ['-created_at']
+        verbose_name_plural = "Trending Discount"

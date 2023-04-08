@@ -62,18 +62,17 @@ class CustomAuthLogin(ObtainJSONWebToken):
                 return Response({'error': error_list, 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({'error':["contact detail is missing"] , 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
-        user_interest_list = models.UserInterest.objects.filter(i_user=user).values('id','i_category__name')    
-        response.data['user_id'] = user.id
-        response.data['first_name'] = user.first_name
-        response.data['last_name'] = user.last_name
-        response.data['email'] = user.email
-        response.data['username'] = user.username
-        response.data['is_type'] = user.is_type
-        response.data['long'] = user.long
-        response.data['lat'] = user.lat
-        response.data['interest'] = user_interest_list
+        user_interest_list = models.UserInterest.objects.filter(i_user=user).values('id','i_category__name')
 
-        return Response({'error': [], 'error_code': '', 'data': [response.data], 'status': status.HTTP_200_OK, }, status=status.HTTP_200_OK)
+        user_serializer = GetUserProfileSerializer(user)
+        user_data = user_serializer.data
+        user_data['interest'] = user_interest_list
+        dict1 = dict(user_data)
+        dict2 = dict(res)
+        response_data = {**dict2, **dict1}
+        
+        return Response({'error': [], 'error_code': '', 'data': [response_data], 'status': status.HTTP_200_OK, }, status=status.HTTP_200_OK)
+    
 class UserProfileViewSet(viewsets.ModelViewSet):
     """ Creating and updating user profile """
 
@@ -105,7 +104,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
         for e in serializer.errors.values():
             error_list.append(e[0])
 
-        return Response({'error': serializer.errors, 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': error_list, 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
 
     def perform_create(self, serializer):
 

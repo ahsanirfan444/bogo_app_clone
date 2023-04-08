@@ -109,6 +109,11 @@
     position: relative;
     display: block !important;
   }
+
+  .image_container {
+      max-width: 800px;
+      max-height: 450px;
+  }
 </style>
 
 <!--begin::Card header-->
@@ -141,9 +146,10 @@
               {% for f in field %}
                 <div class="image_outer">
                   <span class="dragBox">
-                      <img id="image" src="{% if f.data.value  %}{{ f.data.value.url }}{% else %}{% static 'assets/media/images/image.png' %}{% endif %}" {% if f.data.value  %}style="width:100px;height:100px"{% endif %}>
-                      <h1>Drop your image here</h1>
-                      <input type="file" onchange="dragNdrop(event)" ondragover="drag('id_{{ field.name }}')" ondrop="drop('id_{{ field.name }}')" name="{{ field.name }}" id="id_{{ field.name }}" {% if field.field.widget.attrs.accept %}accept="{{field.field.widget.attrs.accept}}"{% endif %} {% if field.value %}{{ field.value }}{% endif %} />
+                      <img id="image" src="{% if f.data.value  %}{{ f.data.value.url }}{% else %}{% static 'assets/media/images/image.png' %}{% endif %}" {% if f.data.value  %}style="width:100px;height:100px"{% endif %} {% if f.data.value %}value="{{ f.data.value }}"{% endif %}>
+                      <input type="hidden" id="image_value" {% if f.data.value %}value="{{ f.data.value }}"{% endif %} >
+                      <h1>Drop your image(s) here</h1>
+                      <input type="file" onchange="dragNdrop(event)" ondragover="drag('id_{{ field.name }}')" ondrop="drop('id_{{ field.name }}')" name="{{ field.name }}" id="id_{{ field.name }}" {% if field.field.widget.attrs.accept %}accept="{{field.field.widget.attrs.accept}}"{% endif %} {% if field.value %}value="{{ field.value }}"{% endif %}  />
                     </span>
                 </div>
               {% endfor %}
@@ -185,7 +191,7 @@
               class="form-control form-control-user" id="id_{{ field.name }}" name="{{ field.name }}"
               value="{% if field.value and field.field.widget.input_type != 'date' %}{{ field.value }}{% elif field.field.widget.input_type == 'date' and field.value %}{#{{ field.value|date:'Y-m-d' }}#}{{field.value|format_date}}{% endif %}"
               autocomplete="new-password" {% if field.field.required %} required {% endif %} {% if field.field.disabled %}
-              readonly {% endif %}>
+              disabled {% endif %} {% if field.field.disabled %} readonly {% endif %}>
 
             {% endif %}
 
@@ -234,6 +240,8 @@
 <!--end::Card body-->
 
 <script>
+  var cropper;
+
   function togglePassword(icon, pass_field) {
       var id = document.getElementById(pass_field);
       if (id.type === "password") {
@@ -247,11 +255,22 @@
   }
 
   function dragNdrop(event) {
+    
     var fileName = URL.createObjectURL(event.target.files[0]);
-    var Img = document.getElementById("image");
-    Img.setAttribute("src", fileName);
-    Img.style.width = '100px';
-    Img.style.height = '100px';
+    
+    $("#image_cropper_modal").modal('show');
+    
+
+    if (event.target.files && event.target.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          $('#image_cropper_container').attr('src', e.target.result)
+        };
+        reader.readAsDataURL(event.target.files[0]);
+        setTimeout(() => {
+          initCropper(event);
+        }, 1000);
+    }
   }
 
   function drag(id) {
@@ -260,6 +279,53 @@
 
   function drop(id) {
       document.getElementById(id).parentNode.className = 'dragBox';
+  }
+
+  function initCropper(event) {
+      var image = document.getElementById('image_cropper_container');
+      cropper = new Cropper(image, {
+          viewMode: 1,
+          dragMode: 'none',
+          // minCropBoxWidth: 105,
+          // minCropBoxHeight: 105,
+          // cropBoxResizable: false,
+          // aspectRatio: 16 / 9,
+          crop: function (e) {
+          }
+      });
+
+    // On crop button clicked
+    document.getElementById('crop_button').addEventListener('click', function () {
+        var imgurl = cropper.getCroppedCanvas().toDataURL();
+        var Img = document.getElementById("image");
+        Img.setAttribute("src", imgurl);
+        Img.style.width = '100px';
+        Img.style.height = '100px';
+
+        $("#image_cropper_modal").modal('hide');
+
+        cropper.getCroppedCanvas().toBlob(function (blob) {
+          // Get a reference to our file input
+          var fileInput = document.getElementById(event.target.id);
+
+          // Create a new File object
+          var myFile = new File([blob], 'image.jpg', {
+              type: 'image/jpeg',
+              lastModified: new Date(),
+          });
+
+          // Now let's create a DataTransfer to get a FileList
+          const dataTransfer = new DataTransfer();
+          dataTransfer.items.add(myFile);
+          fileInput.files = dataTransfer.files;
+        })
+
+        cropper.destroy();
+    })
+
+    $("#image_cropper_modal").on("hidden.bs.modal", function () {
+      cropper.destroy();
+    });
   }
 
 </script>

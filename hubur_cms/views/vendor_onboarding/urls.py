@@ -7,5 +7,6 @@ urlpatterns = [
     path("business-details/", views.SubmitVendorBusinessDetails.as_view(), name="submit_vendor_business_details"),
     path("business-schedule/", views.SubmitVendorBusinessSchedule.as_view(), name="submit_vendor_business_schedule"),
     path("done/", views.VendorOnboardingCompleted.as_view(), name="vendor_onboarding_completed"),
-    path("fetch-subCategories/", views.FetchSubCategories.as_view(), name="fetch_subcategories")
+    path("fetch-subCategories/", views.FetchSubCategories.as_view(), name="fetch_subcategories"),
+    path("resend-otp/", views.ResendOtp.as_view(), name="resend_otp"),
 ]

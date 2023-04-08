@@ -33,5 +33,20 @@ urlpatterns = [
     path("categories/", include("hubur_cms.views.categories.urls")),
 
     # Sub Categories Urls
-    path("Sub-categories/", include("hubur_cms.views.sub_categories.urls"))
+    path("Sub-categories/", include("hubur_cms.views.sub_categories.urls")),
+
+    # Banners
+    path("banners/", include("hubur_cms.views.banners.urls")),
+
+    # Brands
+    path("brands/", include("hubur_cms.views.brands.urls")),
+
+    # Users
+    path("users/", include("hubur_cms.views.users.urls")),
+    
+    # businesses
+    path("businesses/", include("hubur_cms.views.businesses.urls")),
+
+    # trending discounts
+    path("trending-discounts/", include("hubur_cms.views.trending_discounts.urls"))
 ]

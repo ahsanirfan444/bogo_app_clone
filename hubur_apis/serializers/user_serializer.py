@@ -44,6 +44,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         user = None
         request = self.context.get('request')
         medium = request.data.get('medium')
+        is_type = request.data.get('is_type')
 
         code_dict = global_methods.generate_otp_tokens()
         email_address = validated_data['email']
@@ -56,22 +57,25 @@ class UserProfileSerializer(serializers.ModelSerializer):
         email = validated_data.get('email')
         username = email.split('@')[0]
         validated_data['username'] = username
+        
         if medium == '1':
             user = models.UserProfile.objects.create_user(**validated_data)
             user.set_password(validated_data.get('password'))
             user.save()
-            models.OtpToken.objects.create(i_user=user,code=code_dict['sms_code'],medium = "1")
+            if is_type == '1':
+                models.OtpToken.objects.create(i_user=user,code=code_dict['sms_code'],medium = "1")
             return user
         elif medium == '2':
-            notifications.sendEmailToSingleUser(html_message, email_address, subject)
             if "gender" not in validated_data or validated_data['gender'] is None:
                 validated_data['gender'] = 1
             user = models.UserProfile.objects.create_user(**validated_data)
             user.set_password(validated_data.get('password'))
             user.save()
-            models.OtpToken.objects.create(i_user=user,code=code_dict['email_code'],medium = "2")
+            if is_type == '1':
+                notifications.sendEmailToSingleUser(html_message, email_address, subject)
+                models.OtpToken.objects.create(i_user=user,code=code_dict['email_code'],medium = "2")
             return user
-
+       
     def update(self, instance, validated_data):
         
         if "password" in validated_data:
@@ -81,12 +85,14 @@ class UserProfileSerializer(serializers.ModelSerializer):
         
         return super().update(instance, validated_data)
 
-
 class GetUserProfileSerializer(serializers.ModelSerializer):
-    
     class Meta:
         model = models.UserProfile
-        fields = ('id','first_name', 'last_name', 'username', 'email', 'contact', 'profile_picture', 'role', 'dob', 'country_code', 'address', 'is_verified')
+        fields = ('id','first_name', 'last_name', 'email', 'contact', 'profile_picture', 'dob', 'country_code', 'address', 'is_verified','long','lat','is_type','gender','terms_conditions',)
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        return response
 
 
 class EmailLoginSerializer(serializers.Serializer):

@@ -1,18 +1,26 @@
 from hubur_apis import models
 from rest_framework import serializers
 
+class HomeBrandListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+         model = models.Brand
+         fields = ("id","image","name",)
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['type'] = "brand"
+        return response
+
 class BrandListSerializer(serializers.ModelSerializer):
 
     class Meta:
          model = models.Brand
-         fields = ("id","image","name","website",)
+         fields = ("id","image","name","website",'founded_country','founded_year',)
 
-    def __init__(self, *args, **kwargs):
-        self.request = kwargs.get('context')
-        super().__init__(*args, **kwargs)
-
-    def get_full_url(self):
-        request = self.context.get('request')
-        url = models.Brand.logo.url
-        return request.build_absolute_uri(url)
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['products'] = []
+        response['type'] = "brand"
+        return response
     

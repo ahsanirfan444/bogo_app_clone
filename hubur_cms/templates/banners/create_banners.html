@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load generic %}
+{% block page_content %}
+
+<div id="kt_app_content" class="app-content flex-column-fluid">
+	<!--begin::Content container-->
+	<div id="kt_app_content_container" class="app-container container-xxl">
+		<!--begin::details View-->
+		<div class="card mt-10 mb-2 mb-xl-10" id="kt_profile_details_view">
+			{% include "includes/generic_form.html" with form=form form_heading="Create Banner" button_text="Submit" %}
+		</div>
+		<!--end::details View-->
+	</div>
+	<!--end::Content container-->
+</div>
+
+{% endblock %}
+
+{% block extra_script %}
+	<script>
+		if($("#id_position").val() == 3 || $("#id_position").val() == 4){
+			$("#id_i_subcatagory").prop('required', true);
+			$("#id_i_subcatagory").parent().parent().css('display', 'block');
+			$("#id_i_subcatagory").prev().append('<label style="color: red;">*</label>');
+			$("#id_image").prop('required', false);
+			$("#id_image").parent().parent().parent().parent().css('display', 'none');
+		}
+		else{
+			$("#id_i_subcatagory").prop('required', false);
+			$("#id_i_subcatagory").parent().parent().css('display', 'none');
+			$("#id_i_subcatagory option:selected").removeAttr('selected')
+			if($("#image_value").val() != ""){
+				$("#id_image").prop('required', false);
+			}
+			else{
+				$("#id_image").prop('required', true);
+			}
+			$("#id_image").parent().parent().prev().prev().append('<label style="color: red;">*</label>');
+			$("#id_image").parent().parent().parent().parent().css('display', 'block');
+		}
+
+		$("#id_position").on('change', function(){
+			if($(this).val() == 3 || $(this).val() == 4){
+				$("#id_i_subcatagory").prop('required', true);
+				$("#id_i_subcatagory").parent().parent().css('display', 'block');
+				$("#id_i_subcatagory").prev().find('label').remove();
+				$("#id_i_subcatagory").prev().append('<label style="color: red;">*</label>');
+				$("#id_image").prop('required', false);
+				$("#id_image").parent().parent().parent().parent().css('display', 'none');
+			}
+			else{
+				$("#id_i_subcatagory").prop('required', false);
+				$("#id_i_subcatagory").parent().parent().css('display', 'none');
+				$("#id_i_subcatagory option:selected").removeAttr('selected')
+				if($("#image_value").val() != ""){
+					$("#id_image").prop('required', false);
+				}
+				else{
+					$("#id_image").prop('required', true);
+				}
+				$("#id_image").parent().parent().prev().prev().append('<label style="color: red;">*</label>');
+				$("#id_image").parent().parent().parent().parent().css('display', 'block');
+			}
+		})
+	</script>
+{% endblock %}

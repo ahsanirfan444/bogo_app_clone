@@ -7,6 +7,7 @@ from hubur_cms.forms.vendor_onboarding_form import VendorBusinessRegistrationFor
 import random, notifications, datetime
 from django.utils.decorators import method_decorator
 from core.decorators import guest_required
+from django.contrib import messages
 
 @method_decorator([guest_required], name="dispatch")
 class SubmitVendorProfileDetails(NonAuthBaseViews):
@@ -14,7 +15,8 @@ class SubmitVendorProfileDetails(NonAuthBaseViews):
 
     def get(self, request, *args, **kwargs):
         if request.GET.get('place_id'):
-            form = VendorProfileForm()
+            context={'request': request}
+            form = VendorProfileForm(request=context)
 
             return self.render({
                 'form': form
@@ -24,7 +26,8 @@ class SubmitVendorProfileDetails(NonAuthBaseViews):
             return self.redirect(reverse_lazy('login_url'))
     
     def post(self, request, *args, **kwargs):
-        form = VendorProfileForm(request.POST, request.FILES)
+        context={'request': request}
+        form = VendorProfileForm(request.POST, request.FILES, request=context)
                 
         if form.is_valid():
             instance = form.save(commit=False)
@@ -38,6 +41,7 @@ class SubmitVendorProfileDetails(NonAuthBaseViews):
                 pass
 
             request.session['vendorId'] = instance.id
+            request.session['is_verified'] = False
             request.session['place_id'] = request.GET.get('place_id')
             otp_code = random.randint(1000,9999)
             models.OtpToken.objects.create(code=otp_code, i_user_id=instance.id, medium=1)
@@ -57,13 +61,13 @@ class VerifyVendorProfileDetails(NonAuthBaseViews):
     TEMPLATE_NAME = "vendor_onboarding/otp-verification.html"
 
     def get(self, request, *args, **kwargs):
-        if request.session.get('vendorId') and request.session.get('place_id'):
+        if request.session.get('vendorId') and request.session.get('place_id') and request.session.get('is_verified') == False:
             return self.render({})
         else:
             return self.redirect(reverse_lazy('submit_vendor_profile_details'))
     
     def post(self, request, *args, **kwargs):
-        if request.session.get('vendorId') and request.session.get('place_id'):
+        if request.session.get('vendorId') and request.session.get('place_id') and request.session.get('is_verified') == False:
             otp_code = request.POST.get('otp_code')
             vendorId = request.session.get('vendorId')
             user_instance = models.UserProfile.objects.get(id=vendorId)
@@ -73,6 +77,8 @@ class VerifyVendorProfileDetails(NonAuthBaseViews):
                 user_instance.is_verified = True
                 user_instance.save()
                 otp_instance.delete()
+
+                request.session['is_verified'] = True
 
                 return self.redirect(reverse_lazy('submit_vendor_business_details'))
             
@@ -215,9 +221,30 @@ class VendorOnboardingCompleted(NonAuthBaseViews):
                 del request.session['vendorId']
                 del request.session['businessId']
                 del request.session['place_id']  
+                del request.session['is_verified']
             except Exception:
                 pass
 
             return self.render({})
         else:
             return self.redirect(reverse_lazy('submit_vendor_profile_details'))
+        
+        
+@method_decorator([guest_required], name="dispatch")
+class ResendOtp(NonAuthBaseViews):
+
+    def get(self, request, *args, **kwargs):
+        
+        vendorId = request.session.get('vendorId')
+        user_instance = models.UserProfile.objects.get(id=vendorId)
+        otp_code = random.randint(1000,9999)
+        models.OtpToken.objects.filter(i_user_id=user_instance.id).delete()
+        models.OtpToken.objects.create(code=otp_code, i_user_id=user_instance.id, medium=1)
+        models.OtpToken.objects.create(code=otp_code, i_user_id=user_instance.id, medium=2)
+
+        subject = 'Vendor Verification'
+        html_message = "Your otp verification code is %s " % otp_code
+        notifications.sendEmailToSingleUser(html_message, user_instance.email, subject)
+        messages.success(request, "Verification code resend successfully!")
+        
+        return self.redirect(reverse_lazy('verify_vendor_profile_details'))

@@ -16,19 +16,19 @@ class ProductsAPIView(viewsets.ModelViewSet):
     search_fields = ['^name', '^i_sub_category__name']
 
     def create(self, request, *args, **kwargs):
-        return status.HTTP_405_METHOD_NOT_ALLOWED
+        return Response({'error': ['Method is not allowed'], 'error_code': '', 'data': [],'status':status.HTTP_405_METHOD_NOT_ALLOWED}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def update(self, request, pk, *args, **kwargs):
-        return status.HTTP_405_METHOD_NOT_ALLOWED
+        return Response({'error': ['Method is not allowed'], 'error_code': '', 'data': [],'status':status.HTTP_405_METHOD_NOT_ALLOWED}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
        
     def perform_update(self, serializer):
-       return status.HTTP_405_METHOD_NOT_ALLOWED
+       return Response({'error': ['Method is not allowed'], 'error_code': '', 'data': [],'status':status.HTTP_405_METHOD_NOT_ALLOWED}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def retrieve(self, request, pk=None):
-        return status.HTTP_405_METHOD_NOT_ALLOWED
+        return Response({'error': ['Method is not allowed'], 'error_code': '', 'data': [],'status':status.HTTP_405_METHOD_NOT_ALLOWED}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def partial_update(self, request, pk=None):
-        return status.HTTP_405_METHOD_NOT_ALLOWED
+        return Response({'error': ['Method is not allowed'], 'error_code': '', 'data': [],'status':status.HTTP_405_METHOD_NOT_ALLOWED}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
     
 
 

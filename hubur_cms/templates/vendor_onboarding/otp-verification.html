@@ -38,6 +38,10 @@
             [data-theme="dark"] body {
                 background-image: url('../../static/assets/media/auth/bg4-dark.jpg');
             }
+
+            #resend_code{
+                display: none;
+            }
         </style>
         <!--end::Page bg image-->
         <!--begin::Authentication - Sign-in -->
@@ -64,11 +68,20 @@
                 <div class="card rounded-3 w-md-750px">
                     <!--begin::Card body-->
                     <div class="card-body p-10 p-lg-20">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert mt-5 {% if message.tags == 'success' %} alert-success {% elif message.tags == 'info' %} alert-info{% elif message.tags == 'error' %} alert-danger {% endif %} alert-dismissible d-flex align-items-center fade show">
+                                    <i class="{% if message.tags == 'success' %} bi-check-circle-fill {% elif message.tags == 'info' %} bi-info-circle-fill {% elif message.tags == 'error' %} bi-exclamation-octagon-fill {% endif %}"></i>{{ message }}.
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        
                         {% include 'includes/otp_form_generic.html' with form=form form_heading='Verify Your Identity' form_sub_heading='Please enter the 4 digit code that has been send to your registered email and contact number' button_text="Verify" %}
                         <!--begin::Sign in-->
                         <div class="text-gray-500 text-center fw-semibold fs-6 mt-10">Didn't receive OTP code?
-                            <a href="{% url 'login_url' %}"
-                                class="link-primary">Resend Code</a>
+                            <a href="{% url 'resend_otp' %}" class="link-primary" onclick="localStorage.setItem('is_resend_otp', true); localStorage.setItem('otp_timer', 60);">Resend Code</a>
+                            <a class="link-primary" id="resend_code">Resend Code in <span id="timer"> </span> seconds</a> 
                         </div>
                         <!--end::Sign in-->
                     </div>
@@ -129,6 +142,30 @@
         });
 
         var defaultThemeMode = "light"; var themeMode; if (document.documentElement) { if (document.documentElement.hasAttribute("data-theme-mode")) { themeMode = document.documentElement.getAttribute("data-theme-mode"); } else { if (localStorage.getItem("data-theme") !== null) { themeMode = localStorage.getItem("data-theme"); } else { themeMode = defaultThemeMode; } } if (themeMode === "system") { themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; } document.documentElement.setAttribute("data-theme", themeMode); }
+    
+        
+        if (localStorage.getItem('is_resend_otp') == 'true'){
+            $("#resend_code").prev().css('display', 'none');
+            $("#resend_code").css('display', 'initial');
+    
+            var timeleft = localStorage.getItem('otp_timer');
+            var timer_value;
+            var interval = setInterval(() => {
+                timeleft --;
+                $("#timer").html(timeleft)
+                timer_value = parseInt($("#timer").html());
+                localStorage.setItem('otp_timer', timer_value);
+                if(timer_value < 1){
+                    clearInterval(interval);
+                    localStorage.removeItem('is_resend_otp')
+                    localStorage.removeItem('otp_timer');
+                    $("#resend_code").prev().css('display', 'initial');
+                    $("#resend_code").css('display', 'none');
+                }
+                
+            }, 1000);
+        }
+    
     </script>
 
 </body>

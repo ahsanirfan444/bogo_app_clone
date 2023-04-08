@@ -58,6 +58,16 @@ DATABASES = {
         'PORT': os.getenv("LOCAL_DB_PORT")
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': os.getenv("PRO_DB_NAME"),
+#         'USER': os.getenv("PRO_DB_USER"),
+#         'PASSWORD': os.getenv("PRO_DB_PASSWORD"),
+#         'HOST': os.getenv("PRO_DB_HOST"),
+#         'PORT': os.getenv("PRO_DB_PORT")
+#     }
+# }
 
 #==================================================Static Files directory==================================================
 

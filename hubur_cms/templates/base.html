@@ -26,6 +26,7 @@
     <link href="{% static 'assets/plugins/global/plugins.bundle.css' %}" rel="stylesheet" type="text/css" />
     <link href="{% static 'assets/css/style.bundle.css' %}" rel="stylesheet" type="text/css" />
     <link href="{% static 'assets/css/feather-icon.css' %}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.0.0/cropper.min.css" integrity="sha256-FeDcPwV8ZgxG1MU5L/b2i8clOmqZJKK0eyDHqrQaXxY=" crossorigin="anonymous" />
     {% block extra_css %}
     
     {% endblock %}
@@ -124,7 +125,7 @@
                                     data-kt-menu="true">
                                     <!--begin::Heading-->
                                     <div class="d-flex flex-column bgi-no-repeat rounded-top"
-                                        style="background-image:url('../../static/assets/media/misc/menu-header-bg.jpg')">
+                                        style="background-image:url('/static/assets/media/misc/menu-header-bg.jpg')">
                                         <!--begin::Title-->
                                         <h3 class="text-white fw-semibold px-9 mt-10 mb-6">Notifications
                                             <span class="fs-8 opacity-75 ps-3">0 notification(s)</span>
@@ -231,7 +232,7 @@
                                 <div class="cursor-pointer symbol symbol-35px symbol-md-40px"
                                     data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent"
                                     data-kt-menu-placement="bottom-end">
-                                    <img src="{% if request.user.profile_picture %}{{ request.user.profile_picture.url }}{% else %}{% static 'assets/media/avatars/300-1.jpg' %}{% endif %}" alt="user" />
+                                    <img src="{% if request.user.profile_picture %}{{ request.user.profile_picture.url }}{% else %}{% static 'assets/media/misc/image.png' %}{% endif %}" alt="user" />
                                 </div>
                                 <!--begin::User account menu-->
                                 <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px"
@@ -241,7 +242,7 @@
                                         <div class="menu-content d-flex align-items-center px-3">
                                             <!--begin::Avatar-->
                                             <div class="symbol symbol-50px me-5">
-                                                <img alt="Logo" src="{% if request.user.profile_picture %}{{ request.user.profile_picture.url }}{% else %}{% static 'assets/media/avatars/300-1.jpg' %}{% endif %}" />
+                                                <img alt="Logo" src="{% if request.user.profile_picture %}{{ request.user.profile_picture.url }}{% else %}{% static 'assets/media/misc/image.png' %}{% endif %}" />
                                             </div>
                                             <!--end::Avatar-->
                                             <!--begin::Username-->
@@ -413,7 +414,7 @@
                                             <!--end::Svg Icon-->
                                         </span>
                                         <span class="menu-title">{{ tab.display_name }}</span>
-                                        {% if tab.display_name == 'Claim Businesses' and new_claim_requests > 0 %}
+                                        {% if tab.display_name == 'Claim Request' and new_claim_requests > 0 %}
                                             <div style="width: 20px;height: 20px;background-color: white;border-radius: 10px;display: flex;justify-content: center;align-items: center;animation: shadow-pulse-dots 1s infinite;">
                                                 <p style="margin: 0px;color: black;font-size: 10px;">{{ new_claim_requests }}</p>
                                             </div>
@@ -502,6 +503,56 @@
     </div>
     <!--end::Scrolltop-->
 
+    <!--begin::Modal-->
+		<div class="modal fade" id="image_cropper_modal" tabindex="-1" aria-hidden="true">
+			<!--begin::Modal dialog-->
+			<div class="modal-dialog modal-dialog-centered mw-900px">
+				<!--begin::Modal content-->
+				<div class="modal-content">
+					<!--begin::Modal header-->
+					<div class="modal-header">
+						<!--begin::Modal title-->
+						<h2>Image Crop</h2>
+						<!--end::Modal title-->
+						<!--begin::Close-->
+						<div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+							<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+							<span class="svg-icon svg-icon-1">
+								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+									<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+								</svg>
+							</span>
+							<!--end::Svg Icon-->
+						</div>
+						<!--end::Close-->
+					</div>
+					<!--end::Modal header-->
+					<!--begin::Modal body-->
+					<div class="modal-body py-lg-10 px-lg-10">
+						<div class="image_container">
+                            <img id="image_cropper_container" src="#" />
+                        </div>
+                    
+                        
+                        <!--begin::crop button-->
+                        <div class="d-grid mt-10 mb-10">
+                            <button class="btn btn-primary" id="crop_button">
+                                <!--begin::Indicator label-->
+                                <span class="indicator-label">Crop</span>
+                                <!--end::Indicator label-->
+                            </button>
+                        </div>
+                        <!--end::crop button-->
+					</div>
+					<!--end::Modal body-->
+				</div>
+				<!--end::Modal content-->
+			</div>
+			<!--end::Modal dialog-->
+		</div>
+	<!--end::Modal-->
+
     <!--begin::Javascript-->
 
     <script>var hostUrl = "assets/";</script>
@@ -533,11 +584,22 @@
     <script src="{%static 'assets/js/icons/feather-icon/feather.min.js' %}"></script>
     <script src="{%static 'assets/js/icons/feather-icon/feather-icon.js' %}"></script>
     <script src="{%static 'assets/js/tooltip-init.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.0.0/cropper.min.js"></script>
+    <script src="{% static 'assets/js/select2.min.js' %}"></script>
     <!--end::Custom Javascript-->
     <!--end::Javascript-->
     <script>
         $("#load").fadeOut();
         $("#loading").delay().fadeOut("");
+
+       
+        $(".image_outer").click(function(){
+            $('input[type=file]').focus().click();
+        })
+
+        $("input[type=file]").on("click", function(e){
+        e.stopPropagation();
+        })    
     </script>
     {% block extra_script %}
     

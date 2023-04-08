@@ -6,7 +6,7 @@ from django.utils.decorators import method_decorator
 from core.decorators import vendor_required, admin_required
 from django.urls import reverse_lazy
 from django.contrib import messages
-from hubur_cms.forms.subcategory_form import CreateSubCategoryForm
+from hubur_cms.forms.subcategory_form import CreateSubCategoryForm, EditSubCategoryForm
 import notifications
 from django.template.loader import render_to_string
 from django.views.generic import DeleteView
@@ -35,13 +35,20 @@ class AdminCreateSubCategoriesView(AuthBaseViews):
         return self.render({"form": form})
     
     def post(self, request, *args, **kwargs):
-        form = CreateSubCategoryForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Sub-Category Added Successfully")
-            return self.redirect(reverse_lazy("list_sub_categories"))
-        messages.error(request, "Something Went Wrong! Unable to Save Sub-Category.")
-        return self.render({"form": form})
+        try:
+            form = CreateSubCategoryForm(request.POST, request.FILES)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Sub-Category Added Successfully")
+                return self.redirect(reverse_lazy("list_sub_categories"))
+            
+            else:
+                messages.error(request, "Please correct the errors below")
+                return self.render({"form": form})
+            
+        except Exception:
+            messages.error(request, "Something Went Wrong! Unable to Save Sub-Category.")
+            return self.render({"form": form})
     
 
 @method_decorator([admin_required], name="dispatch")
@@ -50,18 +57,25 @@ class AdminEditSubCategoriesView(AuthBaseViews):
 
     def get(self, request, sub_cat_id, *args, **kwargs):
         inst = models.SubCategories.objects.get(id=sub_cat_id)
-        form = CreateSubCategoryForm(instance=inst)
+        form = EditSubCategoryForm(instance=inst)
         return self.render({"form": form})
     
     def post(self, request, sub_cat_id, *args, **kwargs):
-        inst = models.SubCategories.objects.get(id=sub_cat_id)
-        form = CreateSubCategoryForm(instance=inst, data=request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Sub-Category Edited Successfully")
-            return self.redirect(reverse_lazy("list_sub_categories"))
-        messages.error(request, "Something Went Wrong! Unable to Save Sub-Category.")
-        return self.render({"form": form})
+        try:
+            inst = models.SubCategories.objects.get(id=sub_cat_id)
+            form = EditSubCategoryForm(request.POST, request.FILES, instance=inst)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Sub-Category Edited Successfully")
+                return self.redirect(reverse_lazy("list_sub_categories"))
+            
+            else:
+                messages.error(request, "Please correct the errors below")
+                return self.render({"form": form})
+            
+        except Exception:
+            messages.error(request, "Something Went Wrong! Unable to Save Sub-Category.")
+            return self.render({"form": form})
     
 
 @method_decorator([admin_required], name="dispatch")

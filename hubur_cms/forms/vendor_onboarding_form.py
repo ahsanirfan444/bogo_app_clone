@@ -11,6 +11,15 @@ class VendorProfileForm(UserCreationForm):
     role = forms.IntegerField(widget=forms.HiddenInput(), required=False)
     country_code = forms.CharField(widget=forms.HiddenInput(), required=False)
 
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request')
+        super().__init__(*args, **kwargs)
+        request = self.request.get('request')
+        instance = models.ClaimBusiness.objects.get(i_business__place_id=request.GET.get('place_id'))
+        
+        self.fields['email'].initial = instance.business_email
+        self.fields['email'].disabled = True
+
     def clean_email(self):
         if models.UserProfile.objects.filter(email=self.cleaned_data['email']).exists():
             raise forms.ValidationError("This Email has already registered")
@@ -24,11 +33,15 @@ class VendorProfileForm(UserCreationForm):
         return self.cleaned_data['contact']
 
     def clean_dob(self):
-        diff = datetime.now().date() - self.cleaned_data['dob']
-        years = int(diff.days / 365)
-        if years < 18:
-            raise forms.ValidationError("Age must be older than 18 years")
-        return self.cleaned_data['dob']
+        try:
+            diff = datetime.now().date() - self.cleaned_data['dob']
+            years = int(diff.days / 365)
+            if years < 18:
+                raise forms.ValidationError("Age must be older than 18 years")
+            return self.cleaned_data['dob']
+        
+        except Exception:
+            return self.cleaned_data['dob']
     
     class Meta:
         model = models.UserProfile

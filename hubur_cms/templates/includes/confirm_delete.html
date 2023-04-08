@@ -1,26 +1,6 @@
 {% load generic %}
 {% load static %}
 
-<!-- <div class="row">
-    <div class="col-12">
-        <div class="iq-card">
-            <div class="iq-card-header">
-                <h4>Delete <em><strong>"{{ object.name }}"</strong></em></h4>
-            </div>
-            <form method="post" enctype="multipart/form-data">
-                <div class="iq-card-body">
-                    {% csrf_token %}
-                    <p>Are you sure you want to delete "{{ object.name }}"?</p>
-                </div>
-                <div class="card-footer text-right">
-                    <a href="{{ RETURN_URL }}" class="btn btn-primary">Back</a>
-                    <input type="submit" value="delete" class="btn btn-danger">
-                </div>
-            </form>
-        </div>
-    </div>
-</div> -->
-
     <!--begin::Card header-->
     <div class="card-header cursor-pointer">
         <!--begin::Card title-->
@@ -36,7 +16,7 @@
         <!--begin::Card body-->
         <div class="card-body p-9">
             {% csrf_token %}
-            <p>Are you sure you want to delete "{{ object }}"? This action can't be undo.</p>
+            <p>Are you sure you want to delete "{{ object.name }}"? This action can't be undo.</p>
         </div>
         <!--end::Card body-->
         <!--begin::Card Footer-->

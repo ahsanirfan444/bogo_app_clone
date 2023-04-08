@@ -8,11 +8,21 @@ class ProfileDetailsForm(forms.ModelForm):
     country_code = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     def clean_dob(self):
-        diff = datetime.now().date() - self.cleaned_data['dob']
-        years = int(diff.days / 365)
-        if years < 18:
-            raise forms.ValidationError("Age must be older than 18 years")
-        return self.cleaned_data['dob']
+        try:
+            diff = datetime.now().date() - self.cleaned_data['dob']
+            years = int(diff.days / 365)
+            if years < 18:
+                raise forms.ValidationError("Age must be older than 18 years")
+            return self.cleaned_data['dob']
+        
+        except Exception:
+            return self.cleaned_data['dob']
+        
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].disabled = True
+        self.fields['contact'].disabled = True
     
     class Meta:
         model = models.UserProfile

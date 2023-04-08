@@ -29,7 +29,7 @@
 					<!--begin: Pic-->
 					<div class="me-7 mb-4">
 						<div class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
-							<img src="{% if request.user.profile_picture %}{{ request.user.profile_picture.url }}{% else %}{% static 'assets/media/avatars/300-1.jpg' %}{% endif %}" alt="image" />
+							<img src="{% if request.user.profile_picture %}{{ request.user.profile_picture.url }}{% else %}{% static 'assets/media/misc/image.png' %}{% endif %}" alt="image" />
 							<div class="position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-body h-20px w-20px"></div>
 						</div>
 					</div>
@@ -70,7 +70,7 @@
 									<div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
 										<!--begin::Number-->
 										<div class="d-flex align-items-center">
-											<div class="fs-2 fw-bold" data-kt-countup="true" data-kt-countup-value="0">0</div>
+											<div class="fs-2 fw-bold" data-kt-countup="true" data-kt-countup-value="{{ total_checkins }}">{{ total_checkins }}</div>
 										</div>
 										<!--end::Number-->
 										<!--begin::Label-->
@@ -140,6 +140,11 @@
 						<a class="nav-link text-active-primary ms-0 me-10 py-5" href="{% url 'business_schedule' %}">Business Schedule</a>
 					</li>
 					<!--end::Nav item-->
+					<!--begin::Nav item-->
+					<li class="nav-item mt-2">
+						<a class="nav-link text-active-primary ms-0 me-10 py-5" href="{% url 'checkin_details' %}">Check-Ins</a>
+					</li>
+					<!--end::Nav item-->
 				</ul>
 				<!--begin::Navs-->
 			</div>
@@ -168,7 +173,7 @@
 					<!--end::Label-->
 					<!--begin::Col-->
 					<div class="col-lg-8">
-						<img class="business-logo" src="{% if vendor_business.logo_pic %}{{ vendor_business.logo_pic.url }}{% else %}{% static 'assets/media/avatars/300-1.jpg' %}{% endif %}" alt="image" />
+						<img class="business-logo" src="{% if vendor_business.logo_pic %}{{ vendor_business.logo_pic.url }}{% else %}{% static 'assets/media/misc/image.png' %}{% endif %}" alt="image" />
 					</div>
 					<!--end::Col-->
 				</div>
@@ -218,7 +223,7 @@
 					<!--end::Label-->
 					<!--begin::Col-->
 					<div class="col-lg-8">
-						<a href="#" class="fw-semibold fs-6 text-gray-800 text-hover-primary">{% if vendor_business.website %}{{ vendor_business.website }}{% else %}None{% endif %}</a>
+						<a href="{% if vendor_business.website %}{{ vendor_business.website }}{% else %}#{% endif %}" target="_blank" class="fw-semibold fs-6 text-gray-800 text-hover-primary">{% if vendor_business.website %}{{ vendor_business.website }}{% else %}None{% endif %}</a>
 					</div>
 					<!--end::Col-->
 				</div>

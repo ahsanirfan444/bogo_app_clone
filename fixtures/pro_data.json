@@ -1,0 +1,4968 @@
+[
+{
+    "model": "hubur_apis.userprofile",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$brd3syav1D0SvulLymJufI$VdkGryuD1hV9kbkQUnZIhbSEb6UBZ+wlvbWvSIyF9zU=",
+        "last_login": "2023-04-03T06:05:30.882Z",
+        "username": "superuser_hubur",
+        "first_name": "Hubur",
+        "last_name": "Super User",
+        "gender": 1,
+        "email": "superuser@huburway.com",
+        "role": 4,
+        "is_active": true,
+        "is_type": 1,
+        "is_verified": true,
+        "is_staff": true,
+        "contact": "567254682",
+        "country_code": "+971",
+        "dob": "1985-01-30",
+        "address": "South Ridge - Dubai - United Arab Emirates",
+        "profile_picture": "",
+        "long": 25.187401,
+        "lat": 55.2737697,
+        "terms_conditions": true,
+        "created_at": "2023-01-30T09:24:30.845Z",
+        "updated_at": "2023-04-02T20:13:50.611Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "hubur_apis.userprofile",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$QG4VAs5UT6g5NV2E7zOUVS$sc1Q9y8x+TjOzs9pX6XD+NzHScO4z5UIEXPI/YDwJ7I=",
+        "last_login": "2023-04-04T09:45:33.973Z",
+        "username": "admin_hubur",
+        "first_name": "Hubur",
+        "last_name": "Admin",
+        "gender": 1,
+        "email": "admin@huburway.com",
+        "role": 3,
+        "is_active": true,
+        "is_type": 1,
+        "is_verified": true,
+        "is_staff": false,
+        "contact": "567254681",
+        "country_code": "+971",
+        "dob": "1985-01-30",
+        "address": "South Ridge - Dubai - United Arab Emirates",
+        "profile_picture": "profile_pictures/logo_min_LGKUZS6_2EZiMM5.png",
+        "long": 25.187401,
+        "lat": 55.2737697,
+        "terms_conditions": true,
+        "created_at": "2023-01-30T09:29:21.321Z",
+        "updated_at": "2023-04-02T20:11:59.003Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "hubur_apis.userprofile",
+    "pk": 3,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$yZKH16hDRWrTqeTDh77OT8$xccN+kOAQl5djtXaafUGECQdPXXyHHiib8N+TaWiIcI=",
+        "last_login": null,
+        "username": "aiotabusiness",
+        "first_name": "Kapil",
+        "last_name": "Kumar",
+        "gender": 1,
+        "email": "aiotabusiness@mailinator.com",
+        "role": 2,
+        "is_active": false,
+        "is_type": 1,
+        "is_verified": true,
+        "is_staff": false,
+        "contact": "3322084444",
+        "country_code": "+971",
+        "dob": "2000-01-01",
+        "address": null,
+        "profile_picture": "profile_pictures/photo-1570295999919-56ceb5ecca61.jpg",
+        "long": null,
+        "lat": null,
+        "terms_conditions": false,
+        "created_at": "2023-03-31T19:16:37.186Z",
+        "updated_at": "2023-03-31T19:17:10.715Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "hubur_apis.userprofile",
+    "pk": 4,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$iaBrH2f8xEIvF4a1Y5XdWy$tVemmdFbxN6litmCMRrGuX7ccxOyWc6MJoU7+lyaSDc=",
+        "last_login": null,
+        "username": "kapilmukhi336",
+        "first_name": "Kapil",
+        "last_name": "Kumar",
+        "gender": 1,
+        "email": "kapilmukhi336@gmail.com",
+        "role": 1,
+        "is_active": true,
+        "is_type": 2,
+        "is_verified": true,
+        "is_staff": false,
+        "contact": "3322084336",
+        "country_code": "92",
+        "dob": null,
+        "address": null,
+        "profile_picture": "profile_pictures/logo_min.png",
+        "long": 67.1105693,
+        "lat": 24.8137148,
+        "terms_conditions": true,
+        "created_at": "2023-04-01T18:13:33.350Z",
+        "updated_at": "2023-04-01T18:17:08.717Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "hubur_apis.userprofile",
+    "pk": 5,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$OQ0ztJUOIowpmYwbUDAMTf$ppXC1kJOYe1RzBRarvS9+9hXAAz5gnao7Zl1WkFNjAg=",
+        "last_login": null,
+        "username": "kapil",
+        "first_name": "Kapil",
+        "last_name": "Kumar",
+        "gender": 1,
+        "email": "kapil@mailinator.com",
+        "role": 1,
+        "is_active": true,
+        "is_type": 1,
+        "is_verified": true,
+        "is_staff": false,
+        "contact": "3092007727",
+        "country_code": "92",
+        "dob": null,
+        "address": null,
+        "profile_picture": "profile_pictures/logo_min.png",
+        "long": 55.2707817,
+        "lat": 25.2048483,
+        "terms_conditions": true,
+        "created_at": "2023-04-01T18:34:59.025Z",
+        "updated_at": "2023-04-03T18:06:39.335Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "hubur_apis.userprofile",
+    "pk": 7,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$pLJWX0xLcO7PyIgY2YcYKS$PGZRIg9Gvg3Rpioj0wkoAxeteZaVph06Wb3QdehWK8k=",
+        "last_login": "2023-04-03T07:26:42.947Z",
+        "username": "kokarestaurant",
+        "first_name": "Koka",
+        "last_name": "Restaurant",
+        "gender": 1,
+        "email": "kokarestaurant@mailinator.com",
+        "role": 2,
+        "is_active": true,
+        "is_type": 1,
+        "is_verified": true,
+        "is_staff": false,
+        "contact": "3333333111",
+        "country_code": "+92",
+        "dob": "2000-01-01",
+        "address": null,
+        "profile_picture": "profile_pictures/photo-1570295999919-56ceb5ecca61_13T6mYe.jpg",
+        "long": null,
+        "lat": null,
+        "terms_conditions": false,
+        "created_at": "2023-04-01T19:16:42.878Z",
+        "updated_at": "2023-04-01T19:18:35.401Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "hubur_apis.userprofile",
+    "pk": 8,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$h5suOvuYAegt4nhj6YLPWk$AcqmzC56chjArTXNgmQkcx6UV9PGdwbD6+WKsD7lYy4=",
+        "last_login": "2023-04-01T19:30:37.079Z",
+        "username": "alihospital",
+        "first_name": "Ali",
+        "last_name": "Hospital",
+        "gender": 1,
+        "email": "alihospital@mailinator.com",
+        "role": 2,
+        "is_active": true,
+        "is_type": 1,
+        "is_verified": true,
+        "is_staff": false,
+        "contact": "3232323232",
+        "country_code": "+92",
+        "dob": "1991-02-02",
+        "address": null,
+        "profile_picture": "profile_pictures/photo-1570295999919-56ceb5ecca61_0K8e9GY.jpg",
+        "long": null,
+        "lat": null,
+        "terms_conditions": false,
+        "created_at": "2023-04-01T19:28:16.702Z",
+        "updated_at": "2023-04-01T19:29:15.257Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "hubur_apis.userprofile",
+    "pk": 9,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$RACDMzqsXDQMcpIYrj8Irx$k9xkdT8/TiKXxoL9V0XBrbVnAkz2Zqq3wgo5IqHm8q4=",
+        "last_login": "2023-04-01T19:36:25.690Z",
+        "username": "elijahbusiness",
+        "first_name": "Elijah",
+        "last_name": "Carpenter",
+        "gender": 1,
+        "email": "elijahbusiness@mailinator.com",
+        "role": 2,
+        "is_active": true,
+        "is_type": 1,
+        "is_verified": true,
+        "is_staff": false,
+        "contact": "3434343434",
+        "country_code": "+92",
+        "dob": "1984-05-08",
+        "address": null,
+        "profile_picture": "profile_pictures/photo-1570295999919-56ceb5ecca61_Mb4qhQ1.jpg",
+        "long": null,
+        "lat": null,
+        "terms_conditions": false,
+        "created_at": "2023-04-01T19:35:11.487Z",
+        "updated_at": "2023-04-01T19:35:42.806Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "hubur_apis.userprofile",
+    "pk": 10,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$LY3SNakJp4HeNJ3cGyDLKH$qbR2FkvOaMuK65Hgc/ckdrFGC8rogUb3GSyRV9aKUo4=",
+        "last_login": "2023-04-01T19:48:10.502Z",
+        "username": "johanservice",
+        "first_name": "Johan",
+        "last_name": "Service",
+        "gender": 1,
+        "email": "johanservice@mailinator.com",
+        "role": 2,
+        "is_active": true,
+        "is_type": 1,
+        "is_verified": true,
+        "is_staff": false,
+        "contact": "34343434343",
+        "country_code": "+971",
+        "dob": "1985-02-01",
+        "address": null,
+        "profile_picture": "profile_pictures/photo-1570295999919-56ceb5ecca61_zvaZrn1.jpg",
+        "long": null,
+        "lat": null,
+        "terms_conditions": false,
+        "created_at": "2023-04-01T19:46:58.939Z",
+        "updated_at": "2023-04-01T19:47:32.739Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "hubur_apis.userprofile",
+    "pk": 11,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$lT8wbVtSzXmYywaDdZiFva$gHhHeKJeRGUZFBhh3aefCf594ZroRYVjrLuMRC6tZcg=",
+        "last_login": null,
+        "username": "strikersyed73",
+        "first_name": "Syed",
+        "last_name": "Mohsin",
+        "gender": 1,
+        "email": "strikersyed73@gmail.com",
+        "role": 1,
+        "is_active": true,
+        "is_type": 2,
+        "is_verified": true,
+        "is_staff": false,
+        "contact": "301123456",
+        "country_code": "971",
+        "dob": null,
+        "address": null,
+        "profile_picture": "profile_pictures/logo_min.png",
+        "long": 67.0635486,
+        "lat": 24.8199293,
+        "terms_conditions": true,
+        "created_at": "2023-04-01T20:19:02.176Z",
+        "updated_at": "2023-04-01T20:19:11.164Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "hubur_apis.userprofile",
+    "pk": 12,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$ZBxAmzLZj3JOrA5SqsNmD9$J3PSWU2/QS5yUuEMDLxsvbVMiM2BxuVmdiwVORs8PuA=",
+        "last_login": null,
+        "username": "johan",
+        "first_name": "Johan",
+        "last_name": "Johan",
+        "gender": 1,
+        "email": "johan@mailinator.com",
+        "role": 1,
+        "is_active": true,
+        "is_type": 1,
+        "is_verified": true,
+        "is_staff": false,
+        "contact": "3253253255",
+        "country_code": "92",
+        "dob": null,
+        "address": null,
+        "profile_picture": "profile_pictures/logo_min.png",
+        "long": 67.1105729,
+        "lat": 24.8137127,
+        "terms_conditions": true,
+        "created_at": "2023-04-01T21:03:19.981Z",
+        "updated_at": "2023-04-01T21:04:47.439Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "hubur_apis.userprofile",
+    "pk": 13,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$tkuH2fvfYPgatZ2YeaYWf5$cBu9pQryglALQDy4n5qvK5K6m4+nK6BWigaWsw+AywQ=",
+        "last_login": null,
+        "username": "zyair",
+        "first_name": "zyair",
+        "last_name": "zyair",
+        "gender": 1,
+        "email": "zyair@mailinator.com",
+        "role": 1,
+        "is_active": true,
+        "is_type": 1,
+        "is_verified": true,
+        "is_staff": false,
+        "contact": "3535353535",
+        "country_code": "92",
+        "dob": null,
+        "address": null,
+        "profile_picture": "profile_pictures/logo_min.png",
+        "long": 67.1105509,
+        "lat": 24.813751,
+        "terms_conditions": true,
+        "created_at": "2023-04-01T21:41:05.555Z",
+        "updated_at": "2023-04-01T21:42:07.023Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "hubur_apis.userprofile",
+    "pk": 14,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$GZh6j1803VGY69GLxinwfE$VNuixEavbEdmcaVb8ZvUTnmxzET7tNdrgg4YEDza1U0=",
+        "last_login": null,
+        "username": "aiota.developers",
+        "first_name": "Mohsin",
+        "last_name": "Siddiqui",
+        "gender": 1,
+        "email": "aiota.developers@gmail.com",
+        "role": 1,
+        "is_active": true,
+        "is_type": 2,
+        "is_verified": true,
+        "is_staff": false,
+        "contact": "3213213211",
+        "country_code": "92",
+        "dob": null,
+        "address": null,
+        "profile_picture": "profile_pictures/logo_min.png",
+        "long": 67.11078848805789,
+        "lat": 24.813558526343257,
+        "terms_conditions": true,
+        "created_at": "2023-04-01T22:57:10.763Z",
+        "updated_at": "2023-04-01T22:57:21.415Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "hubur_apis.otptoken",
+    "pk": 11,
+    "fields": {
+        "i_user": 5,
+        "code": "8777",
+        "medium": "2",
+        "created_at": "2023-04-01T18:55:02.973Z",
+        "updated_at": "2023-04-01T18:55:02.973Z"
+    }
+},
+{
+    "model": "hubur_apis.otptoken",
+    "pk": 22,
+    "fields": {
+        "i_user": 12,
+        "code": "5436",
+        "medium": "2",
+        "created_at": "2023-04-01T21:03:20.946Z",
+        "updated_at": "2023-04-01T21:03:20.946Z"
+    }
+},
+{
+    "model": "hubur_apis.otptoken",
+    "pk": 23,
+    "fields": {
+        "i_user": 13,
+        "code": "8363",
+        "medium": "2",
+        "created_at": "2023-04-01T21:41:06.607Z",
+        "updated_at": "2023-04-01T21:41:06.607Z"
+    }
+},
+{
+    "model": "hubur_apis.category",
+    "pk": 1,
+    "fields": {
+        "name": "Resturant",
+        "image": "category_images/image_Bb0rDCy.png",
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.446Z",
+        "updated_at": "2023-03-31T12:30:08.266Z"
+    }
+},
+{
+    "model": "hubur_apis.category",
+    "pk": 2,
+    "fields": {
+        "name": "Services",
+        "image": "category_images/image_4eHPWoF.png",
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.497Z",
+        "updated_at": "2023-03-31T12:30:23.091Z"
+    }
+},
+{
+    "model": "hubur_apis.category",
+    "pk": 3,
+    "fields": {
+        "name": "Products",
+        "image": "category_images/image_sb9RfGw.png",
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.560Z",
+        "updated_at": "2023-03-31T12:30:37.014Z"
+    }
+},
+{
+    "model": "hubur_apis.category",
+    "pk": 4,
+    "fields": {
+        "name": "Health Care",
+        "image": "category_images/image_KKIUaJp.png",
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.687Z",
+        "updated_at": "2023-03-31T12:30:51.879Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 1,
+    "fields": {
+        "name": "Bakery",
+        "image": "category_images/bakery.jpg",
+        "i_category": 1,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.460Z",
+        "updated_at": "2023-04-02T19:57:42.524Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 2,
+    "fields": {
+        "name": "Bar",
+        "image": "category_images/bar.jfif",
+        "i_category": 1,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.467Z",
+        "updated_at": "2023-04-02T19:57:38.665Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 3,
+    "fields": {
+        "name": "Cafe",
+        "image": "category_images/cafe.jpg",
+        "i_category": 1,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.475Z",
+        "updated_at": "2023-04-02T19:57:34.617Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 4,
+    "fields": {
+        "name": "Casino",
+        "image": "category_images/casino.jpg",
+        "i_category": 1,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.483Z",
+        "updated_at": "2023-04-02T19:57:28.112Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 5,
+    "fields": {
+        "name": "Restaurant",
+        "image": "category_images/restaurant_mK1nGmQ.jpeg",
+        "i_category": 1,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.491Z",
+        "updated_at": "2023-04-02T19:57:23.711Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 6,
+    "fields": {
+        "name": "Beauty Salon",
+        "image": "category_images/beauty_salon.jpg",
+        "i_category": 2,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.503Z",
+        "updated_at": "2023-04-02T19:57:19.296Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 7,
+    "fields": {
+        "name": "Car Rental",
+        "image": "category_images/car_rental.jfif",
+        "i_category": 2,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.510Z",
+        "updated_at": "2023-04-02T19:57:12.246Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 8,
+    "fields": {
+        "name": "Car Repair",
+        "image": "category_images/car.jpg",
+        "i_category": 2,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.517Z",
+        "updated_at": "2023-04-02T19:57:05.470Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 9,
+    "fields": {
+        "name": "Car Wash",
+        "image": "category_images/Car_Wash.jpeg",
+        "i_category": 2,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.525Z",
+        "updated_at": "2023-04-02T19:56:57.700Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 10,
+    "fields": {
+        "name": "Electrician",
+        "image": "category_images/electriction.jfif",
+        "i_category": 2,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.533Z",
+        "updated_at": "2023-04-02T19:56:50.845Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 11,
+    "fields": {
+        "name": "Laundry",
+        "image": "category_images/laundry.jpg",
+        "i_category": 2,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.540Z",
+        "updated_at": "2023-04-02T19:56:45.764Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 12,
+    "fields": {
+        "name": "Painter",
+        "image": "category_images/painter.webp",
+        "i_category": 2,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.547Z",
+        "updated_at": "2023-04-02T19:56:40.678Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 13,
+    "fields": {
+        "name": "Plumber",
+        "image": "category_images/plumber.jfif",
+        "i_category": 2,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.554Z",
+        "updated_at": "2023-04-02T19:55:42.989Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 14,
+    "fields": {
+        "name": "Bicycle Store",
+        "image": "category_images/bicycle_store.jpg",
+        "i_category": 3,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.567Z",
+        "updated_at": "2023-04-02T19:55:37.183Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 15,
+    "fields": {
+        "name": "Book Store",
+        "image": "category_images/book_store.jpg",
+        "i_category": 3,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.573Z",
+        "updated_at": "2023-04-02T19:55:30.435Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 16,
+    "fields": {
+        "name": "Cemetery",
+        "image": "",
+        "i_category": 3,
+        "is_active": false,
+        "created_at": "2023-03-09T06:39:39.581Z",
+        "updated_at": "2023-04-02T19:55:20.040Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 17,
+    "fields": {
+        "name": "Clothing",
+        "image": "category_images/clothing_store.jpg",
+        "i_category": 3,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.589Z",
+        "updated_at": "2023-04-02T19:55:15.214Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 18,
+    "fields": {
+        "name": "Convenience Store",
+        "image": "category_images/Convenience_Store.jpeg",
+        "i_category": 3,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.596Z",
+        "updated_at": "2023-04-02T19:55:02.389Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 19,
+    "fields": {
+        "name": "Electronics",
+        "image": "category_images/electronics_store.jpg",
+        "i_category": 3,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.604Z",
+        "updated_at": "2023-04-02T19:56:33.584Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 20,
+    "fields": {
+        "name": "Furniture Store",
+        "image": "category_images/furniture_store.jpg",
+        "i_category": 3,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.612Z",
+        "updated_at": "2023-04-02T19:54:46.766Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 21,
+    "fields": {
+        "name": "Florist",
+        "image": "category_images/florist.jpg",
+        "i_category": 3,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.620Z",
+        "updated_at": "2023-04-02T19:54:38.808Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 22,
+    "fields": {
+        "name": "Hardware Store",
+        "image": "category_images/hardware_store.jpg",
+        "i_category": 3,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.628Z",
+        "updated_at": "2023-04-02T19:54:32.607Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 23,
+    "fields": {
+        "name": "Home Goods Store",
+        "image": "category_images/department_store.jpg",
+        "i_category": 3,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.636Z",
+        "updated_at": "2023-04-02T19:54:20.193Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 24,
+    "fields": {
+        "name": "Jewelry Store",
+        "image": "category_images/jewelry_store.jpg",
+        "i_category": 3,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.642Z",
+        "updated_at": "2023-04-02T19:54:08.649Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 25,
+    "fields": {
+        "name": "Pet Store",
+        "image": "category_images/pet_store.jpg",
+        "i_category": 3,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.650Z",
+        "updated_at": "2023-04-02T19:53:44.915Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 26,
+    "fields": {
+        "name": "Shoe Store",
+        "image": "category_images/shoe_store.jpg",
+        "i_category": 3,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.657Z",
+        "updated_at": "2023-04-02T19:53:38.177Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 27,
+    "fields": {
+        "name": "Shopping Mall",
+        "image": "category_images/shopping_mall.jpg",
+        "i_category": 3,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.665Z",
+        "updated_at": "2023-04-02T19:53:30.464Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 28,
+    "fields": {
+        "name": "Store",
+        "image": "category_images/store.jpg",
+        "i_category": 3,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.673Z",
+        "updated_at": "2023-04-02T19:52:35.028Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 29,
+    "fields": {
+        "name": "Supermarket",
+        "image": "category_images/supermarket.jpg",
+        "i_category": 3,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.681Z",
+        "updated_at": "2023-04-02T19:52:30.630Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 30,
+    "fields": {
+        "name": "Dentist",
+        "image": "category_images/dentist.jfif",
+        "i_category": 4,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.693Z",
+        "updated_at": "2023-04-02T19:52:26.016Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 31,
+    "fields": {
+        "name": "Departmental Store",
+        "image": "category_images/department_store_KylwEVD.jpg",
+        "i_category": 4,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.700Z",
+        "updated_at": "2023-04-02T19:52:20.892Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 32,
+    "fields": {
+        "name": "Physician",
+        "image": "category_images/doctor.jpg",
+        "i_category": 4,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.708Z",
+        "updated_at": "2023-04-02T19:52:12.024Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 33,
+    "fields": {
+        "name": "Drugstore",
+        "image": "category_images/drugstore.jpg",
+        "i_category": 4,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.716Z",
+        "updated_at": "2023-04-02T19:50:23.061Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 34,
+    "fields": {
+        "name": "Hair Care",
+        "image": "category_images/hair_care.jfif",
+        "i_category": 4,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.721Z",
+        "updated_at": "2023-04-02T19:50:18.032Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 35,
+    "fields": {
+        "name": "Hospital",
+        "image": "category_images/hospital-2_xBL24EQ.jpg",
+        "i_category": 4,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.728Z",
+        "updated_at": "2023-04-02T19:50:10.169Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 36,
+    "fields": {
+        "name": "Pharmacy",
+        "image": "category_images/pharmacy.jpg",
+        "i_category": 4,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.735Z",
+        "updated_at": "2023-04-02T19:50:02.745Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 37,
+    "fields": {
+        "name": "Spa",
+        "image": "",
+        "i_category": 4,
+        "is_active": false,
+        "created_at": "2023-03-09T06:39:39.743Z",
+        "updated_at": "2023-04-02T19:46:23.794Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 38,
+    "fields": {
+        "name": "Veterinary Care",
+        "image": "category_images/veterinary_care.jpg",
+        "i_category": 4,
+        "is_active": true,
+        "created_at": "2023-03-09T06:39:39.751Z",
+        "updated_at": "2023-04-02T19:46:14.296Z"
+    }
+},
+{
+    "model": "hubur_apis.subcategories",
+    "pk": 44,
+    "fields": {
+        "name": "Diagnosis",
+        "image": "category_images/Health_Care_W5OW9TY.png",
+        "i_category": 4,
+        "is_active": true,
+        "created_at": "2023-03-20T05:56:47.733Z",
+        "updated_at": "2023-04-02T19:49:52.557Z"
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 29,
+    "fields": {
+        "name": "NUR Al jafen bakery",
+        "contact": "504936635",
+        "country_code": "+971",
+        "address": "Abu Dhabi Islands - United Arab Emirates",
+        "long": 54.5209508,
+        "lat": 24.8799433,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJc81Ig53tXj4RrpGlE3cSxT8",
+        "created_at": "2023-03-28T07:24:05.238Z",
+        "updated_at": "2023-03-28T07:24:05.238Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 30,
+    "fields": {
+        "name": "مخبز سلورة البرشاء - sallora bakery al barsha",
+        "contact": "554716540",
+        "country_code": "+971",
+        "address": "Hessa St - Al Barsha - Dubai - United Arab Emirates",
+        "long": 55.1855349,
+        "lat": 25.0934577,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJP-8_YettXz4RcXB6-r5Wo8s",
+        "created_at": "2023-03-28T07:24:08.051Z",
+        "updated_at": "2023-03-28T07:24:08.051Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 31,
+    "fields": {
+        "name": "AL RABAT Sweets And Bakery (Dubai Branch)",
+        "contact": "42227888",
+        "country_code": "+971",
+        "address": "679 Jumeirah St - Umm SuqeimUmm - Umm Suqeim 2 - Dubai - United Arab Emirates",
+        "long": 55.2065952,
+        "lat": 25.1583144,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJ97taJaprXz4RHXSFd7JhpjE",
+        "created_at": "2023-03-28T07:24:10.675Z",
+        "updated_at": "2023-03-28T07:24:10.675Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 32,
+    "fields": {
+        "name": "مخبز نجوم برشاء Najoom Barsha Bakery",
+        "contact": "558646586",
+        "country_code": "+971",
+        "address": "4 15 St - Al Barsha - Al Barsha 3 - Dubai - United Arab Emirates",
+        "long": 55.1923885,
+        "lat": 25.1042804,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJDdjunJprXz4RapRt93gCVhI",
+        "created_at": "2023-03-28T07:24:13.394Z",
+        "updated_at": "2023-03-28T07:24:13.394Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 33,
+    "fields": {
+        "name": "Jibin and laham bakery",
+        "contact": "522677016",
+        "country_code": "+971",
+        "address": "35WC+P8W - Al Barsha - Barsha Heights - Dubai - United Arab Emirates",
+        "long": 55.1708273,
+        "lat": 25.096859,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJhdxY-kprXz4R6KrWZtbvSZU",
+        "created_at": "2023-03-28T07:24:15.734Z",
+        "updated_at": "2023-03-28T07:24:15.734Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 34,
+    "fields": {
+        "name": "Albadyia Alyadavia Al bakery",
+        "contact": "501673046",
+        "country_code": "+971",
+        "address": "GMPR+CQC - Al Shahamah - New Shahamah - Abu Dhabi - United Arab Emirates",
+        "long": 54.6918813,
+        "lat": 24.5360595,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJ-XXjXHdPXj4R_yMGk1rDaHA",
+        "created_at": "2023-03-28T07:24:17.998Z",
+        "updated_at": "2023-03-28T07:24:17.998Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 35,
+    "fields": {
+        "name": "Dawn Bakery",
+        "contact": "507807071",
+        "country_code": "+971",
+        "address": "49 9 B St - Al Barsha - Al Barsha 2 - Dubai - United Arab Emirates",
+        "long": 55.2229057,
+        "lat": 25.1021553,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJ72rtBv9rXz4RefwPSDNeFeE",
+        "created_at": "2023-03-28T07:24:20.155Z",
+        "updated_at": "2023-03-28T07:24:20.155Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 36,
+    "fields": {
+        "name": "4U bakery",
+        "contact": "43450005",
+        "country_code": "+971",
+        "address": "36VP+582 - Al Barsha - Al Barsha South - Dubai - United Arab Emirates",
+        "long": 55.2357542,
+        "lat": 25.0928942,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJ0ZNXXqVuXz4Rqa0U-0t3RRM",
+        "created_at": "2023-03-28T07:24:22.663Z",
+        "updated_at": "2023-03-28T07:24:22.663Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 37,
+    "fields": {
+        "name": "Munich Finest Bakery",
+        "contact": "585221966",
+        "country_code": "+971",
+        "address": "LULU Superstore, محمع دبي للإستثمار 1 - Green Community Village - Dubai - United Arab Emirates",
+        "long": 55.1524967,
+        "lat": 25.0024531,
+        "is_active": true,
+        "website": "http://munichfinestbakery.com/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJC5MTGt5tXz4RhlIG7-nnBTA",
+        "created_at": "2023-03-28T07:24:25.184Z",
+        "updated_at": "2023-03-28T07:24:25.184Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 38,
+    "fields": {
+        "name": "مخبز محمد غلوم عباس",
+        "contact": "43385842",
+        "country_code": "+971",
+        "address": "22 26th St - Al Quoz - Al Quoz 1 - Dubai - United Arab Emirates",
+        "long": 55.254073,
+        "lat": 25.1727246,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJaW1BEYVpXz4R2dYd0KoNH1A",
+        "created_at": "2023-03-28T07:24:29.621Z",
+        "updated_at": "2023-03-28T07:24:29.621Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 39,
+    "fields": {
+        "name": "Jeel al Taybeen Bakery LLC",
+        "contact": "551200560",
+        "country_code": "+971",
+        "address": "4 22a St - Al Barsha - Al Barsha 2 - Dubai - United Arab Emirates",
+        "long": 55.2174846,
+        "lat": 25.1093426,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJweJMnHVrXz4RgaeiGKjuv7g",
+        "created_at": "2023-03-28T07:24:32.067Z",
+        "updated_at": "2023-03-28T07:24:32.067Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 40,
+    "fields": {
+        "name": "Hamdullah Khan Bakery",
+        "contact": "555455868",
+        "country_code": "+971",
+        "address": "Barsha Valley Building - behind Ramada Chelsea Hotel - Al Barsha - Al Barsha 1 - Dubai - United Arab Emirates",
+        "long": 55.2035659,
+        "lat": 25.1096366,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJgQ19FUJrXz4Rzrcot82y6TM",
+        "created_at": "2023-03-28T07:24:35.193Z",
+        "updated_at": "2023-03-28T07:24:35.193Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 41,
+    "fields": {
+        "name": "Jabal Al Seraj Bakery مخبز جبل السراج",
+        "contact": "551486694",
+        "country_code": "+971",
+        "address": "Ground Floor, Neema Residence - Al Barsha - Al Barsha 1 - Dubai - United Arab Emirates",
+        "long": 55.1990412,
+        "lat": 25.1075768,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJ5fS-uTFrXz4RBJz9BO2OkwI",
+        "created_at": "2023-03-28T07:24:37.743Z",
+        "updated_at": "2023-03-28T07:24:37.743Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 42,
+    "fields": {
+        "name": "Walid Mohammad Bakhit Bakery",
+        "contact": "",
+        "country_code": "",
+        "address": "17 27d St - Jumeirah - Jumeirah 1 - Dubai - United Arab Emirates",
+        "long": 55.2657492,
+        "lat": 25.2296953,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJC0fEvFZCXz4RZxXZudeKcHk",
+        "created_at": "2023-03-28T07:24:39.906Z",
+        "updated_at": "2023-03-28T07:24:39.906Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 43,
+    "fields": {
+        "name": "Delicious Loaf Bakery",
+        "contact": "43328202",
+        "country_code": "+971",
+        "address": "321 D90 - Dubai - United Arab Emirates",
+        "long": 55.2748674,
+        "lat": 25.2281338,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJGWTq319DXz4RkxcZ6b8dtYI",
+        "created_at": "2023-03-28T07:24:42.185Z",
+        "updated_at": "2023-03-28T07:24:42.185Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 44,
+    "fields": {
+        "name": "مخبز تنور القمة - Tanoor Al Qummah Bakery",
+        "contact": "529969331",
+        "country_code": "+971",
+        "address": "Unnamed Road - الحِصِنغرب 4 - الحصن - غرب 4 - أبو ظبي - United Arab Emirates",
+        "long": 54.3585384,
+        "lat": 24.4799066,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJwZSU-upnXj4R6pgW8Fuuvpw",
+        "created_at": "2023-03-28T07:24:45.085Z",
+        "updated_at": "2023-03-28T07:24:45.085Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 45,
+    "fields": {
+        "name": "Wonder Bakery",
+        "contact": "43389557",
+        "country_code": "+971",
+        "address": "PHASE 3 - مدينة دبي الصناعية - دبي - United Arab Emirates",
+        "long": 55.0860214,
+        "lat": 24.8153839,
+        "is_active": true,
+        "website": "https://wonder-bakery.com/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJiT8UgGppXz4RPStRm6lFnS0",
+        "created_at": "2023-03-28T07:24:47.273Z",
+        "updated_at": "2023-03-28T07:24:47.273Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 46,
+    "fields": {
+        "name": "Abdul Rahim Ghulam Bakery",
+        "contact": "",
+        "country_code": "",
+        "address": "25HR+W87 - Dubai Production City - Dubai - United Arab Emirates",
+        "long": 55.1907904,
+        "lat": 25.0297793,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJLV9iMgttXz4RquKVXBRtmfc",
+        "created_at": "2023-03-28T07:24:49.330Z",
+        "updated_at": "2023-03-28T07:24:49.330Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 47,
+    "fields": {
+        "name": "French Bakery | Birthday Cakes | Cake Shop",
+        "contact": "43307367",
+        "country_code": "+971",
+        "address": "Umm Suqeim 3, Aswaaq Supermarket, Next to King's Dubai School - ام سقيم - ام سقيم ٣ - دبي - United Arab Emirates",
+        "long": 55.197147,
+        "lat": 25.136976,
+        "is_active": true,
+        "website": "http://www.frenchbakery.cafe/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJBaau80xqXz4R0VVnR8ckP34",
+        "created_at": "2023-03-28T07:24:51.725Z",
+        "updated_at": "2023-03-28T07:24:51.725Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 48,
+    "fields": {
+        "name": "Al Qouz Bakery",
+        "contact": "43384103",
+        "country_code": "+971",
+        "address": "57F3+3JW - Al Quoz - Al Quoz 1 - Dubai - United Arab Emirates",
+        "long": 55.2540784,
+        "lat": 25.1727287,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJgyENL8dpXz4RyM1XPkzLiek",
+        "created_at": "2023-03-28T07:24:57.773Z",
+        "updated_at": "2023-03-28T07:24:57.773Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 49,
+    "fields": {
+        "name": "French Bakery | Birthday Cakes | Cake Shop",
+        "contact": "44307261",
+        "country_code": "+971",
+        "address": "Knowledge Village - Opposite to Cordoba Villa Complex, Office Park Building - الصفوح - الصفوح 2 - دبي - United Arab Emirates",
+        "long": 55.1683919,
+        "lat": 25.1052665,
+        "is_active": true,
+        "website": "http://www.frenchbakery.cafe/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJcwUNJG1rXz4RECEd8JJDYdE",
+        "created_at": "2023-03-28T07:25:00.087Z",
+        "updated_at": "2023-03-28T07:25:00.087Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 50,
+    "fields": {
+        "name": "AlSultan markets and bakeries",
+        "contact": "25633363",
+        "country_code": "+971",
+        "address": "الفلاح الجديدة - الفلاح - أبو ظبي - United Arab Emirates",
+        "long": 54.7273971,
+        "lat": 24.4585098,
+        "is_active": true,
+        "website": "https://instagram.com/alsultanbakeries?igshid=jebgdnnscg93",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJnwNtHZFLXj4RtR1u19NiYFE",
+        "created_at": "2023-03-28T07:25:02.973Z",
+        "updated_at": "2023-03-28T07:25:02.973Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 51,
+    "fields": {
+        "name": "مخبز الأسرار",
+        "contact": "",
+        "country_code": "",
+        "address": "23 12 A St - Al Satwa - Dubai - United Arab Emirates",
+        "long": 55.2807899,
+        "lat": 25.2314788,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJE1SjsxxDXz4R0RM-fAyCPKE",
+        "created_at": "2023-03-28T07:25:05.069Z",
+        "updated_at": "2023-03-28T07:25:05.069Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 52,
+    "fields": {
+        "name": "Modern Bakery LLC",
+        "contact": "43059999",
+        "country_code": "+971",
+        "address": "4th St - Al Quoz - Al Quoz Industrial Area 3 - Dubai - United Arab Emirates",
+        "long": 55.211807,
+        "lat": 25.1269913,
+        "is_active": true,
+        "website": "http://www.modernbakery.com/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJi2kpC8VrXz4RC7iuvhpfsBc",
+        "created_at": "2023-03-28T07:25:07.623Z",
+        "updated_at": "2023-03-28T07:25:07.623Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 53,
+    "fields": {
+        "name": "Al Reem Bakery LLC Al Quoz, Dubai | مخبز الريم ذ م م , القوز",
+        "contact": "43385977",
+        "country_code": "+971",
+        "address": "26th St - Al Quoz - Al Quoz 1 - Dubai - United Arab Emirates",
+        "long": 55.2494206,
+        "lat": 25.1677596,
+        "is_active": true,
+        "website": "http://www.alreembakery.com/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJ-wV4wL9pXz4R3RrKlAxj6V0",
+        "created_at": "2023-03-28T07:25:15.076Z",
+        "updated_at": "2023-03-28T07:25:15.076Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 54,
+    "fields": {
+        "name": "Quraishi Bakery مخبز القريشي",
+        "contact": "558522877",
+        "country_code": "+971",
+        "address": "61 8 B St - Al Manara - Dubai - United Arab Emirates",
+        "long": 55.215483,
+        "lat": 25.1482686,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJ0U3bfzFqXz4R-Yiz7-zWlME",
+        "created_at": "2023-03-28T07:25:32.340Z",
+        "updated_at": "2023-03-28T07:25:32.340Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 55,
+    "fields": {
+        "name": "Ayyub Bakery",
+        "contact": "509163830",
+        "country_code": "+971",
+        "address": "5 Al Rusoum St - Al Bahyah - Al Shahama Old - Abu Dhabi - United Arab Emirates",
+        "long": 54.6939485,
+        "lat": 24.5521287,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJ8Za6XJZRXj4R0AL4J16Za5Q",
+        "created_at": "2023-03-28T07:25:46.004Z",
+        "updated_at": "2023-03-28T07:25:46.004Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 56,
+    "fields": {
+        "name": "DouArt Bakery",
+        "contact": "42244910",
+        "country_code": "+971",
+        "address": "Al Quoz - Al Quoz Industrial Area 3 - Dubai - United Arab Emirates",
+        "long": 55.2112075,
+        "lat": 25.1187462,
+        "is_active": true,
+        "website": "http://douartdxb.com/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJQQzAygVrXz4Re6veXF7KZFw",
+        "created_at": "2023-03-28T07:26:05.180Z",
+        "updated_at": "2023-03-28T07:26:05.180Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 57,
+    "fields": {
+        "name": "Bakery Manama",
+        "contact": "42662886",
+        "country_code": "+971",
+        "address": "394 Al Rasheed Road - Deira - Dubai - United Arab Emirates",
+        "long": 55.3363663,
+        "lat": 25.2825804,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJ1VjJgL1cXz4RQEjW3MrTEw8",
+        "created_at": "2023-03-28T07:26:11.557Z",
+        "updated_at": "2023-03-28T07:26:11.557Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 58,
+    "fields": {
+        "name": "Bait al khodamouni bakery & sweets \"LLC\"",
+        "contact": "",
+        "country_code": "",
+        "address": "Al Quoz - Al Quoz 3 - Dubai - United Arab Emirates",
+        "long": 55.211795,
+        "lat": 25.1195561,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJj-wAOW9rXz4RiwBEC6bR-uM",
+        "created_at": "2023-03-28T07:26:19.425Z",
+        "updated_at": "2023-03-28T07:26:19.425Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 59,
+    "fields": {
+        "name": "Al Khayam Bakery & Sweets",
+        "contact": "26667579",
+        "country_code": "+971",
+        "address": "12 شارع أُم كْبَار - Al Khalidiyah - W9 - Abu Dhabi - United Arab Emirates",
+        "long": 54.3487124,
+        "lat": 24.4721757,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJYbT6uBlnXj4RWIT01ezZ34k",
+        "created_at": "2023-03-28T07:26:30.917Z",
+        "updated_at": "2023-03-28T07:26:30.917Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 60,
+    "fields": {
+        "name": "Broadway Bakery",
+        "contact": "42526555",
+        "country_code": "+971",
+        "address": "Jebel Ali Industrial Area 1 64 Street Warehouse 15, Building Number 2 - منطقة جبل علي الصناعية - Jebel Ali Industrial - دبي - United Arab Emirates",
+        "long": 55.1287142,
+        "lat": 24.9966099,
+        "is_active": true,
+        "website": "https://www.broadwaybakery.com/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJP008XmtnXz4RkXzC_N-rrU4",
+        "created_at": "2023-03-28T07:26:34.252Z",
+        "updated_at": "2023-03-28T07:26:34.252Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 61,
+    "fields": {
+        "name": "Habib Bakery & Supermarket-Hor Al Anz",
+        "contact": "522299311",
+        "country_code": "+971",
+        "address": "Ground Floor, Habib Building, Opp. Abu Hail Clinic - Al Rasheed Road, Hor Al Anz, Deira - 17 13 A St - Hor Al Anz - Dubai - United Arab Emirates",
+        "long": 55.3328577,
+        "lat": 25.2810063,
+        "is_active": true,
+        "website": "http://www.habibbakery.ae/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJk6WxgL1cXz4RoAqkgar12Lw",
+        "created_at": "2023-03-28T07:26:37.769Z",
+        "updated_at": "2023-03-28T07:26:37.769Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 62,
+    "fields": {
+        "name": "Al Sultan Bakeries & Markets",
+        "contact": "24411482",
+        "country_code": "+971",
+        "address": "Danet - Al Sa'adah - Zone 1 - Abu Dhabi - United Arab Emirates",
+        "long": 54.4337254,
+        "lat": 24.4306024,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJ1exXjNVpXj4RWo-bN2Z5s-M",
+        "created_at": "2023-03-28T07:26:42.188Z",
+        "updated_at": "2023-03-28T07:26:42.188Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 63,
+    "fields": {
+        "name": "مخبز الرغيف البلدي - Al Ragheef Al Baladi Bakery",
+        "contact": "565100054",
+        "country_code": "+971",
+        "address": "Dubai - Hor Al Anz East - Dubai - United Arab Emirates",
+        "long": 55.3519751,
+        "lat": 25.2821918,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJrau3fWNdXz4Rj0K6yr7KRgg",
+        "created_at": "2023-03-28T07:26:53.105Z",
+        "updated_at": "2023-03-28T07:26:53.105Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 64,
+    "fields": {
+        "name": "Baytak Bakery - مخبز بيتك",
+        "contact": "42842885",
+        "country_code": "+971",
+        "address": "Ibn Al Zahrawi St - Al Jaddaf - Dubai - United Arab Emirates",
+        "long": 55.3224274,
+        "lat": 25.2208742,
+        "is_active": true,
+        "website": "https://baytakbakery.com/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJk-Dmv39dXz4RJzpPX-6wOmU",
+        "created_at": "2023-03-28T07:26:55.509Z",
+        "updated_at": "2023-03-28T07:26:55.509Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 65,
+    "fields": {
+        "name": "Najoom Barsha Bakery",
+        "contact": "558646586",
+        "country_code": "+971",
+        "address": "4 Al Sagi Street - البرشاء - البرشاء 3 - دبي - United Arab Emirates",
+        "long": 55.1923898,
+        "lat": 25.1042891,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJR-gig5prXz4RbhvXwNFqOW8",
+        "created_at": "2023-03-28T07:26:58.118Z",
+        "updated_at": "2023-03-28T07:26:58.118Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 66,
+    "fields": {
+        "name": "Al khayam bakers&sweet",
+        "contact": "26325060",
+        "country_code": "+971",
+        "address": "F9J8+P2W - Al Danah - Zone 1 - Abu Dhabi - United Arab Emirates",
+        "long": 54.3650823,
+        "lat": 24.4818549,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJ116ikARnXj4RkJwYX4h72w0",
+        "created_at": "2023-03-28T07:27:01.008Z",
+        "updated_at": "2023-03-28T07:27:01.008Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 67,
+    "fields": {
+        "name": "مخابز وأسواق السلطان",
+        "contact": "26323444",
+        "country_code": "+971",
+        "address": "4 اليُولَة - Al Hisn - W4 - Abu Dhabi - United Arab Emirates",
+        "long": 54.3555005,
+        "lat": 24.4779068,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJ6xYkn7w4Xj4RPzwdFOhlNOs",
+        "created_at": "2023-03-28T07:27:03.488Z",
+        "updated_at": "2023-03-28T07:27:03.488Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 68,
+    "fields": {
+        "name": "مخبز العيش المصرى",
+        "contact": "502307325",
+        "country_code": "+971",
+        "address": "Al Zahiyah - E16-02 - Abu Dhabi - United Arab Emirates",
+        "long": 54.3834171,
+        "lat": 24.4901418,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJRwFK7ERnXj4R1Hw6M77TPxc",
+        "created_at": "2023-03-28T07:27:05.644Z",
+        "updated_at": "2023-03-28T07:27:05.644Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 69,
+    "fields": {
+        "name": "Royal Bakery",
+        "contact": "44227970",
+        "country_code": "+971",
+        "address": "Dubai - United Arab Emirates",
+        "long": 55.1699643,
+        "lat": 25.0535476,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJdUGORuVsXz4Rc0bWU6zZuvk",
+        "created_at": "2023-03-28T07:27:08.059Z",
+        "updated_at": "2023-03-28T07:27:08.059Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 70,
+    "fields": {
+        "name": "AL Awwal Bakery",
+        "contact": "26339220",
+        "country_code": "+971",
+        "address": "16 اليُولَة - Al Hisn - W4 - Abu Dhabi - United Arab Emirates",
+        "long": 54.355944,
+        "lat": 24.4770537,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJQ0Y8xplnXj4RmNF7Lr4kHgs",
+        "created_at": "2023-03-28T07:27:10.694Z",
+        "updated_at": "2023-03-28T07:27:10.694Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 71,
+    "fields": {
+        "name": "French Bakery | Birthday Cakes | Cake Shop",
+        "contact": "43436444",
+        "country_code": "+971",
+        "address": "Behind Shangrila Hotel - شارع المركز المالي - Al Satwa - Al Safa - Dubai - United Arab Emirates",
+        "long": 55.268901,
+        "lat": 25.206451,
+        "is_active": true,
+        "website": "http://www.frenchbakery.cafe/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJ8wcnuWJCXz4RgbmwYRS5DVo",
+        "created_at": "2023-03-28T07:27:13.889Z",
+        "updated_at": "2023-03-28T07:27:13.889Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 72,
+    "fields": {
+        "name": "مخبز وحلويات المدينة الذهبية",
+        "contact": "25574745",
+        "country_code": "+971",
+        "address": "Abu Dhabi - Khalifa City - SW-2 - Abu Dhabi - United Arab Emirates",
+        "long": 54.564751,
+        "lat": 24.4236784,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJPdKKyoBGXj4RhrjL_DA2Jk8",
+        "created_at": "2023-03-28T07:27:15.999Z",
+        "updated_at": "2023-03-28T07:27:15.999Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 73,
+    "fields": {
+        "name": "Al mesbah Al Zahabi Bakery",
+        "contact": "556412126",
+        "country_code": "+971",
+        "address": "31 Al Rolla Rd - Al Raffa - Dubai - United Arab Emirates",
+        "long": 55.2914121,
+        "lat": 25.2571033,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJS5wFERZDXz4RQt3xXzsutqY",
+        "created_at": "2023-03-28T07:27:18.700Z",
+        "updated_at": "2023-03-28T07:27:18.700Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 74,
+    "fields": {
+        "name": "مخبز الجديد",
+        "contact": "559231008",
+        "country_code": "+971",
+        "address": "Dubai - Al Khabaisi - Dubai - United Arab Emirates",
+        "long": 55.3420887,
+        "lat": 25.2733858,
+        "is_active": true,
+        "website": "http://www.aljadeedbakery.com/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJ9zBqduxcXz4R-Q_q1SDZHjw",
+        "created_at": "2023-03-28T07:27:20.660Z",
+        "updated_at": "2023-03-28T07:27:20.660Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 75,
+    "fields": {
+        "name": "Spinneys Central Bakery & Deli Factory",
+        "contact": "48856620",
+        "country_code": "+971",
+        "address": "مجمع دبي للإستثمار 2 - Dubai Investments Park - Dubai - United Arab Emirates",
+        "long": 55.2108497,
+        "lat": 24.9770336,
+        "is_active": true,
+        "website": "https://www.spinneys.com/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJIS-LlDNyXz4RLmnZhkKbxpQ",
+        "created_at": "2023-03-28T07:27:22.576Z",
+        "updated_at": "2023-03-28T07:27:22.576Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 76,
+    "fields": {
+        "name": "مخبز شارع المصلى",
+        "contact": "",
+        "country_code": "",
+        "address": "5 18a St - Deira - Al Ras - Dubai - United Arab Emirates",
+        "long": 55.2958883,
+        "lat": 25.2684989,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJt3IpbEFDXz4R8U85uyZNWA4",
+        "created_at": "2023-03-28T07:27:24.628Z",
+        "updated_at": "2023-03-28T07:27:24.628Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 77,
+    "fields": {
+        "name": "RAS AL KHOR BAKERY",
+        "contact": "503539125",
+        "country_code": "+971",
+        "address": "58JJ+F5Q - Ras Al Khor Industrial Area - Ras Al Khor Industrial Area 1 - Dubai - United Arab Emirates",
+        "long": 55.3304811,
+        "lat": 25.1812053,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJM7725MVnXz4RzcA74BGKaxQ",
+        "created_at": "2023-03-28T07:27:26.649Z",
+        "updated_at": "2023-03-28T07:27:26.649Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 78,
+    "fields": {
+        "name": "Viking Bageri",
+        "contact": "569672494",
+        "country_code": "+971",
+        "address": "Marina View Towers - Dubai Marina - Dubai - United Arab Emirates",
+        "long": 55.1415369,
+        "lat": 25.0796924,
+        "is_active": true,
+        "website": "https://vikingbageri.com/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJ1Z-3htVDXz4R4JHkYEaY-A0",
+        "created_at": "2023-03-28T07:27:28.647Z",
+        "updated_at": "2023-03-28T07:27:28.647Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 79,
+    "fields": {
+        "name": "Don Bambalino",
+        "contact": "542451412",
+        "country_code": "+971",
+        "address": "Bluewaters Marine Transport Station - Bluewaters Island - Dubai - United Arab Emirates",
+        "long": 55.1248512,
+        "lat": 25.0774207,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJW9DHw-cVXz4RJ9oJPv4tjsU",
+        "created_at": "2023-03-28T07:27:30.714Z",
+        "updated_at": "2023-03-28T07:27:30.714Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 80,
+    "fields": {
+        "name": "مخبز - خبز أفغاني",
+        "contact": "",
+        "country_code": "",
+        "address": "F95H+WXJ - Al Manhal - W15-02 - Abu Dhabi - United Arab Emirates",
+        "long": 54.3798899,
+        "lat": 24.4598454,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJe9WQyYJoXj4RzxckCA_W9E8",
+        "created_at": "2023-03-28T07:27:32.599Z",
+        "updated_at": "2023-03-28T07:27:32.599Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 81,
+    "fields": {
+        "name": "Muhammad Khan Bakery",
+        "contact": "521500660",
+        "country_code": "+971",
+        "address": "2422+FRM - Unnamed Road - Jebel Ali Industrial Area - Jebel Ali Industrial - Dubai - United Arab Emirates",
+        "long": 55.1020468,
+        "lat": 25.0012136,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJD8mfV9ITXz4R_NZYJD-qHAI",
+        "created_at": "2023-03-28T07:27:34.538Z",
+        "updated_at": "2023-03-28T07:27:34.538Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 82,
+    "fields": {
+        "name": "CHTAURA BAKERY",
+        "contact": "44393900",
+        "country_code": "+971",
+        "address": "108 Lazuward S W - Jumeirah Village - Dubai - United Arab Emirates",
+        "long": 55.1975641,
+        "lat": 25.053186,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJIXOZMb5tXz4RnD0TbOOPn9c",
+        "created_at": "2023-03-28T07:27:36.452Z",
+        "updated_at": "2023-03-28T07:27:36.452Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 83,
+    "fields": {
+        "name": "مخبز وحلويات الكوفية Al Kofyah Bakery & Sweets",
+        "contact": "526869178",
+        "country_code": "+971",
+        "address": "89HF+JF3 - Al Khan - Al Majaz 3 - Sharjah - United Arab Emirates",
+        "long": 55.3736838,
+        "lat": 25.3290211,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJ32Awtb1bXz4RLXU6VQruItk",
+        "created_at": "2023-03-28T07:27:38.399Z",
+        "updated_at": "2023-03-28T07:27:38.399Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 84,
+    "fields": {
+        "name": "Bread Lane Bakery",
+        "contact": "524704195",
+        "country_code": "+971",
+        "address": "694J+G3J - Nadd Al Hamar - Dubai - United Arab Emirates",
+        "long": 55.3801364,
+        "lat": 25.206336,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJS7_kv9VnXz4Rnje2E1ErvYg",
+        "created_at": "2023-03-28T07:27:40.272Z",
+        "updated_at": "2023-03-28T07:27:40.273Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 85,
+    "fields": {
+        "name": "Katrina Bakery - DIP",
+        "contact": "48132300",
+        "country_code": "+971",
+        "address": "58 street, Warehouse 12, PO 87047, Dubai Investment Park - 2 - مجمع دبي للإستثمار - دبي - United Arab Emirates",
+        "long": 55.205505,
+        "lat": 24.9701608,
+        "is_active": true,
+        "website": "http://www.katrinasweets.com/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJRcuMNodzXz4RjV6lN6UeunM",
+        "created_at": "2023-03-28T07:27:42.150Z",
+        "updated_at": "2023-03-28T07:27:42.150Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 86,
+    "fields": {
+        "name": "French Bakery Meadows",
+        "contact": "551233181",
+        "country_code": "+971",
+        "address": "The Meadows Village - 1st Rd - Dubai - United Arab Emirates",
+        "long": 55.1574495,
+        "lat": 25.0642803,
+        "is_active": true,
+        "website": "https://frenchbakery.cafe/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJC36nvSdtXz4RH56u643GkgM",
+        "created_at": "2023-03-28T07:27:44.067Z",
+        "updated_at": "2023-03-28T07:27:44.068Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 87,
+    "fields": {
+        "name": "Century Bakery",
+        "contact": "26116448",
+        "country_code": "+971",
+        "address": "F9H4+595 - Al Hisn - W4 - Abu Dhabi - United Arab Emirates",
+        "long": 54.3559931,
+        "lat": 24.4778869,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJCSvu9XJmXj4RTF4TYPbYJ04",
+        "created_at": "2023-03-28T07:27:46.138Z",
+        "updated_at": "2023-03-28T07:27:46.138Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 88,
+    "fields": {
+        "name": "Adrar Bakery مخبز ادرار",
+        "contact": "525965108",
+        "country_code": "+971",
+        "address": "24 Al Soor St - Deira - Al Sabkha - Dubai - United Arab Emirates",
+        "long": 55.30004,
+        "lat": 25.2713653,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJuUyuMURDXz4RD0Ue6dMJkHM",
+        "created_at": "2023-03-28T07:27:48.258Z",
+        "updated_at": "2023-03-28T07:27:48.258Z",
+        "i_subcategory": [
+            1
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 89,
+    "fields": {
+        "name": "Mushref Bar",
+        "contact": "48145555",
+        "country_code": "+971",
+        "address": "Exit # 13, Sheikh Zayed Road - Mina Jebel Ali - Jebel Ali Freezone - Dubai - United Arab Emirates",
+        "long": 55.02294,
+        "lat": 24.987743,
+        "is_active": true,
+        "website": "http://www.jaresortshotels.com/Properties/JAGR/PalmTreeCourt/hotel/Overview.aspx",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJp9vP3L4RXz4RbQlXNfC1W04",
+        "created_at": "2023-03-28T07:27:50.285Z",
+        "updated_at": "2023-03-28T07:27:50.285Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 90,
+    "fields": {
+        "name": "The Anchor",
+        "contact": "48145555",
+        "country_code": "+971",
+        "address": "X2QC+4G8 - Sheikh Zayed Road, Exit # 13 - Mina Jebel Ali - Jebel Ali Freezone - Dubai - United Arab Emirates",
+        "long": 55.0213256,
+        "lat": 24.9877848,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJlb38KLkRXz4R_KdXmyFPd1M",
+        "created_at": "2023-03-28T07:27:52.855Z",
+        "updated_at": "2023-03-28T07:27:52.855Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 91,
+    "fields": {
+        "name": "ICON Bar & Lounge",
+        "contact": "43669111",
+        "country_code": "+971",
+        "address": "Al Falak St - Al Sufouh - Dubai Media City - Dubai - United Arab Emirates",
+        "long": 55.1552396,
+        "lat": 25.0935824,
+        "is_active": true,
+        "website": "https://www.radissonhotels.com/en-us/hotels/radisson-blu-dubai-media-city/restaurant-bar/icon-bar-lounge",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJPy0ta0NrXz4R8u04xM6sdjU",
+        "created_at": "2023-03-28T07:27:55.001Z",
+        "updated_at": "2023-03-28T07:27:55.001Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 92,
+    "fields": {
+        "name": "Vintage Bar",
+        "contact": "",
+        "country_code": "",
+        "address": "VV4W+QQ4 - Ghantout - Abu Dhabi - United Arab Emirates",
+        "long": 54.8969573,
+        "lat": 24.8568878,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJ69keQ5wFXz4RKLwbstl9f0w",
+        "created_at": "2023-03-28T07:27:57.009Z",
+        "updated_at": "2023-03-28T07:27:57.009Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 93,
+    "fields": {
+        "name": "Bounty Bar",
+        "contact": "25629100",
+        "country_code": "+971",
+        "address": "Dubai-Abu Dhabi Road, Exit # 399 - غنتوت - أبو ظبي - United Arab Emirates",
+        "long": 54.8962778,
+        "lat": 24.85775,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJB6s7Sz0EXz4RN_Y3MWyka2E",
+        "created_at": "2023-03-28T07:27:59.467Z",
+        "updated_at": "2023-03-28T07:27:59.467Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 94,
+    "fields": {
+        "name": "Mina A'Salam Pool Bar",
+        "contact": "800323232",
+        "country_code": "+971",
+        "address": "Pool area, Jumeirah Mina A’Salam, Madinat Jumeirah - Jumeira Road, Umm Suqeim 3 - الصفوح 1 - دبي - United Arab Emirates",
+        "long": 55.185396,
+        "lat": 25.136425,
+        "is_active": true,
+        "website": "https://www.jumeirah.com/en/dine/dubai/mina-a-salam-pool-bar?utm_source=google&utm_medium=google%20places&utm_campaign=restaurant",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJVTgMJ1RqXz4Rfovx0FfqWow",
+        "created_at": "2023-03-28T07:28:02.341Z",
+        "updated_at": "2023-03-28T07:28:02.341Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 95,
+    "fields": {
+        "name": "Centre Circle Bar",
+        "contact": "45019000",
+        "country_code": "+971",
+        "address": "23rd St - Al Barsha - Al Barsha 1 - Dubai - United Arab Emirates",
+        "long": 55.2039066,
+        "lat": 25.108595,
+        "is_active": true,
+        "website": "https://www.carltonbarsha.com/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJI6r65AxrXz4R4oBudqY38aU",
+        "created_at": "2023-03-28T07:28:04.606Z",
+        "updated_at": "2023-03-28T07:28:04.606Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 96,
+    "fields": {
+        "name": "Cave Bar",
+        "contact": "25638557",
+        "country_code": "+971",
+        "address": "JP8C+P8G - Sheikh Maktoum Road (E 11 Road) - Abu Mreikhah - Abu Dhabi - United Arab Emirates",
+        "long": 54.72083,
+        "lat": 24.616824,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJURUIGZVTXj4RpcUyqmPpVXk",
+        "created_at": "2023-03-28T07:28:06.846Z",
+        "updated_at": "2023-03-28T07:28:06.846Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 97,
+    "fields": {
+        "name": "Nakhuda Bar",
+        "contact": "43666730",
+        "country_code": "+971",
+        "address": "45PP+397 - Jumeirah Beach Road - Madinat Jumeirah - Al Sufouh 1 - Dubai - United Arab Emirates",
+        "long": 55.185916,
+        "lat": 25.135151,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJn5lxalRqXz4RQL-oN6PvNzc",
+        "created_at": "2023-03-28T07:28:08.957Z",
+        "updated_at": "2023-03-28T07:28:08.957Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 98,
+    "fields": {
+        "name": "Gilt - Sky Bar",
+        "contact": "800323232",
+        "country_code": "+971",
+        "address": "27th floor, Burj Al Arab Jumeirah - شارع جميرا - ام سقيم ٣ - دبي - United Arab Emirates",
+        "long": 55.1853984,
+        "lat": 25.1414396,
+        "is_active": true,
+        "website": "http://www.jumeirah.com/gilt",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJQbBcrvtrXz4RiqsmJd2EcXw",
+        "created_at": "2023-03-28T07:28:10.961Z",
+        "updated_at": "2023-03-28T07:28:10.961Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 99,
+    "fields": {
+        "name": "Crystal Bar",
+        "contact": "44299999",
+        "country_code": "+971",
+        "address": "G floor,Grand Millennium Dubai,Sheikh Zayed Road,Exit 36, Al Barsha South - TECOM - Media City - Barsha Heights - Dubai - United Arab Emirates",
+        "long": 55.1776828,
+        "lat": 25.101247,
+        "is_active": true,
+        "website": "https://www.millenniumhotels.com/en/dubai/grand-millennium-dubai/crystal-bar/?cid=gplaces-crystal-bar-dubai",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJv_wi5nZrXz4RTTqhDuKF1jA",
+        "created_at": "2023-03-28T07:28:12.903Z",
+        "updated_at": "2023-03-28T07:28:12.903Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 100,
+    "fields": {
+        "name": "Maxx Music Bar - Al Barsha at the Mall",
+        "contact": "501007046",
+        "country_code": "+971",
+        "address": "Ground Floor, Citymax Hotels, Behind Mall of Emirates - البرشاء - البرشاء 1 - دبي - United Arab Emirates",
+        "long": 55.2040078,
+        "lat": 25.1155664,
+        "is_active": true,
+        "website": "https://www.citymaxhotels.com/dining/maxx-music-bar?utm_source=GMB&utm_medium=organic&utm_campaign=maxx-bar",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJyabPVJVrXz4RLCCBDK6q3g0",
+        "created_at": "2023-03-28T07:28:14.765Z",
+        "updated_at": "2023-03-28T07:28:14.765Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 101,
+    "fields": {
+        "name": "Bar Buci",
+        "contact": "800323232",
+        "country_code": "+971",
+        "address": "Lobby Level, Jumeirah Al Qasr Hotel - الصفوح 1 - دبي - United Arab Emirates",
+        "long": 55.1844266,
+        "lat": 25.1320804,
+        "is_active": true,
+        "website": "https://www.jumeirah.com/en/dine/dubai/al-qasr-bar-buci",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJGwXtEmlDXz4R6GbaJFB92xg",
+        "created_at": "2023-03-28T07:28:16.675Z",
+        "updated_at": "2023-03-28T07:28:16.675Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 102,
+    "fields": {
+        "name": "Sundeck Pool Bar",
+        "contact": "44282093",
+        "country_code": "+971",
+        "address": "The Walk - Jumeirah Beach Residence - Dubai - United Arab Emirates",
+        "long": 55.1307302,
+        "lat": 25.0739642,
+        "is_active": true,
+        "website": "https://www.rotana.com/rotanahotelandresorts/unitedarabemirates/dubai/amwajrotana/diningout/sundeckpoolbar?utm_source=google&utm_medium=local&utm_campaign=sundeck",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJN2mjQVYTXz4RzzonUPaziS8",
+        "created_at": "2023-03-28T07:28:18.644Z",
+        "updated_at": "2023-03-28T07:28:18.644Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 103,
+    "fields": {
+        "name": "Bubbles Lounge Bar",
+        "contact": "43049000",
+        "country_code": "+971",
+        "address": "Sheikh Zayed Rd - Al Barsha - Al Barsha 1 - Dubai - United Arab Emirates",
+        "long": 55.188786,
+        "lat": 25.112454,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJt8XzbKJrXz4RtEy33yvLYXY",
+        "created_at": "2023-03-28T07:28:20.657Z",
+        "updated_at": "2023-03-28T07:28:20.657Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 104,
+    "fields": {
+        "name": "Huddle Sports Bar & Grill",
+        "contact": "44098000",
+        "country_code": "+971",
+        "address": "Citymax Hotel - Al Barsha - Al Barsha 1 - Dubai - United Arab Emirates",
+        "long": 55.2039886,
+        "lat": 25.1155806,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJwdOLquprXz4RK2SBTP90gvM",
+        "created_at": "2023-03-28T07:28:22.617Z",
+        "updated_at": "2023-03-28T07:28:22.618Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 105,
+    "fields": {
+        "name": "Sunset Bar",
+        "contact": "",
+        "country_code": "",
+        "address": "X2PC+W67 - Mina Jebel Ali - Jebel Ali Freezone - Dubai - United Arab Emirates",
+        "long": 55.0205364,
+        "lat": 24.9872891,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJs-l5oNERXz4R8FTTd4zjBK0",
+        "created_at": "2023-03-28T07:28:24.899Z",
+        "updated_at": "2023-03-28T07:28:24.899Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 106,
+    "fields": {
+        "name": "The Q - Sports Bar",
+        "contact": "47040802",
+        "country_code": "+971",
+        "address": "Sheikh Zayed Rd - Al Barsha - Al Barsha 1 - Dubai - United Arab Emirates",
+        "long": 55.1939543,
+        "lat": 25.1163369,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJe6OGNgJrXz4RVDl9UCWVIxM",
+        "created_at": "2023-03-28T07:28:27.127Z",
+        "updated_at": "2023-03-28T07:28:27.127Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 107,
+    "fields": {
+        "name": "Jamboree Bar",
+        "contact": "",
+        "country_code": "",
+        "address": "455M+C7P - Al Barsha - Al Barsha 1 - Dubai - United Arab Emirates",
+        "long": 55.1831897,
+        "lat": 25.1085779,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJEzT5OXxrXz4RLW9aE8xC4sQ",
+        "created_at": "2023-03-28T07:28:29.261Z",
+        "updated_at": "2023-03-28T07:28:29.261Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 108,
+    "fields": {
+        "name": "Lock, Stock & Barrel JBR",
+        "contact": "44238307",
+        "country_code": "+971",
+        "address": "Rixos Premium JBR - The Walk - Dubai Marina - Dubai - United Arab Emirates",
+        "long": 55.1354571,
+        "lat": 25.0800378,
+        "is_active": true,
+        "website": "https://www.lsbdubai.com/jbr/?utm_source=google&utm_medium=google-places&utm_campaign=venue",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJ65xpC6sUXz4RDhldvsSCGgE",
+        "created_at": "2023-03-28T07:28:31.539Z",
+        "updated_at": "2023-03-28T07:28:31.539Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 109,
+    "fields": {
+        "name": "Vero Sky Bar",
+        "contact": "",
+        "country_code": "",
+        "address": "The Walk - Dubai Marina - Dubai - United Arab Emirates",
+        "long": 55.1341126,
+        "lat": 25.0789302,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJ-zOoOiwVXz4RFCFUD4VRNmY",
+        "created_at": "2023-03-28T07:28:34.101Z",
+        "updated_at": "2023-03-28T07:28:34.101Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 110,
+    "fields": {
+        "name": "Ezaz Bar",
+        "contact": "43823000",
+        "country_code": "+971",
+        "address": "Street 2A - Al Barsha - Al Barsha 1 - Dubai - United Arab Emirates",
+        "long": 55.1958705,
+        "lat": 25.1166097,
+        "is_active": true,
+        "website": "https://all.accor.com/hotel/6493/index.en.shtml?utm_campaign=seo+maps&utm_medium=seo+maps&utm_source=google+Maps",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJPdYtUbxrXz4REl0IblU7ACo",
+        "created_at": "2023-03-28T07:28:37.454Z",
+        "updated_at": "2023-03-28T07:28:37.454Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 111,
+    "fields": {
+        "name": "Skyview Bar",
+        "contact": "800323232",
+        "country_code": "+971",
+        "address": "27th floor, Burj Al Arab - شارع شاطئ جميرة - ام سقيم ٣ - دبي - United Arab Emirates",
+        "long": 55.184923,
+        "lat": 25.141635,
+        "is_active": true,
+        "website": "https://www.jumeirah.com/en/dine/dubai/burj-al-arab-skyview-bar",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJRcbZaklDXz4R46_nG84hXqM",
+        "created_at": "2023-03-28T07:28:39.425Z",
+        "updated_at": "2023-03-28T07:28:39.425Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 112,
+    "fields": {
+        "name": "Bar 44",
+        "contact": "43176000",
+        "country_code": "+971",
+        "address": "Grosvenor House Dubai - Al Emreef Street - دبي مارينا - دبي - United Arab Emirates",
+        "long": 55.143862,
+        "lat": 25.08575,
+        "is_active": true,
+        "website": "http://www.bar44-dubai.com/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJwxJBb1FrXz4RTGNIk3yn7g0",
+        "created_at": "2023-03-28T07:28:41.299Z",
+        "updated_at": "2023-03-28T07:28:41.299Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 113,
+    "fields": {
+        "name": "The Lounge Bar",
+        "contact": "42239000ext.3",
+        "country_code": "+971",
+        "address": "37th alrigga street deira - ديرة - دبي - United Arab Emirates",
+        "long": 55.3237733,
+        "lat": 25.2609407,
+        "is_active": true,
+        "website": "https://www.facebook.com/sunandsandsdubai/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJd60WI9BcXz4R3ltmU5NzVbU",
+        "created_at": "2023-03-28T07:28:43.212Z",
+        "updated_at": "2023-03-28T07:28:43.212Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 114,
+    "fields": {
+        "name": "Oak Resto Bar",
+        "contact": "504931713",
+        "country_code": "+971",
+        "address": "Al Barsha Rd - behind Mall Of Emirates - Al Barsha - Al Barsha 1 - Dubai - United Arab Emirates",
+        "long": 55.1971995,
+        "lat": 25.1144979,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJp78VYxRrXz4RomBQLJP28mM",
+        "created_at": "2023-03-28T07:28:45.070Z",
+        "updated_at": "2023-03-28T07:28:45.070Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 115,
+    "fields": {
+        "name": "The Bar",
+        "contact": "45119333",
+        "country_code": "+971",
+        "address": "57Q4+F36 - Sheikh Zayed Rd - Al Wasl - Dubai - United Arab Emirates",
+        "long": 55.2551526,
+        "lat": 25.1886633,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJQ6tFHtlpXz4RcXtWONmzk-c",
+        "created_at": "2023-03-28T07:28:46.978Z",
+        "updated_at": "2023-03-28T07:28:46.978Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 116,
+    "fields": {
+        "name": "Qube Sports Bar",
+        "contact": "43813300",
+        "country_code": "+971",
+        "address": "G 11,Meydan Hotel,Al Meydan Street,Nad Al Sheba - Nad Al Sheba 1 - Dubai - United Arab Emirates",
+        "long": 55.3042176,
+        "lat": 25.1606998,
+        "is_active": true,
+        "website": "https://themeydanhotel.com/qube-sports-bar",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJxQcxy4hoXz4RMeMZS6nLiP8",
+        "created_at": "2023-03-28T07:28:48.953Z",
+        "updated_at": "2023-03-28T07:28:48.953Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 117,
+    "fields": {
+        "name": "Anonymous Lounge",
+        "contact": "509955400",
+        "country_code": "+971",
+        "address": "Fairmont Dubai Hotel - 67GM+GQG - شارع الشيخ زايد - المركز التجاري - المركز التجاري الأولي - دبي - United Arab Emirates",
+        "long": 55.284455,
+        "lat": 25.2263014,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJ-6ZBgKFDXz4RtmXbK7UFNqs",
+        "created_at": "2023-03-28T07:28:51.171Z",
+        "updated_at": "2023-03-28T07:28:51.171Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 118,
+    "fields": {
+        "name": "Pool Bar",
+        "contact": "43995000",
+        "country_code": "+971",
+        "address": "King Salman Bin Abdulaziz Al Saud St - Dubai Marina - Dubai - United Arab Emirates",
+        "long": 55.1410794,
+        "lat": 25.0861787,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJaW-LTVJrXz4R5l6P_FAij28",
+        "created_at": "2023-03-28T07:28:55.353Z",
+        "updated_at": "2023-03-28T07:28:55.353Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 119,
+    "fields": {
+        "name": "Rum bar",
+        "contact": "",
+        "country_code": "",
+        "address": "Jumeirah Beach Residence - Beach Walk - دبي مارينا - دبي - United Arab Emirates",
+        "long": 55.1362217,
+        "lat": 25.0832604,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJGTxxkrAVXz4RC2HxxoEeE74",
+        "created_at": "2023-03-28T07:29:00.143Z",
+        "updated_at": "2023-03-28T07:29:00.143Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 120,
+    "fields": {
+        "name": "Jumeirah Beach Hotel Pool Bar",
+        "contact": "800323232",
+        "country_code": "+971",
+        "address": "Jumeirah Beach Hotel,Jumeirah Beach Road,Umm Suqeim 3 - Umm Suqeim - Umm Suqeim 3 - Dubai - United Arab Emirates",
+        "long": 55.189768,
+        "lat": 25.141767,
+        "is_active": true,
+        "website": "https://www.jumeirah.com/en/dine/dubai/beach-hotel-pool-bar?utm_source=google&utm_medium=google%20places&utm_campaign=restaurant",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJn5lxalRqXz4RtUYGk2x3_KQ",
+        "created_at": "2023-03-28T07:29:02.866Z",
+        "updated_at": "2023-03-28T07:29:02.866Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 121,
+    "fields": {
+        "name": "23rd Street Sports House",
+        "contact": "562738306",
+        "country_code": "+971",
+        "address": "Grandeur Hotel, 23rd street, Near Mall Of The Emirates - البرشاء - البرشاء 1 - دبي - United Arab Emirates",
+        "long": 55.202905,
+        "lat": 25.1096129,
+        "is_active": true,
+        "website": "http://www.grandeurhotel.com/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJ_QTNWpNrXz4R2Zc6xTplGLs",
+        "created_at": "2023-03-28T07:29:05.076Z",
+        "updated_at": "2023-03-28T07:29:05.076Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 122,
+    "fields": {
+        "name": "Hidden Bar - Gin Bar",
+        "contact": "28135550",
+        "country_code": "+971",
+        "address": "Rosewood Hotel, Al Maryah Island - Al Maryah Island - Abu Dhabi Global Market Square - Abu Dhabi - United Arab Emirates",
+        "long": 54.3877964,
+        "lat": 24.4995637,
+        "is_active": true,
+        "website": "https://www.rosewoodhotels.com/en/abu-dhabi/dining/Hidden-Bar",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJ49rF71RmXj4Rj9AbDnE1Dg4",
+        "created_at": "2023-03-28T07:29:07.132Z",
+        "updated_at": "2023-03-28T07:29:07.132Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 123,
+    "fields": {
+        "name": "S Bar",
+        "contact": "46070757",
+        "country_code": "+971",
+        "address": "Level 71, SLS Dubai Hotel & Residences - مراسي درايف - الخليج التجاري - دبي - United Arab Emirates",
+        "long": 55.2922208,
+        "lat": 25.1847846,
+        "is_active": true,
+        "website": "https://www.sbe.com/nightlife/s-bar/dubai",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJn6oR8L1pXz4RqwG386LSuyg",
+        "created_at": "2023-03-28T07:29:09.130Z",
+        "updated_at": "2023-03-28T07:29:09.130Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 124,
+    "fields": {
+        "name": "Juzz Bar",
+        "contact": "44299999",
+        "country_code": "+971",
+        "address": "18th Floor ,Grand Millennium Dubai,Sheikh Zayed Road - Exit 36, Al Barsha South - Tecom - Media City - إمارة دبيّ - Barsha Heights - دبي - United Arab Emirates",
+        "long": 55.1777021,
+        "lat": 25.1012779,
+        "is_active": true,
+        "website": "https://www.millenniumhotels.com/en/dubai/grand-millennium-dubai/juzz-bar/?cid=gplaces-juzz-bar",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJBSu-wnZrXz4RFrX18-hZvDM",
+        "created_at": "2023-03-28T07:29:11.271Z",
+        "updated_at": "2023-03-28T07:29:11.271Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 125,
+    "fields": {
+        "name": "Cheers Bar",
+        "contact": "42632555",
+        "country_code": "+971",
+        "address": "239 Damascus Street - Al Qusais - Dubai - United Arab Emirates",
+        "long": 55.3811944,
+        "lat": 25.2731129,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJbY_RJTZcXz4R5rZ0KF3sR_c",
+        "created_at": "2023-03-28T07:29:13.340Z",
+        "updated_at": "2023-03-28T07:29:13.340Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 126,
+    "fields": {
+        "name": "Biggles Pub",
+        "contact": "47028888",
+        "country_code": "+971",
+        "address": "Airport Road, Casablanca Street, - Garhoud - Dubai - United Arab Emirates",
+        "long": 55.3439018,
+        "lat": 25.2481161,
+        "is_active": true,
+        "website": "https://www.millenniumhotels.com/en/dubai/millennium-airport-hotel-dubai/biggles-pub/?cid=gplaces-biggles-pub",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJmXGj3f5cXz4ROLdxQoU1eC8",
+        "created_at": "2023-03-28T07:29:15.745Z",
+        "updated_at": "2023-03-28T07:29:15.745Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 127,
+    "fields": {
+        "name": "Library Bar",
+        "contact": "",
+        "country_code": "",
+        "address": "The Ritz-Carlton, Dubai - مساكن شاطئ جميرا - دبي - United Arab Emirates",
+        "long": 55.1373946,
+        "lat": 25.0825387,
+        "is_active": true,
+        "website": "http://www.ritzcarlton.com/en/hotels/dubai/dubai-beach/dining/library-bar?scid=bb1a189a-fec3-4d19-a255-54ba596febe2",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJxzCMUxVCXz4RzKOtvilkf9Y",
+        "created_at": "2023-03-28T07:29:18.156Z",
+        "updated_at": "2023-03-28T07:29:18.156Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 128,
+    "fields": {
+        "name": "The List Bar",
+        "contact": "45962294",
+        "country_code": "+971",
+        "address": "Al Jaddaf - Dubai - United Arab Emirates",
+        "long": 55.329615,
+        "lat": 25.2210884,
+        "is_active": true,
+        "website": "https://www.rotana.com/rotanahotelandresorts/unitedarabemirates/dubai/aljaddafrotana/diningout/thelistbar?utm_source=google&utm_medium=local&utm_campaign=glocal+list-bar",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJmddH4X1dXz4RjuPB4zjhCv0",
+        "created_at": "2023-03-28T07:29:20.318Z",
+        "updated_at": "2023-03-28T07:29:20.318Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 129,
+    "fields": {
+        "name": "Rex Bar Dubai",
+        "contact": "44466788",
+        "country_code": "+971",
+        "address": "InterContinental - King Salman Bin Abdulaziz Al Saud St - Dubai Marina - Dubai - United Arab Emirates",
+        "long": 55.1378836,
+        "lat": 25.0792742,
+        "is_active": true,
+        "website": "https://www.intercontinentaldubaimarina.com/rex-bar-dubai",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJRWqU8QVrXz4Rz2i8umw9BhQ",
+        "created_at": "2023-03-28T07:29:22.567Z",
+        "updated_at": "2023-03-28T07:29:22.567Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 130,
+    "fields": {
+        "name": "Leon Bar Dubai",
+        "contact": "46023399",
+        "country_code": "+971",
+        "address": "The Dubai EDITION - Downtown Dubai - Dubai - United Arab Emirates",
+        "long": 55.2807509,
+        "lat": 25.1921281,
+        "is_active": true,
+        "website": "http://www.leon-bar.com/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJk_VVKAdpXz4RX3JbhUu9RTo",
+        "created_at": "2023-03-28T07:29:25.202Z",
+        "updated_at": "2023-03-28T07:29:25.202Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 131,
+    "fields": {
+        "name": "Vertical Bar",
+        "contact": "26597666",
+        "country_code": "+971",
+        "address": "F9RH+6WV - Al Salam Street - Al Zahiyah - E16-01 - Abu Dhabi - United Arab Emirates",
+        "long": 54.37981,
+        "lat": 24.4906115,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJs5Kbi09mXj4RVg5HrpEbUNE",
+        "created_at": "2023-03-28T07:29:29.167Z",
+        "updated_at": "2023-03-28T07:29:29.167Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 132,
+    "fields": {
+        "name": "Ripples Pool Bar",
+        "contact": "45247777",
+        "country_code": "+971",
+        "address": "44QR+GV8 - The Palm Jumeirah - Dubai - United Arab Emirates",
+        "long": 55.1422056,
+        "lat": 25.138786,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJuRj429FrXz4RnFlrE2SePJU",
+        "created_at": "2023-03-28T07:29:32.822Z",
+        "updated_at": "2023-03-28T07:29:32.822Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 133,
+    "fields": {
+        "name": "Bar Nights Bites",
+        "contact": "43177777",
+        "country_code": "+971",
+        "address": "Oud Metha Road Al Jaddaf Area - 6868+H6C - الجداف - دبي - United Arab Emirates",
+        "long": 55.3155195,
+        "lat": 25.2114294,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJyQd0ys5dXz4RNxqeT4YIimM",
+        "created_at": "2023-03-28T07:29:35.471Z",
+        "updated_at": "2023-03-28T07:29:35.471Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 134,
+    "fields": {
+        "name": "The Boston Bar & Restaurant",
+        "contact": "43084342",
+        "country_code": "+971",
+        "address": "Al Diyafah Road - 6 A St - Al Bada'a - Dubai - United Arab Emirates",
+        "long": 55.2746402,
+        "lat": 25.2371077,
+        "is_active": true,
+        "website": "https://www.rotana.com/jumeirarotana/dining/thebostonbar",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJDys-GP5CXz4RZj4S8OMQ1l8",
+        "created_at": "2023-03-28T07:29:37.463Z",
+        "updated_at": "2023-03-28T07:29:37.463Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 135,
+    "fields": {
+        "name": "VOLGA BAR",
+        "contact": "565695353",
+        "country_code": "+971",
+        "address": "78J7+MR5 - 2nd St - Deira - Dubai - United Arab Emirates",
+        "long": 55.314599,
+        "lat": 25.2816255,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJz0_CwTJdXz4RwCqMGPI2HPY",
+        "created_at": "2023-03-28T07:29:40.839Z",
+        "updated_at": "2023-03-28T07:29:40.839Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 136,
+    "fields": {
+        "name": "The Bar, Hyatt Regency Dubai",
+        "contact": "42096887",
+        "country_code": "+971",
+        "address": "Al Khaleej St - Corniche Deira - Dubai - United Arab Emirates",
+        "long": 55.304314,
+        "lat": 25.27923,
+        "is_active": true,
+        "website": "https://www.hyattrestaurants.com/en/dining/uae/dubai/arabic-restaurant-in-deira-corniche-the-bar?utm_source=gmblisting_dxbrd&utm_medium=thebar&utm_campaign=GMB",
+        "logo_pic": "business_images/ezgif.com-webp-to-jpg.jpg",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJSR7cZlBDXz4RzxKG4PUChoQ",
+        "created_at": "2023-03-28T07:29:43.866Z",
+        "updated_at": "2023-03-31T12:29:06.091Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 137,
+    "fields": {
+        "name": "Balcony Bar",
+        "contact": "44052703",
+        "country_code": "+971",
+        "address": "shangri la Hotel - 1 شارع الشيخ زايد - المركز التجاري - المركز التجاري الأولي - دبي - United Arab Emirates",
+        "long": 55.2719962,
+        "lat": 25.2082186,
+        "is_active": true,
+        "website": "http://www.shangri-la.com/mobile/dubai/shangrila/dining/bars-lounges/balcony-bar/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJOVQ-RYhCXz4RAFV_7_eeEac",
+        "created_at": "2023-03-28T07:29:46.366Z",
+        "updated_at": "2023-03-28T07:29:46.366Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 138,
+    "fields": {
+        "name": "The Polo Bar, Habtoor Palace",
+        "contact": "44355577",
+        "country_code": "+971",
+        "address": "260 Sheikh Zayed Rd - Al Wasl - Dubai - United Arab Emirates",
+        "long": 55.2543674,
+        "lat": 25.1831671,
+        "is_active": true,
+        "website": "https://www.hilton.com/en/hotels/dxbplol-habtoor-palace-dubai-lxr/dining/?utm_source=tripadvisor&utm_medium=referral",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJN-UZd9tpXz4RqLPSv39Icrc",
+        "created_at": "2023-03-28T07:29:49.469Z",
+        "updated_at": "2023-03-28T07:29:49.469Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 139,
+    "fields": {
+        "name": "The Sports Bar",
+        "contact": "43473222",
+        "country_code": "+971",
+        "address": "35P5+2XR - Emirates Hills 2 - Dubai - United Arab Emirates",
+        "long": 55.1598966,
+        "lat": 25.0851131,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJN35hd2BrXz4RzewuLvReZHk",
+        "created_at": "2023-03-28T07:29:51.782Z",
+        "updated_at": "2023-03-28T07:29:51.782Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 140,
+    "fields": {
+        "name": "Le Bar",
+        "contact": "44285898",
+        "country_code": "+971",
+        "address": "57RH+G3G - Downtown Dubai - Dubai - United Arab Emirates",
+        "long": 55.2776897,
+        "lat": 25.1913006,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJNea8xC5oXz4RcSnGH81oXVc",
+        "created_at": "2023-03-28T07:29:53.782Z",
+        "updated_at": "2023-03-28T07:29:53.782Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 141,
+    "fields": {
+        "name": "Speakeasy",
+        "contact": "501896214",
+        "country_code": "+971",
+        "address": "Delta Hotels by Marriott Jumeirah Beach, Dubai, Bahar 7 - Jumeirah Beach Residence - Dubai - United Arab Emirates",
+        "long": 55.1361463,
+        "lat": 25.0778843,
+        "is_active": true,
+        "website": "https://www.speakeasydubai.com/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJARX5k6oUXz4R3gXBkQA6cRc",
+        "created_at": "2023-03-28T07:29:56.666Z",
+        "updated_at": "2023-03-28T07:29:56.666Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 142,
+    "fields": {
+        "name": "Monkey Bar Dubai",
+        "contact": "42102566",
+        "country_code": "+971",
+        "address": "25hours Hotel Dubai One Central - Trade Center St - المركز التجاري - المركز التجاري الثانية - دبي - United Arab Emirates",
+        "long": 55.2844297,
+        "lat": 25.2194241,
+        "is_active": true,
+        "website": "https://www.monkeybardubai.com/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJLXpp_bdDXz4RdPUPqcJ4nN4",
+        "created_at": "2023-03-28T07:29:58.920Z",
+        "updated_at": "2023-03-28T07:29:58.921Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 143,
+    "fields": {
+        "name": "The Brick Wall Sports Bar",
+        "contact": "44275535",
+        "country_code": "+971",
+        "address": "Al Sufouh - Dubai Knowledge Park - Dubai - United Arab Emirates",
+        "long": 55.1661131,
+        "lat": 25.1043349,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJEbQBYs1rXz4RzP6xSig0t1Q",
+        "created_at": "2023-03-28T07:30:01.796Z",
+        "updated_at": "2023-03-28T07:30:01.796Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 144,
+    "fields": {
+        "name": "Neptune Pool & Bar",
+        "contact": "45566666",
+        "country_code": "+971",
+        "address": "Caesars Palace - Bluewaters Island - Dubai - United Arab Emirates",
+        "long": 55.120548,
+        "lat": 25.080689,
+        "is_active": true,
+        "website": "https://www.caesars.com/dubai/restaurants/neptune-pool-beach?utm_campaign=GMB&utm_source=google&utm_medium=local&utm_term=Neptune&utm_content=bar",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJE7HOuL0VXz4RayDh5Skfl4k",
+        "created_at": "2023-03-28T07:30:03.932Z",
+        "updated_at": "2023-03-28T07:30:03.932Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 145,
+    "fields": {
+        "name": "Dukes Bar",
+        "contact": "44551101",
+        "country_code": "+971",
+        "address": "Palm Jumeirah - The Palm Jumeirah - Dubai - United Arab Emirates",
+        "long": 55.1379749,
+        "lat": 25.112388,
+        "is_active": true,
+        "website": "https://www.offers.dukesthepalm.com/dukes-bar/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJKX8uP_5rXz4R_u2ZLdmbcG4",
+        "created_at": "2023-03-28T07:30:06.197Z",
+        "updated_at": "2023-03-28T07:30:06.197Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 146,
+    "fields": {
+        "name": "Waves Bar & Outdoor Lounge",
+        "contact": "25016088",
+        "country_code": "+971",
+        "address": "Novotel Abu Dhabi Al Bustan Airport Road First Floor - السعادة - Zone 1 - أبو ظبي - United Arab Emirates",
+        "long": 54.4290428,
+        "lat": 24.4294872,
+        "is_active": true,
+        "website": "https://www.novotel-abudhabi-albustan.com/restaurants-and-bars/waves-bar/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJn8_odJ1pXj4R70vkNb6oBLU",
+        "created_at": "2023-03-28T07:30:08.467Z",
+        "updated_at": "2023-03-28T07:30:08.467Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 147,
+    "fields": {
+        "name": "Hoxton Bar & Urban Eatery",
+        "contact": "43958888",
+        "country_code": "+971",
+        "address": "B1, Armada BlueBay Hotel, Cluster P - أبراج بحيرات الجميرا - دبي - United Arab Emirates",
+        "long": 55.1454076,
+        "lat": 25.0749517,
+        "is_active": true,
+        "website": "http://hoxtondubai.com/",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJxcnf7-dtXz4R6IF-pGzJHQE",
+        "created_at": "2023-03-28T07:30:10.923Z",
+        "updated_at": "2023-03-28T07:30:10.923Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 148,
+    "fields": {
+        "name": "The Sand Bar",
+        "contact": "",
+        "country_code": "",
+        "address": "34VX+P3 - Dubai Marina - Dubai - United Arab Emirates",
+        "long": 55.147682,
+        "lat": 25.094303,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 1,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJmzV2C7FrXz4RmXUFvyjem9E",
+        "created_at": "2023-03-28T07:30:14.802Z",
+        "updated_at": "2023-03-28T07:30:14.802Z",
+        "i_subcategory": [
+            2
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 149,
+    "fields": {
+        "name": "Gloss & Glitter Ladies Beauty Salon",
+        "contact": "26661116",
+        "country_code": "+971",
+        "address": "Abu dhabi, Almanaseer area - Villa 632 - Mubarak Bin Mohammad Street - opposite Japanese Embassy - Al Manhal - Abu Dhabi - United Arab Emirates",
+        "long": 54.3640846,
+        "lat": 24.4584579,
+        "is_active": true,
+        "website": "http://www.ggsalonuae.com/",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJS61JbB5mXj4RgF-hmsgxuBs",
+        "created_at": "2023-03-28T07:30:18.787Z",
+        "updated_at": "2023-03-28T07:30:18.787Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 150,
+    "fields": {
+        "name": "Beauty Lounge Ladies Salon",
+        "contact": "43412118",
+        "country_code": "+971",
+        "address": "SS Lootha Bldg. Shop 4 Front of Centro Rotana Hotel Near Millennium - البرشاء - البرشاء 1 - دبي - United Arab Emirates",
+        "long": 55.1945242,
+        "lat": 25.1134954,
+        "is_active": true,
+        "website": "https://beauty-lounge-ladies-salon.business.site/?m=true",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJka-2aL1rXz4Ru4lK6zytvrQ",
+        "created_at": "2023-03-28T07:30:21.504Z",
+        "updated_at": "2023-03-28T07:30:21.504Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 151,
+    "fields": {
+        "name": "Lulu albahiya beauty center",
+        "contact": "25630058",
+        "country_code": "+971",
+        "address": "unnamed road - الصدر - الصدر أ - أبو ظبي - United Arab Emirates",
+        "long": 54.650861,
+        "lat": 24.5889019,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJHfc_FDxQXj4RuBgBPhy5gyQ",
+        "created_at": "2023-03-28T07:30:23.573Z",
+        "updated_at": "2023-03-28T07:30:23.573Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 152,
+    "fields": {
+        "name": "Zanzibar Beauty Salon",
+        "contact": "45469658",
+        "country_code": "+971",
+        "address": "871 Al Wasl Rd - Al Safa - Al Safa 2 - Dubai - United Arab Emirates",
+        "long": 55.2169442,
+        "lat": 25.1555667,
+        "is_active": true,
+        "website": "https://www.fresha.com/a/zanzibar-beauty-salon-dubai-2-c-street-bfbx4dzu?pId=501111",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJTTAXU6prXz4Rf2veGWjmk6I",
+        "created_at": "2023-03-28T07:30:25.755Z",
+        "updated_at": "2023-03-28T07:30:25.755Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 153,
+    "fields": {
+        "name": "Bodour Beauty Salon صالون بدور للتجميل",
+        "contact": "43422773",
+        "country_code": "+971",
+        "address": "Street - شارع ٦٢ - البرشاء - البرشاء 3 - دبي - United Arab Emirates",
+        "long": 55.2044122,
+        "lat": 25.0820178,
+        "is_active": true,
+        "website": "https://www.instagram.com/bodourbeauty",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJK2kMNQttXz4RSwr6ashIbvw",
+        "created_at": "2023-03-28T07:30:28.015Z",
+        "updated_at": "2023-03-28T07:30:28.015Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 154,
+    "fields": {
+        "name": "Rival stars Salon",
+        "contact": "45484385",
+        "country_code": "+971",
+        "address": "Villa G5 U1 Al Badaa' St - البدع - دبي - United Arab Emirates",
+        "long": 55.2615804,
+        "lat": 25.2183048,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJl02biFxCXz4R2DXywADlGDs",
+        "created_at": "2023-03-28T07:30:30.639Z",
+        "updated_at": "2023-03-28T07:30:30.639Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 155,
+    "fields": {
+        "name": "Sasha Beauty Salon Vida Hills",
+        "contact": "45708880",
+        "country_code": "+971",
+        "address": "Al Naseem St - Dubai - United Arab Emirates",
+        "long": 55.1569862,
+        "lat": 25.0797252,
+        "is_active": true,
+        "website": "http://www.sashauae.com/",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJpf9cxi1tXz4RbtgU9W1DO4I",
+        "created_at": "2023-03-28T07:30:32.709Z",
+        "updated_at": "2023-03-28T07:30:32.709Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 156,
+    "fields": {
+        "name": "Blossom Beauty Salon",
+        "contact": "44548414",
+        "country_code": "+971",
+        "address": "Al Barsha Boutique Building - Al Barsha - Al Barsha 1 - Dubai - United Arab Emirates",
+        "long": 55.197687,
+        "lat": 25.1077752,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJgWAoXJFrXz4RRvLwxKdfooQ",
+        "created_at": "2023-03-28T07:30:34.585Z",
+        "updated_at": "2023-03-28T07:30:34.585Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 157,
+    "fields": {
+        "name": "صالون ايمان eman salon",
+        "contact": "43480009",
+        "country_code": "+971",
+        "address": "969 Al Wasl Rd - near J3 Mall - Al Manara - Dubai - United Arab Emirates",
+        "long": 55.2113138,
+        "lat": 25.1481965,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJp49fVuhrXz4RetghndQh8Lk",
+        "created_at": "2023-03-28T07:30:36.598Z",
+        "updated_at": "2023-03-28T07:30:36.598Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 158,
+    "fields": {
+        "name": "Sandhya Beauty Salon Al Barsha",
+        "contact": "42854560",
+        "country_code": "+971",
+        "address": "Ground Floor AB Center, Al Attar Business Center - 1 Shop No 15 - 4C Street - Al Barsha - Al Barsha 1 - Dubai - United Arab Emirates",
+        "long": 55.1842797,
+        "lat": 25.1085807,
+        "is_active": true,
+        "website": "https://g.page/sandhyasalonalbarsha1",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJuVsapp9rXz4RSPWHKWIH7cc",
+        "created_at": "2023-03-28T07:30:38.517Z",
+        "updated_at": "2023-03-28T07:30:38.517Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 159,
+    "fields": {
+        "name": "TipTop Hair Beauty Salon marina mall",
+        "contact": "43997770",
+        "country_code": "+971",
+        "address": "Dubai Marina Mall P-Level / L3 - دبي مارينا - دبي - United Arab Emirates",
+        "long": 55.1405152,
+        "lat": 25.0763845,
+        "is_active": true,
+        "website": "http://tiptophair.ae/",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJKX-BiZZtXz4RPAsI9WTgDWc",
+        "created_at": "2023-03-28T07:30:40.637Z",
+        "updated_at": "2023-03-28T07:30:40.637Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 160,
+    "fields": {
+        "name": "Lengths and Lashes Ladies Beauty Salon Barsha",
+        "contact": "526828999",
+        "country_code": "+971",
+        "address": "Hessa St - Al Barsha - Dubai - United Arab Emirates",
+        "long": 55.1856911,
+        "lat": 25.0936641,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJFTkzIYxtXz4RpTwiUJo3mio",
+        "created_at": "2023-03-28T07:30:42.555Z",
+        "updated_at": "2023-03-28T07:30:42.555Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 161,
+    "fields": {
+        "name": "Legend beauty salon",
+        "contact": "43948040",
+        "country_code": "+971",
+        "address": "Wasl Road Wasl Square - Block 3 Shop 13 - الصفا - الصفا 1 - دبي - United Arab Emirates",
+        "long": 55.2392701,
+        "lat": 25.1849674,
+        "is_active": true,
+        "website": "http://www.legendspacentre.com/",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJCQB88-JpXz4RU_pzq5Fp4JA",
+        "created_at": "2023-03-28T07:30:44.471Z",
+        "updated_at": "2023-03-28T07:30:44.471Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 162,
+    "fields": {
+        "name": "Belle Femme Beauty Salon",
+        "contact": "43953334",
+        "country_code": "+971",
+        "address": "Villa 467 A, Opposite Sunset Mall, Jumeirah Road, Jumeirah 3 - جميرا - Jumeirah 3 - دبي - United Arab Emirates",
+        "long": 55.227771,
+        "lat": 25.1847408,
+        "is_active": true,
+        "website": "http://bellefemmeme.com/",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJTZQd4v9pXz4RUFUMrWEyff0",
+        "created_at": "2023-03-28T07:30:46.424Z",
+        "updated_at": "2023-03-28T07:30:46.424Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 163,
+    "fields": {
+        "name": "MOVARA BEAUTY LADIES SALOON ARJAN, DUBAI",
+        "contact": "557371866",
+        "country_code": "+971",
+        "address": "MIRACLE HILLS - 07 street شارع أم سقيم - أرجان دبي لاند - جنوب البرشاء - دبي - United Arab Emirates",
+        "long": 55.2471392,
+        "lat": 25.0645629,
+        "is_active": true,
+        "website": "https://movara-beauty-ladies-saloon-nad-al-hammar-dubai.business.site/?m=true",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJJ6SgNf9nXz4Rbi-MxPKgNX0",
+        "created_at": "2023-03-28T07:30:48.293Z",
+        "updated_at": "2023-03-28T07:30:48.293Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 164,
+    "fields": {
+        "name": "Elata Beauty Salon - Jumeirah 3, Dubai",
+        "contact": "43806950",
+        "country_code": "+971",
+        "address": "Sunset Mall Ground Floor - G18 - شارع شاطئ جميرة - جميرا - Jumeirah 3 - دبي - United Arab Emirates",
+        "long": 55.2262768,
+        "lat": 25.1838645,
+        "is_active": true,
+        "website": "https://www.elata.ae/",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJj9Mr4JBDXz4Rv6KTbCsoszY",
+        "created_at": "2023-03-28T07:30:50.246Z",
+        "updated_at": "2023-03-28T07:30:50.246Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 165,
+    "fields": {
+        "name": "Just One Beauty Salon",
+        "contact": "44277296",
+        "country_code": "+971",
+        "address": "Dubai Marina Damac the Waves Tower B shop 09 - دبي مارينا - دبي - United Arab Emirates",
+        "long": 55.1346661,
+        "lat": 25.0707248,
+        "is_active": true,
+        "website": "https://justonebeautysalon.com/",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJC1uO8ZETXz4RiNJ1BJVsY6Q",
+        "created_at": "2023-03-28T07:30:52.213Z",
+        "updated_at": "2023-03-28T07:30:52.213Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 166,
+    "fields": {
+        "name": "Luminosa Beauty Salon",
+        "contact": "",
+        "country_code": "",
+        "address": "Shop No 4 - 3 Jumeirah St - Umm Suqeim - Jumeirah 3 - Dubai - United Arab Emirates",
+        "long": 55.2045589,
+        "lat": 25.1564837,
+        "is_active": true,
+        "website": "https://revenge-beauty.business.site/?m=true",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJT1BA1OtrXz4RZy-TORnCV5s",
+        "created_at": "2023-03-28T07:30:54.987Z",
+        "updated_at": "2023-03-28T07:30:54.987Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 167,
+    "fields": {
+        "name": "Sasha Beauty Salon Jumeirah Golf Estate",
+        "contact": "45761767",
+        "country_code": "+971",
+        "address": "Jumeirah Golf Estate Centro Al Andalus - ملاعب عقارات جميرا للغولف - دبي - United Arab Emirates",
+        "long": 55.2072625,
+        "lat": 25.0286464,
+        "is_active": true,
+        "website": "http://www.sashauae.com/",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJ4yiZA4JtXz4RyHOqaHDbi2Q",
+        "created_at": "2023-03-28T07:30:57.305Z",
+        "updated_at": "2023-03-28T07:30:57.305Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 168,
+    "fields": {
+        "name": "ELE Beauty Salon",
+        "contact": "45515362",
+        "country_code": "+971",
+        "address": "Ground Floor, Burj Al Nujoom, Downtown Dubai - Downtown Dubai - Dubai - United Arab Emirates",
+        "long": 55.2823381,
+        "lat": 25.1911447,
+        "is_active": true,
+        "website": "http://www.elebeauty.ae/",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJfWszmSVoXz4RBq5jeEfzmR4",
+        "created_at": "2023-03-28T07:30:59.351Z",
+        "updated_at": "2023-03-28T07:30:59.351Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 169,
+    "fields": {
+        "name": "Sasha Beauty Salon - Al Barsha 1",
+        "contact": "43473001",
+        "country_code": "+971",
+        "address": "Al Barsha 1, Al Tallal No.11 Shop No 1, Near Westzone Supermarket - البرشاء - البرشاء 1 - دبي - United Arab Emirates",
+        "long": 55.198838,
+        "lat": 25.1067766,
+        "is_active": true,
+        "website": "http://www.sashauae.com/",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJ9T990ZNrXz4RD-lP1iYRGYg",
+        "created_at": "2023-03-28T07:31:01.928Z",
+        "updated_at": "2023-03-28T07:31:01.928Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 170,
+    "fields": {
+        "name": "INFINITY LADIES BEAUTY SALON",
+        "contact": "529342603",
+        "country_code": "+971",
+        "address": "Shop No 2, Ground Floor - Building, Al Barsha Business Centre - البرشاء - البرشاء 1 - دبي - United Arab Emirates",
+        "long": 55.1939691,
+        "lat": 25.1136932,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJN52MpkBrXz4RAX2U-DKDF58",
+        "created_at": "2023-03-28T07:31:03.938Z",
+        "updated_at": "2023-03-28T07:31:03.938Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 171,
+    "fields": {
+        "name": "صالون بيشون للسيدات",
+        "contact": "24913585",
+        "country_code": "+971",
+        "address": "F9CC+C63 - Airport Rd - Al Danah - E18-01 - Abu Dhabi - United Arab Emirates",
+        "long": 54.3705399,
+        "lat": 24.4710067,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJbxO6Cz1mXj4Rd7mzAkRPzCo",
+        "created_at": "2023-03-28T07:31:05.873Z",
+        "updated_at": "2023-03-28T07:31:05.873Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 172,
+    "fields": {
+        "name": "صالون حلا للسيدات Hala ladys Saloon",
+        "contact": "26440709",
+        "country_code": "+971",
+        "address": "الرويضة خلف مطعم زهرة لبنان - مقابل البحريه - Al Zahiyah - E16-02 - Abu Dhabi - United Arab Emirates",
+        "long": 54.3824796,
+        "lat": 24.4900102,
+        "is_active": true,
+        "website": "https://www.facebook.com/%D8%B5%D8%A7%D9%84%D9%88%D9%86-%D8%AD%D9%84%D8%A7-%D9%84%D9%84%D8%B3%D9%8A%D8%AF%D8%A7%D8%AA-1633875003513797/",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJcdzVQ0lmXj4R8LF1iNswxUY",
+        "created_at": "2023-03-28T07:31:08.083Z",
+        "updated_at": "2023-03-28T07:31:08.083Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 173,
+    "fields": {
+        "name": "Gladys Beauty Saloon-Dubai Marina",
+        "contact": "44476663",
+        "country_code": "+971",
+        "address": "Marina Diamond 5 - Dubai Marina - Dubai - United Arab Emirates",
+        "long": 55.1466369,
+        "lat": 25.081374,
+        "is_active": true,
+        "website": "http://www.gladyssaloon.com/dubai-marina.php",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJcS_nu1drXz4ROXTa4g-n_JE",
+        "created_at": "2023-03-28T07:31:10.001Z",
+        "updated_at": "2023-03-28T07:31:10.001Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 174,
+    "fields": {
+        "name": "Mehr Mah Beauty Salon",
+        "contact": "553388330",
+        "country_code": "+971",
+        "address": "Bahar, Plaza Level - JBR - The Walk - Jumeirah Beach Residence - Dubai - United Arab Emirates",
+        "long": 55.134562,
+        "lat": 25.0779399,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJDYokjKoUXz4RWa3CUoZHhrs",
+        "created_at": "2023-03-28T07:31:11.976Z",
+        "updated_at": "2023-03-28T07:31:11.976Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 175,
+    "fields": {
+        "name": "Glare Ladies Beauty Salon DXB",
+        "contact": "44578726",
+        "country_code": "+971",
+        "address": "410 Commercial Entrance, Amiralty Tower - 7 Al Nahar 2 St - Barsha Heights - Dubai - United Arab Emirates",
+        "long": 55.1763241,
+        "lat": 25.0983487,
+        "is_active": true,
+        "website": "http://www.glarebeautysalon.com/",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJm4JrEiprXz4RRCbXT6RD-Cs",
+        "created_at": "2023-03-28T07:31:14.161Z",
+        "updated_at": "2023-03-28T07:31:14.161Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 176,
+    "fields": {
+        "name": "Aura Beauty Salon",
+        "contact": "523421650",
+        "country_code": "+971",
+        "address": "Emerald Building, Shop 3, JVC - قرية جميرا - دبي - United Arab Emirates",
+        "long": 55.2016418,
+        "lat": 25.0526506,
+        "is_active": true,
+        "website": "http://www.aurabeautysalon.ae/",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJUZuRaSZtXz4Rq1TNc-KVKW4",
+        "created_at": "2023-03-28T07:31:16.080Z",
+        "updated_at": "2023-03-28T07:31:16.080Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 177,
+    "fields": {
+        "name": "Monarch Beauty Salon",
+        "contact": "45479333",
+        "country_code": "+971",
+        "address": "Umm Suqeim St - Al Barsha - Al Barsha 2 - Dubai - United Arab Emirates",
+        "long": 55.2145715,
+        "lat": 25.1136617,
+        "is_active": true,
+        "website": "http://www.monarchsaloon.ae/",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJYWvPvTxrXz4RGwmneni515Y",
+        "created_at": "2023-03-28T07:31:18.156Z",
+        "updated_at": "2023-03-28T07:31:18.156Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 178,
+    "fields": {
+        "name": "Beauty Queen Salon",
+        "contact": "552400909",
+        "country_code": "+971",
+        "address": "JVC, 14th District, Emirates Garden 2, Maple 2 Building Jumeirah Village Circle - Jumeirah Village - Dubai - United Arab Emirates",
+        "long": 55.2049003,
+        "lat": 25.047891,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJB7bP7cltXz4RAG7SKMxMQ_U",
+        "created_at": "2023-03-28T07:31:20.318Z",
+        "updated_at": "2023-03-28T07:31:20.318Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 179,
+    "fields": {
+        "name": "Snob Salon & Boutique",
+        "contact": "43386600",
+        "country_code": "+971",
+        "address": "Al Wasl Rd - Al Safa 1 - Dubai - United Arab Emirates",
+        "long": 55.2289992,
+        "lat": 25.1710899,
+        "is_active": true,
+        "website": "http://www.snob.ae/",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJHVXH-_ZpXz4R-yZ5Da8l_fI",
+        "created_at": "2023-03-28T07:31:22.272Z",
+        "updated_at": "2023-03-28T07:31:22.272Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 180,
+    "fields": {
+        "name": "Tres Beauty Salon",
+        "contact": "45468989",
+        "country_code": "+971",
+        "address": "Shop 19, Trio Building - البرشاء - البرشاء 1 - دبي - United Arab Emirates",
+        "long": 55.1956595,
+        "lat": 25.1106914,
+        "is_active": true,
+        "website": "http://www.tresbeautysalon.com/",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJIc7F73hrXz4RaG4GXW2qGpc",
+        "created_at": "2023-03-28T07:31:24.344Z",
+        "updated_at": "2023-03-28T07:31:24.344Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 181,
+    "fields": {
+        "name": "Beautiful Henna Centre (صالون النقوش الجميلة)",
+        "contact": "26343963",
+        "country_code": "+971",
+        "address": "Villa 141, Near VIETNAM EMBASSY - Salama Bint Butti St - Al Mushrif - Abu Dhabi - United Arab Emirates",
+        "long": 54.4019581,
+        "lat": 24.4316998,
+        "is_active": true,
+        "website": "http://www.beautifulhennacentre.com/",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJ_XHbJhZmXj4RZEoLST18fRY",
+        "created_at": "2023-03-28T07:31:26.223Z",
+        "updated_at": "2023-03-28T07:31:26.223Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 182,
+    "fields": {
+        "name": "Argana beauty salon and spa",
+        "contact": "43307977",
+        "country_code": "+971",
+        "address": "3 Umm Suqeim St - Umm Suqeim - Umm Suqeim 3 - Dubai - United Arab Emirates",
+        "long": 55.1968475,
+        "lat": 25.1354599,
+        "is_active": true,
+        "website": "http://www.spargana.com/",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJz6C6gOJpXz4Rbu0J8dO7ajk",
+        "created_at": "2023-03-28T07:31:28.118Z",
+        "updated_at": "2023-03-28T07:31:28.119Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 183,
+    "fields": {
+        "name": "Rerotti Hair & Beauty Salon",
+        "contact": "25838553",
+        "country_code": "+971",
+        "address": "Village - Al Layyan - Al Ghadeer - Abu Dhabi - United Arab Emirates",
+        "long": 55.0279045,
+        "lat": 24.841809,
+        "is_active": true,
+        "website": "http://rerotti.com/",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJlbj2hS8JXz4RW_fmMalJYrI",
+        "created_at": "2023-03-28T07:31:30.062Z",
+        "updated_at": "2023-03-28T07:31:30.062Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 184,
+    "fields": {
+        "name": "Casa Havana Beauty Salon",
+        "contact": "43215757",
+        "country_code": "+971",
+        "address": "892 Al Wasl Rd - Umm Suqeim - Umm Suqeim 1 - Dubai - United Arab Emirates",
+        "long": 55.2241809,
+        "lat": 25.1656203,
+        "is_active": true,
+        "website": "http://www.casahavanasalon.com/",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJa-7jna1rXz4RPHvlNMsZMdU",
+        "created_at": "2023-03-28T07:31:32.190Z",
+        "updated_at": "2023-03-28T07:31:32.190Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 185,
+    "fields": {
+        "name": "ARFI NAILS Beauty Salon",
+        "contact": "522668099",
+        "country_code": "+971",
+        "address": "Shops 7, 8, and 9 Dawoud Building - البرشاء - البرشاء 1 - دبي - United Arab Emirates",
+        "long": 55.1978268,
+        "lat": 25.1081001,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJIWujKHtrXz4RE-7llgiR4N0",
+        "created_at": "2023-03-28T07:31:34.376Z",
+        "updated_at": "2023-03-28T07:31:34.376Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 186,
+    "fields": {
+        "name": "Al Yasat Beauty Center",
+        "contact": "26343494",
+        "country_code": "+971",
+        "address": "F9H3+62H - Al Hisn - W7-01 - Abu Dhabi - United Arab Emirates",
+        "long": 54.3525946,
+        "lat": 24.4780716,
+        "is_active": true,
+        "website": null,
+        "logo_pic": "business_images/png-transparent-computer-icons-offers-text-logo-discount-thumbnail.png",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJ7Ss1_nJmXj4RIiCl0lGbiN4",
+        "created_at": "2023-03-28T07:31:36.545Z",
+        "updated_at": "2023-03-31T12:29:15.396Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 187,
+    "fields": {
+        "name": "East Elegance Beauty Salon - Tecom",
+        "contact": "44541412",
+        "country_code": "+971",
+        "address": "Oasis Residence Ground Floor Opp Emaar - Barsha Heights - دبي - United Arab Emirates",
+        "long": 55.1737367,
+        "lat": 25.0957092,
+        "is_active": true,
+        "website": "https://eastelegance.com/",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJp6EpTHprXz4RYaFRPlIKsoo",
+        "created_at": "2023-03-28T07:31:38.503Z",
+        "updated_at": "2023-03-28T07:31:38.504Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 188,
+    "fields": {
+        "name": "JNK LADIES BEAUTY SALOON",
+        "contact": "43401415",
+        "country_code": "+971",
+        "address": "GOLDEN TULIP HOTEL 1ST FLOOR - البرشاء - البرشاء 1 - دبي - United Arab Emirates",
+        "long": 55.1899163,
+        "lat": 25.1129282,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJF1WQtadDXz4RXkPB_mK9QtQ",
+        "created_at": "2023-03-28T07:31:40.582Z",
+        "updated_at": "2023-03-28T07:31:40.582Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 189,
+    "fields": {
+        "name": "Simply You Beauty Salon",
+        "contact": "42944740",
+        "country_code": "+971",
+        "address": "Al Attar Business Center - Shop No - 27 Sheikh Zayed Rd - near Ibis Hotel - Al Barsha - Al Barsha 1 - Dubai - United Arab Emirates",
+        "long": 55.1837839,
+        "lat": 25.1090088,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJn9tVFJ9rXz4Rc8AGgcgZfI0",
+        "created_at": "2023-03-28T07:31:42.501Z",
+        "updated_at": "2023-03-28T07:31:42.501Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 190,
+    "fields": {
+        "name": "Bellacure Beauty Lounge- Al Mamoura",
+        "contact": "26584100",
+        "country_code": "+971",
+        "address": "15th street and Muroor Al Mamoora - آل نهيان - E25 - أبو ظبي - United Arab Emirates",
+        "long": 54.3874549,
+        "lat": 24.4646205,
+        "is_active": true,
+        "website": "",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJs0OGRxhmXj4RyqF8O7pRgMs",
+        "created_at": "2023-03-28T07:31:44.566Z",
+        "updated_at": "2023-03-28T07:31:44.566Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 191,
+    "fields": {
+        "name": "Jacques La Coupe JBR - Beauty Salon Dubai",
+        "contact": "45646058",
+        "country_code": "+971",
+        "address": "Sadaf 6 Shop 10 - Plaza level - مساكن شاطئ جميرا - دبي - United Arab Emirates",
+        "long": 55.1375015,
+        "lat": 25.0808371,
+        "is_active": true,
+        "website": "https://jacques-la-coupe-salon-jbr.business.site/",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJKejENKsUXz4ROs9YWMpl_44",
+        "created_at": "2023-03-28T07:31:46.657Z",
+        "updated_at": "2023-03-28T07:31:46.657Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 192,
+    "fields": {
+        "name": "Etoile La Coupe Beauty Salon",
+        "contact": "45798861",
+        "country_code": "+971",
+        "address": "قرية جميرا الدائرية - City Apartments - Jumeirah Village - Dubai - United Arab Emirates",
+        "long": 55.2109375,
+        "lat": 25.0648125,
+        "is_active": true,
+        "website": "https://www.fresha.com/providers/uep1w41n?pId=430441",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJp2mojz5tXz4RP2QyLEuGM8Y",
+        "created_at": "2023-03-28T07:31:48.621Z",
+        "updated_at": "2023-03-28T07:31:48.621Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 193,
+    "fields": {
+        "name": "La Sirene Beauty & Spa JBR",
+        "contact": "43994612",
+        "country_code": "+971",
+        "address": "Al Fattan Tower Mall JBR الفتان تاور - 34HP+VJ8 - Jumeirah Beach Residence - Dubai - United Arab Emirates",
+        "long": 55.1365918,
+        "lat": 25.0796602,
+        "is_active": true,
+        "website": "https://m.facebook.com/lasirenehairbeauty.spa/",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJJcLOH6sUXz4RzPmXjM6SFOA",
+        "created_at": "2023-03-28T07:31:50.663Z",
+        "updated_at": "2023-03-28T07:31:50.663Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 194,
+    "fields": {
+        "name": "House of Klara Beauty Salon",
+        "contact": "42212210",
+        "country_code": "+971",
+        "address": "Villa #2 - شارع الوصل - ام الشيف - دبي - United Arab Emirates",
+        "long": 55.2034001,
+        "lat": 25.1381271,
+        "is_active": true,
+        "website": "https://www.houseofklara.com/",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJD-ZCPVxrXz4Rfzf7EqYlBdg",
+        "created_at": "2023-03-28T07:31:52.897Z",
+        "updated_at": "2023-03-28T07:31:52.897Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 195,
+    "fields": {
+        "name": "Hair Factory Beauty Salon l Hair Salon - Tecom",
+        "contact": "506195502",
+        "country_code": "+971",
+        "address": "grand millennium albarsha heights - Barsha Heights - Dubai - United Arab Emirates",
+        "long": 55.1775785,
+        "lat": 25.1013535,
+        "is_active": true,
+        "website": "https://hairfactoryuae.com/",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJy9uL3ghrXz4RcT-0tRpzRqU",
+        "created_at": "2023-03-28T07:31:55.110Z",
+        "updated_at": "2023-03-28T07:31:55.110Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+},
+{
+    "model": "hubur_apis.business",
+    "pk": 196,
+    "fields": {
+        "name": "Bella Vie Beauty Salon",
+        "contact": "42355384",
+        "country_code": "+971",
+        "address": "Adress 39 - villa no 2 Hessa St - Al Barsha - Dubai - United Arab Emirates",
+        "long": 55.1912716,
+        "lat": 25.0892303,
+        "is_active": true,
+        "website": "https://www.instagram.com/bellavie.uae/",
+        "logo_pic": "",
+        "i_category": 2,
+        "i_user": null,
+        "is_claimed": 1,
+        "place_id": "ChIJXUoCz0ZtXz4Res-r0ofyu3k",
+        "created_at": "2023-03-28T07:31:57.040Z",
+        "updated_at": "2023-03-28T07:31:57.040Z",
+        "i_subcategory": [
+            6
+        ]
+    }
+}

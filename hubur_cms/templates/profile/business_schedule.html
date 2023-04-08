@@ -1,6 +1,77 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load generic %}
+
+{% block extra_css %}
+
+<style>
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 25px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 3px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background: linear-gradient(90deg, rgba(106,174,255,1) 1%, rgba(127,155,254,1) 30%, rgba(166,122,253,1) 70%);
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #7F9BFE;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+</style>
+
+{% endblock %}
+
 {% block page_content %}
 <!-- <meta http-equiv="refresh" content="60"> -->
 
@@ -29,7 +100,7 @@
 					<!--begin: Pic-->
 					<div class="me-7 mb-4">
 						<div class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
-							<img src="{% if request.user.profile_picture %}{{ request.user.profile_picture.url }}{% else %}{% static 'assets/media/avatars/300-1.jpg' %}{% endif %}" alt="image" />
+							<img src="{% if request.user.profile_picture %}{{ request.user.profile_picture.url }}{% else %}{% static 'assets/media/misc/image.png' %}{% endif %}" alt="image" />
 							<div class="position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-body h-20px w-20px"></div>
 						</div>
 					</div>
@@ -70,7 +141,7 @@
 									<div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
 										<!--begin::Number-->
 										<div class="d-flex align-items-center">
-											<div class="fs-2 fw-bold" data-kt-countup="true" data-kt-countup-value="0">0</div>
+											<div class="fs-2 fw-bold" data-kt-countup="true" data-kt-countup-value="{{ total_checkins }}">{{ total_checkins }}</div>
 										</div>
 										<!--end::Number-->
 										<!--begin::Label-->
@@ -140,6 +211,11 @@
 						<a class="nav-link text-active-primary ms-0 me-10 py-5 active" href="">Business Schedule</a>
 					</li>
 					<!--end::Nav item-->
+					<!--begin::Nav item-->
+					<li class="nav-item mt-2">
+						<a class="nav-link text-active-primary ms-0 me-10 py-5" href="{% url 'checkin_details' %}">Check-Ins</a>
+					</li>
+					<!--end::Nav item-->
 				</ul>
 				<!--begin::Navs-->
 			</div>
@@ -169,15 +245,45 @@
 							<label class="col-lg-4 fw-semibold text-muted">{{ day.i_day.name }}</label>
 							<!--end::Label-->
 							<!--begin::Col-->
-							<div class="col-lg-8">
-								<span class="fw-bold fs-6 text-gray-800 me-2">{{ day.start_time }} - {{ day.end_time }}</span>
+							<div class="col-lg-3">
+								<span class="fw-bold fs-6 text-gray-800 me-2">{{ day.start_time|time:"h:i a" }} - {{ day.end_time|time:"h:i a" }}</span>
+								
+							</div>
+							<!--end::Col-->
+							<div class="col-lg-2">
 								{% if day.is_active %}
 									<span class="badge badge-success">Open</span>
 								{% else %}
 									<span class="badge badge-danger">Closed</span>
 								{% endif %}
 							</div>
-							<!--end::Col-->
+							<div class="col-lg-3">
+								{% if day.is_active %}
+								<div class="justify-content-between flex-shrink-0">
+									<form method="POST" enctype="multipart/form-data">
+										{% csrf_token %}
+										<label class="switch">
+											<input type="checkbox" checked>
+											<span class="slider round"></span>
+										</label>
+										<input type="hidden" name="status" value="False">
+										<input type="hidden" name="schedule_id" value="{{ day.id }}">
+									</form>
+								</div>
+								{% else %}
+								<div class="justify-content-between flex-shrink-0">
+									<form method="POST" enctype="multipart/form-data">
+										{% csrf_token %}
+										<label class="switch">
+											<input type="checkbox">
+											<span class="slider round"></span>
+										</label>
+										<input type="hidden" name="status" value="True">
+										<input type="hidden" name="schedule_id" value="{{ day.id }}">
+									</form>
+								</div>
+								{% endif %}
+							</div>
 						</div>
 						<!--end::Row-->
 					{% endif %}
@@ -193,5 +299,14 @@
 {% endblock %}
 
 {% block extra_script %}
-
+<script>
+    $("input[type='checkbox']").on('change', function(){
+        if(this.checked){
+            $(this).closest("form").submit();
+        }
+        else{
+            $(this).closest("form").submit();
+        }
+    })
+</script>
 {% endblock %}
