@@ -4,6 +4,7 @@ from global_methods import distance
 from hubur_apis import models
 from hubur_apis.serializers.banner_serializer import SubCatListSerializer
 from hubur_apis.serializers.entity_details_serializer import GalleryImagesListSerializer
+from hubur_apis.serializers.review_serializer import AggregateBusinessReviewsSerializer
 
 
 class HomeBusinessSerializer(serializers.ModelSerializer):
@@ -31,8 +32,13 @@ class HomeBusinessSerializer(serializers.ModelSerializer):
             name_list.append(name['name'])
         response['i_sub_category'] = name_list
         del response['i_subcategory']
+
+        rating = AggregateBusinessReviewsSerializer(data).data
+        response['average_rate'] = rating['average_rate']
+        response['total_reviews'] = rating['total_reviews']
+        
         gallery_images_list = []
-        gallery_images = models.Images.objects.filter(i_business=data, is_active=True)
+        gallery_images = models.Images.objects.filter(i_business=data, is_active=True, type=1)
         if gallery_images:
             gallery_images = GalleryImagesListSerializer(gallery_images,many=True)
             for images in gallery_images.data:
@@ -68,8 +74,12 @@ class HomeBusinessWithAddressSerializer(serializers.ModelSerializer):
         response['i_sub_category'] = name_list
         del response['i_subcategory']
 
+        rating = AggregateBusinessReviewsSerializer(data).data
+        response['average_rate'] = rating['average_rate']
+        response['total_reviews'] = rating['total_reviews']
+
         gallery_images_list = []
-        gallery_images = models.Images.objects.filter(i_business=data, is_active=True)
+        gallery_images = models.Images.objects.filter(i_business=data, is_active=True, type=1)
         if gallery_images:
             gallery_images = GalleryImagesListSerializer(gallery_images,many=True)
             for images in gallery_images.data:
@@ -106,7 +116,12 @@ class NearByDealsSerializer(serializers.ModelSerializer):
         response['i_sub_category'] = name_list
         del response['i_subcategory']
         gallery_images_list = []
-        gallery_images = models.Images.objects.filter(i_business=data, is_active=True)
+        gallery_images = models.Images.objects.filter(i_business=data, is_active=True, type=1)
+
+        rating = AggregateBusinessReviewsSerializer(data).data
+        response['average_rate'] = rating['average_rate']
+        response['total_reviews'] = rating['total_reviews']
+        
         if gallery_images:
             gallery_images = GalleryImagesListSerializer(gallery_images,many=True)
             for images in gallery_images.data:

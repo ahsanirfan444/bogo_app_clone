@@ -13,6 +13,8 @@ jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
 from hubur_apis.serializers.user_serializer import (
+    CitySerializer,
+    CountrySerializer,
     ForgotPasswordSerializer,
     GetUserProfileSerializer,
     EmailLoginSerializer,
@@ -81,29 +83,33 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
 
-        serializer = self.get_serializer(data=request.data)
-        validation = serializer.is_valid()
-
-        if validation:
-            self.perform_create(serializer)
-
-            returnObj = serializer.data
-            if returnObj['is_type'] == 2:
-                user_obj = models.UserProfile.objects.get(id=returnObj['id'])
-                user_obj.is_active = True
-                user_obj.is_verified = True
-                user_obj.save()
-                payload = jwt_payload_handler(user_obj)
-                token = jwt_encode_handler(payload)
-                returnObj['token'] = token
-
-            return Response({'error': [], 'error_code': '', 'data': [returnObj], 'status': status.HTTP_201_CREATED}, status=status.HTTP_201_CREATED)
-
-        
         error_list = []
-        for e in serializer.errors.values():
-            error_list.append(e[0])
+        try:
 
+            serializer = self.get_serializer(data=request.data)
+            validation = serializer.is_valid()
+
+            if validation:
+                self.perform_create(serializer)
+
+                returnObj = serializer.data
+                if returnObj['is_type'] == 2:
+                    user_obj = models.UserProfile.objects.get(id=returnObj['id'])
+                    user_obj.is_active = True
+                    user_obj.is_verified = True
+                    user_obj.save()
+                    payload = jwt_payload_handler(user_obj)
+                    token = jwt_encode_handler(payload)
+                    returnObj['token'] = token
+
+                return Response({'error': [], 'error_code': '', 'data': [returnObj], 'status': status.HTTP_201_CREATED}, status=status.HTTP_201_CREATED)
+    
+            for e in serializer.errors.values():
+                error_list.append(e[0])
+            return Response({'error': error_list, 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+        
+        except Exception as e:
+            error_list.append(repr(e))
         return Response({'error': error_list, 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
 
     def perform_create(self, serializer):
@@ -120,6 +126,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
         user = pk
 
         if "email" in request.data:
+            
             email = request.data.get("email")
             try:
                 emailInst = models.UserProfile.objects.get(email=email)
@@ -127,15 +134,19 @@ class UserProfileViewSet(viewsets.ModelViewSet):
                     return Response({'error': ['Email already exists'], 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return super().update(request, pk, *args, **kwargs)
+                    
             except models.UserProfile.DoesNotExist:
                 return super().update(request, pk, *args, **kwargs)
         return super().update(request, pk, *args, **kwargs)
 
     def perform_update(self, serializer):
-        if "profile_picture" in serializer.validated_data:
-            if self.request.user.profile_picture:
-                self.request.user.profile_picture.delete()
-        serializer.save()
+        if self.request.user.username:
+            if "profile_picture" in serializer.validated_data:
+                if self.request.user.profile_picture:
+                    self.request.user.profile_picture.delete()
+            serializer.save()
+        else:
+            raise serializers.ValidationError({'error': ['No User Login'],'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST})
 
     def retrieve(self, request, pk=None):
         queryset = models.UserProfile.objects.filter(is_active=True)
@@ -144,32 +155,86 @@ class UserProfileViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def partial_update(self, request, pk=None):
+        all_countries_list = list(models.Country.objects.filter(is_active=True).values_list("id",flat=True))
+        all_cities_list = list(models.City.objects.filter(is_active=True).values_list("id",flat=True))
+        
         queryset = models.UserProfile.objects.filter(id=request.user.id)
+        error_list = []
         data = get_object_or_404(queryset, pk=pk)
-        serializer = GetUserProfileSerializer(
-            data, data=request.data, partial=True)
+        if 'i_city' in request.data:
+            i_city = int(request.data.get('i_city'))
+            if i_city in all_cities_list:
+                data.i_city_id = i_city
+                data.save()
+            else:
+                raise serializers.ValidationError({'error': ['No City Found'],'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST})
+        if 'i_country' in request.data:
+            i_country = int(request.data.get('i_country'))
+            if i_country in all_countries_list:
+                data.i_country_id = i_country
+                data.save()
+            else:
+                raise serializers.ValidationError({'error': ['No Country Found'],'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST})
+        if ('old_password' or 'new_password' or 'password') in request.data:
+            context = {"user": request.user}
+            change_pass_serializer = ResetPasswordSerializer(data=request.data, context=context)
+            if change_pass_serializer.is_valid():
+                serializer = GetUserProfileSerializer(data, data=request.data, partial=True)
+                if serializer.is_valid():
+                    password = change_pass_serializer.validated_data['password']
+                    data.set_password(password)
+                    data.save()
+                    serializer.save()
+                    return Response(serializer.data,  status=status.HTTP_200_OK)
+                else:
+                    for e in serializer.errors.values():
+                        error_list.append(e[0])
+            else:
+                for e in change_pass_serializer.errors.values():
+                    error_list.append(e[0])
+        else:
+            serializer = GetUserProfileSerializer(data, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data,  status=status.HTTP_200_OK)
+            else:
+                for e in serializer.errors.values():
+                    error_list.append(e[0])
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data,  status=status.HTTP_200_OK)
+        return Response({'error': error_list, 'error_code': 'HS002', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(serializer.errors,  status=status.HTTP_400_BAD_REQUEST)
-
+            
 
 class UserStatusAPIView(APIView):
+    def get(self, request,pk, *args, **kwargs):
+        if pk:
+            user_data = {}
+            queryset = models.UserProfile.objects.filter(is_active=True, role=1)
+            obj = get_object_or_404(queryset, pk=pk)
+            if obj:
+                if request.user.is_authenticated:
+                    serializer = GetUserProfileSerializer(obj, context={"user_obj":request.user})
+                else:
+                    serializer = GetUserProfileSerializer(obj)
+                user_data = serializer.data
+                return Response({'error': [], 'error_code': '', 'data': [user_data], 'status': status.HTTP_200_OK}, status=status.HTTP_200_OK)
+        
+        return Response({'error': ['No user found'], 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+
+class UserStatusTokenAPIView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, *args, **kwargs):
         user_data = {}
-        queryset = models.UserProfile.objects.filter(is_active=True)
-        obj = get_object_or_404(queryset, pk=request.user.id)
+        try:
+            obj = models.UserProfile.objects.get(is_active=True, id=request.user.id)
+        except:
+            return Response({'error': ['No user found'], 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
         if obj:
-            serializer = GetUserProfileSerializer(obj)
+            serializer = GetUserProfileSerializer(obj, context={"user_obj":request.user})
+            
             user_data = serializer.data
             return Response({'error': [], 'error_code': '', 'data': [user_data], 'status': status.HTTP_200_OK}, status=status.HTTP_200_OK)
-        else:
-            return Response({'error': ['No user found'], 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
-
-
+    
 class VerifyUser(APIView):
 
     def post(self, request, *args, **kwargs):
@@ -310,3 +375,50 @@ class SaveLocatonView(APIView):
                 return Response({'error': ['Please Enter Latitude and Longitude'], 'error_code': '', 'message': [], 'status': status.HTTP_200_OK}, status=status.HTTP_200_OK)
         except Exception as error:
             return Response({'error': [repr(error)], 'error_code': 'H007', 'matched': 'N', 'message': [], 'status': status.HTTP_500_INTERNAL_SERVER_ERROR}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class GetAllCitiesViewSet(viewsets.ModelViewSet):
+    serializer_class = CitySerializer
+    queryset = models.City.objects.filter(is_active=True)
+
+
+    def retrieve(self, request, pk=None):
+        country = models.Country.objects.filter(is_active=True)
+        data = get_object_or_404(country, pk=pk)
+        if data:
+            cities = models.City.objects.filter(i_country=pk)
+        
+            serializer = CitySerializer(cities, many=True)
+            return Response({'error': [], 'error_code': '', 'data': serializer.data, 'status': status.HTTP_200_OK}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': [], 'error_code': '', 'data': ["No Country found"], 'status': status.HTTP_200_OK}, status=status.HTTP_200_OK)
+    
+
+    def list(self, request, *args, **kwargs):
+        queryset = models.Country.objects.filter(is_active=True)
+        serializer = CountrySerializer(queryset, many=True)
+
+        return Response({'error': [], 'error_code': '', 'data': serializer.data, 'status': status.HTTP_200_OK}, status=status.HTTP_200_OK)
+
+class UserOnlineStatusAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, *args, **kwargs):
+        try:
+            obj = models.UserProfile.objects.get(is_active=True, id=request.user.id)
+        except:
+            return Response({'error': ['No user found'], 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+        
+        user_online_status = models.UserOnlineStatus.objects.filter(i_user=obj)
+        if user_online_status.exists():
+            user_online_status = user_online_status.first()
+            if user_online_status.is_online:
+                user_online_status.is_online = False
+                user_online_status.save()
+                return Response({'error': [], 'error_code': '', 'data': ["Offline successfully"], 'status': status.HTTP_200_OK}, status=status.HTTP_200_OK)
+            else:
+                user_online_status.is_online = True
+                user_online_status.save()
+                return Response({'error': [], 'error_code': '', 'data': ["Online successfully"], 'status': status.HTTP_200_OK}, status=status.HTTP_200_OK)
+        else:
+            models.UserOnlineStatus.objects.create(i_user=obj, is_online=True)
+            return Response({'error': [], 'error_code': '', 'data': ["Online successfully"], 'status': status.HTTP_200_OK}, status=status.HTTP_200_OK)

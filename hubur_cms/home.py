@@ -1,3 +1,5 @@
+import json
+from django.http import JsonResponse
 from core.base import AuthBaseViews
 from django.urls import reverse_lazy
 
@@ -12,3 +14,11 @@ class Home(AuthBaseViews):
         else:
             url = reverse_lazy("logout_url")
         return self.redirect(url)
+    
+
+class RemoveImage(AuthBaseViews):
+    def post(self, request, *args, **kwargs):
+        image_ids = request.POST.getlist('image_id')
+        request.session['image_ids'] = image_ids
+
+        return JsonResponse({'status': True}, safe=False)

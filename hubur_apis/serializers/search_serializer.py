@@ -1,12 +1,20 @@
 from rest_framework import serializers
 from hubur_apis import models
+from hubur_apis.serializers.brand_serializer import BrandListSerializer
+from hubur_apis.serializers.content_serializer import ProductImagesListSerializer
 
 class GetSubCategorySerializer(serializers.ModelSerializer):
     i_category = serializers.CharField(source='i_category.name')
     class Meta:
         model = models.SubCategories
-        fields = ('id','name', 'i_category',)
-
+        fields = ('id','name', 'i_category','image',)
+    
+    def to_representation(self, instance):
+        response =  super().to_representation(instance)
+        sub_cat_list_for_filter = self.context.get('sub_cat_list_for_filter')
+        if sub_cat_list_for_filter and sub_cat_list_for_filter == True:
+            del response['i_category'], response['image']
+        return response
 
 class SubCatagoriesListSerializer(serializers.ModelSerializer):
     i_category = serializers.CharField(source='i_category.name')
@@ -16,26 +24,28 @@ class SubCatagoriesListSerializer(serializers.ModelSerializer):
 
 
 class GetProductsSerializer(serializers.ModelSerializer):
-    type = serializers.CharField(default='Product')
-    i_sub_category = SubCatagoriesListSerializer(many=True)
+    content_type = serializers.SerializerMethodField("get_content_type")
+    i_sub_category = serializers.CharField(source="i_sub_category.name")
+    i_category = serializers.CharField(source="i_sub_category.i_category.name")
     class Meta:
         model = models.Content
-        fields = ('id','name', 'picture','i_sub_category', 'type', )
+        fields = ('id','name','content_type','i_category', 'i_sub_category',)
 
     def to_representation(self, instance):
         response =super().to_representation(instance)
-        response['image'] = response['picture']
-        del response['picture']
-        sub_cat_name_list = []
-        cat_name = ''
 
-        for cat_name in response['i_sub_category']:
-            sub_cat_name_list.append(cat_name['name'])
-            cat_name = cat_name['i_category']
+        content_image = models.Images.objects.filter(i_content=instance).last()
 
-        response['i_sub_category'] = sub_cat_name_list
-        response['i_category'] = cat_name
+        content_image = ProductImagesListSerializer(content_image).data
+        response['image'] = content_image['image']
+        response['type'] = response['content_type']
+        response['i_sub_category'] = [response['i_sub_category']]
+        del response['content_type']
+        
         return response
+    
+    def get_content_type(self,value):
+        return value.get_content_type_display()
 
 
 class GetBusinessSerializer(serializers.ModelSerializer):
@@ -89,13 +99,26 @@ class SearchSerializer(serializers.Serializer):
           
 
 class PopularSearchSerializer(serializers.ModelSerializer):
+    obj_id = serializers.IntegerField()
     class Meta:
         model = models.PopularSearch
-        fields = ('name', 'count','url','type_id','type','catagory',)
+        fields = ('i_brand', 'i_business', 'i_content', 'count','type','obj_id',)
 
     
     def validate(self, validate_data):
-        popular_search_data = models.PopularSearch.objects.filter(type=validate_data['type'], type_id=validate_data['type_id'])
+        if validate_data['type'] == "Business":
+        
+            popular_search_data = models.PopularSearch.objects.filter(type=validate_data['type'], i_business_id=validate_data['obj_id'])
+
+        elif validate_data['type'] == "Brand":
+        
+            popular_search_data = models.PopularSearch.objects.filter(type=validate_data['type'], i_brand_id=validate_data['obj_id'])
+        
+        elif validate_data['type'] == "Content":
+        
+            popular_search_data = models.PopularSearch.objects.filter(type=validate_data['type'], i_content_id=validate_data['obj_id'])
+        else:
+            raise serializers.ValidationError("Not valid type")
         if popular_search_data:
             popular_search_data = popular_search_data.first()
             count = popular_search_data.count + 1
@@ -105,16 +128,50 @@ class PopularSearchSerializer(serializers.ModelSerializer):
             return super().validate(validate_data)
         else:
             return super().validate(validate_data)
-        
+            
 class PopularSearchListSerializer(serializers.ModelSerializer):
-    image_url = serializers.CharField(source="url")
+    business_name = serializers.CharField(source="i_business.name",default="")
+    brand_name = serializers.CharField(source="i_brand.name",default="")
+    content_name = serializers.CharField(source="i_content.name",default="")
+    catagory = serializers.CharField(source="i_business.i_category.name",default="")
+    image_url = serializers.SerializerMethodField()
     class Meta:
         model = models.PopularSearch
-        fields = ('name','image_url','type','type_id','catagory',)
+        fields = ('i_brand','i_business','i_content','type','business_name','brand_name','content_name','catagory','image_url',)
     
     def to_representation(self, instance):
         response = super().to_representation(instance)
-        response['id'] = response['type_id']
-        del response['type_id']
+        if response['i_brand']:
+            response['id'] = response['i_brand']
+            response['name'] = response['brand_name']
+            del response['i_brand'],response['brand_name'],response['business_name'],response['i_business'],response['i_content'],response['content_name']
+        
+        elif response['i_business']:
+            response['id'] = response['i_business']
+            response['name'] = response['business_name']
+            del response['i_business'],response['business_name'],response['brand_name'],response['i_brand'],response['i_content'],response['content_name']
+
+        elif response['i_content']:
+            response['id'] = response['i_content']
+            response['name'] = response['content_name']
+            del response['i_content'],response['content_name'], response['i_business'],response['business_name'],response['brand_name'],response['i_brand']
+
         return response
     
+    def get_image_url(self,obj):
+        if obj.i_business:
+            image_url = GetBusinessSerializer(obj.i_business)
+            image_url = image_url.data['image']
+        elif obj.i_content:
+            images = models.Images.objects.filter(is_active=True,i_content=obj.i_content).order_by('-created_at').first()
+            image_url =(ProductImagesListSerializer(images)).data['image']
+        else:
+            image_url = BrandListSerializer(obj.i_brand)
+            image_url = image_url.data['image']
+        return image_url
+
+
+class SubCatagoryBannerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Banner
+        fields = ('image','url',)

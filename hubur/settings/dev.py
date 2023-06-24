@@ -6,7 +6,7 @@ DEBUG = eval(os.getenv("DEBUG"))
 
 #==================================================Admin Email configuration==================================================
 SERVER_EMAIL = os.getenv("SERVER_EMAIL")
-ADMINS = [('Ahsan Irfan','ahsan.irfan444@gmail.com'),('shahnawaz irfan', 'shahnawazmemon78@gmail.com')]
+ADMINS = [('Ahsan Irfan','ahsan.irfan444@gmail.com'),('shahnawaz irfan', 'shahnawazmemon78@gmail.com'),('Syed Mohsin', 'strikersyed73@gmail.com')]
 EMAIL_SUBJECT_PREFIX = "Hubur development error"
 
 
@@ -65,7 +65,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'hubur_apis.middlewares.ExceptionMiddleware.ExceptionMiddleware',
-    'hubur_apis.middlewares.HttpsRedirectMiddleware.WWWRedirectMiddleware'
+    'hubur_apis.middlewares.HttpsRedirectMiddleware.WWWRedirectMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 
@@ -83,7 +84,6 @@ EMAIL_HOST_PASSWORD = os.getenv("SENDGRID_API_KEY")
 EMAIL_PORT = os.getenv("EMAIL_PORT")
 EMAIL_USE_TLS = eval(os.getenv("EMAIL_USE_TLS"))
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
-
 
 #==================================================Internationalization==================================================
 LANGUAGE_CODE = os.getenv("LANGUAGE_CODE")

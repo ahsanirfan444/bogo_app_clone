@@ -11,6 +11,7 @@ router.register('all_before_my_fav', views.BeforeMyFavListAPIView)
 router.register('all_have_you_been_there', views.HaveYouBeenThereListAPIView)
 router.register('all_brands', views.DiscoverBrandListAPIView)
 router.register('all_near_by_deals', views.NearByDealsListAPIView)
+router.register('all_products_in_offer', views.AllProductsInOfferAPIView)
 
 urlpatterns = [
 

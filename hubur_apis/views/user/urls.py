@@ -6,6 +6,8 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register('create_user', views.UserProfileViewSet)
+router.register('get_cities', views.GetAllCitiesViewSet)
+router.register('get_countries', views.GetAllCitiesViewSet)
 
 urlpatterns = [
     path('api_token_auth/', views.CustomAuthLogin.as_view(), name='api-token-auth/'),
@@ -15,6 +17,8 @@ urlpatterns = [
     path('resend_code/', views.ResendCodeAPI.as_view(), name='resend-code'),
     path('change_pass_after_verify/', views.ChangePassAfterVerify.as_view(), name='change-pass-after-verify'),
     path('save_location/', views.SaveLocatonView.as_view(), name='change-pass-after-verify'),
-    path('status/', views.UserStatusAPIView.as_view()),
+    path('status/<int:pk>', views.UserStatusAPIView.as_view()),
+    path('status/', views.UserStatusTokenAPIView.as_view()),
+    path('change_online_status/', views.UserOnlineStatusAPIView.as_view()),
     path('', include(router.urls))
 ]

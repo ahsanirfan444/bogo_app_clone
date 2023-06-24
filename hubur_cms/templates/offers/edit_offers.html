@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load generic %}
+{% block page_content %}
+
+<div id="kt_app_content" class="app-content flex-column-fluid">
+	<!--begin::Content container-->
+	<div id="kt_app_content_container" class="app-container container-xxl">
+		<!--begin::details View-->
+		<div class="card mt-10 mb-2 mb-xl-10" id="kt_profile_details_view">
+			{% include "includes/generic_form.html" with form=form form_heading="Edit Offer" button_text="Save Changes" %}
+		</div>
+		<!--end::details View-->
+	</div>
+	<!--end::Content container-->
+</div>
+
+{% endblock %}
+
+{% block extra_script %}
+<link rel="stylesheet" href="{% static 'assets/css/select2.css' %}">
+<script src="{% static 'assets/js/select2.full.min.js' %}"></script>
+<script>
+	$(".searchable-select").select2({
+		placeholder: "Search Here"
+	});
+</script>
+{% endblock %}

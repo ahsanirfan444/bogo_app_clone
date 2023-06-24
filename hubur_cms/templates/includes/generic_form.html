@@ -8,6 +8,12 @@
     margin: 0;
   }
 
+  input[type=color] {
+    height: 50px;
+    width: 100px;
+    cursor: pointer;
+  }
+
   /* Firefox */
   input[type=number] {
     -moz-appearance: textfield;
@@ -75,6 +81,7 @@
 
   .draging {
       transform: scale(1.1);
+      background-color: #edeef4;
   }
 
   #password1_icon {
@@ -114,6 +121,28 @@
       max-width: 800px;
       max-height: 450px;
   }
+
+  #removeImage {
+    position: relative;
+    left: calc(100% - 12px);
+    bottom: 115px;
+    font-size: 14px;
+    border: 1px solid #cdced2;
+    border-radius: 75px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    background: linear-gradient(90deg, rgba(106,174,255,1) 1%, rgba(127,155,254,1) 30%, rgba(166,122,253,1) 70%);
+    color: #ffff;
+    cursor: pointer;
+  }
+
+  #removeImage i {
+    line-height: 1;
+    font-size: 16px;
+    color: #fff;
+  }
 </style>
 
 <!--begin::Card header-->
@@ -141,18 +170,44 @@
             {% endif %}
             {% if field.field.widget.input_type == 'select' %}
             {{ field }}
-            {% elif field.field.widget.input_type == 'file' %}
+            {% elif field.field.widget.input_type == 'file' and not field.field.widget.attrs.multiple %}
             <br />
               {% for f in field %}
                 <div class="image_outer">
                   <span class="dragBox">
                       <img id="image" src="{% if f.data.value  %}{{ f.data.value.url }}{% else %}{% static 'assets/media/images/image.png' %}{% endif %}" {% if f.data.value  %}style="width:100px;height:100px"{% endif %} {% if f.data.value %}value="{{ f.data.value }}"{% endif %}>
                       <input type="hidden" id="image_value" {% if f.data.value %}value="{{ f.data.value }}"{% endif %} >
-                      <h1>Drop your image(s) here</h1>
-                      <input type="file" onchange="dragNdrop(event)" ondragover="drag('id_{{ field.name }}')" ondrop="drop('id_{{ field.name }}')" name="{{ field.name }}" id="id_{{ field.name }}" {% if field.field.widget.attrs.accept %}accept="{{field.field.widget.attrs.accept}}"{% endif %} {% if field.value %}value="{{ field.value }}"{% endif %}  />
+                      <h1>Select or Drop your image here</h1>
+                      <input type="file" onchange="dragNdrop(event)" ondragover="drag('id_{{ field.name }}')" ondrop="drop('id_{{ field.name }}')" name="{{ field.name }}" id="id_{{ field.name }}" {% if field.field.widget.attrs.accept %}accept="{{field.field.widget.attrs.accept}}"{% endif %} {% if field.value %}value="{{ field.value }}"{% endif %} />
                     </span>
                 </div>
               {% endfor %}
+
+            
+            {% elif field.field.widget.input_type == 'file' and field.field.widget.attrs.multiple %}
+            <br />
+              {% for f in field %}
+                <div class="image_outer">
+                  <span class="dragBox">
+                      <img src="{% if f.data.value  %}{{ f.data.value.url }}{% else %}{% static 'assets/media/images/image.png' %}{% endif %}" {% if f.data.value  %}style="width:100px;height:100px"{% endif %} {% if f.data.value %}value="{{ f.data.value }}"{% endif %}>
+                      <input type="hidden" id="image_value" {% if f.data.value %}value="{{ f.data.value }}"{% endif %} >
+                      <h1>Select or Drop your image here</h1>
+                      <input type="file" onchange="dragNdrop(event)" ondragover="drag('id_{{ field.name }}_multiple')" ondrop="drop('id_{{ field.name }}_multiple')" name="{{ field.name }}" id="id_{{ field.name }}_multiple" {% if field.field.widget.attrs.accept %}accept="{{field.field.widget.attrs.accept}}"{% endif %} {% if field.value %}value="{{ field.value }}"{% endif %} {% if field.field.widget.attrs.multiple %} multi="{{field.field.widget.attrs.multiple}}" {% endif %} />
+                    </span>
+                </div>
+              {% endfor %}
+            
+            <div class="row preview_content_images">
+              {% if images %}
+                {% for image in images %}
+                  <div class="col-3 mt-5 mb-5">
+                    <img id="image" class="mb-2" src="{{ image.image.url }}" style="width:100%;height:100px;"> 
+                    <a href="javascript:void();" id="removeImage" onclick="removeImage(this, '{{ forloop.counter0 }}', '{{ image.id }}')"><i class="fa fa-times" aria-hidden="true"></i></a>
+                  </div>
+                {% endfor %}
+              {% endif %}
+            </div>
+            
 
             {% elif field.field.widget.input_type == 'time' %}
             {{ field }}
@@ -185,13 +240,30 @@
             
             <img toggle="#password-field" id="{{ field.name }}_icon" src="{% static 'assets/media/icons/eye.svg' %}" onclick="togglePassword('{{ field.name }}_icon', 'id_{{ field.name }}')">
 
-            {% else %}
+            {% elif field.field.widget.input_type == "text" or field.field.widget.input_type == "email" or field.field.widget.input_type == "date" or field.field.widget.input_type == "number" %}
 
             <input type="{{ field.field.widget.input_type }}" placeholder="Enter {{ field.label }} here"
               class="form-control form-control-user" id="id_{{ field.name }}" name="{{ field.name }}"
               value="{% if field.value and field.field.widget.input_type != 'date' %}{{ field.value }}{% elif field.field.widget.input_type == 'date' and field.value %}{#{{ field.value|date:'Y-m-d' }}#}{{field.value|format_date}}{% endif %}"
               autocomplete="new-password" {% if field.field.required %} required {% endif %} {% if field.field.disabled %}
               disabled {% endif %} {% if field.field.disabled %} readonly {% endif %}>
+
+            {% elif field.field.widget.input_type == "color" %}
+
+              <input type="{{ field.field.widget.input_type }}" placeholder="Enter {{ field.label }} here"
+                class="form-control" id="id_{{ field.name }}" name="{{ field.name }}"
+                value="{% if field.value and field.field.widget.input_type != 'date' %}{{ field.value }}{% elif field.field.widget.input_type == 'date' and field.value %}{#{{ field.value|date:'Y-m-d' }}#}{{field.value|format_date}}{% endif %}"
+                autocomplete="new-password" {% if field.field.required %} required {% endif %} {% if field.field.disabled %}
+                disabled {% endif %} {% if field.field.disabled %} readonly {% endif %}>
+
+            {% else %}
+            <textarea
+              placeholder="{% if field.field.widget.attrs.placeholder %}{{ field.field.widget.attrs.placeholder }}{% else %}Enter {{ field.label }} here{% endif %}"
+              class="form-control" id="id_{{ field.name }}" cols="{{field.field.widget.attrs.cols}}"
+              rows="3" name="{{ field.name }}" {% if field.field.required %}
+              required {% endif %} {% if field.field.disabled %} readonly {% endif %}
+              {% if field.field.widget.attrs.disabled %} disabled="true"
+              {% endif %} style="line-height: 22px;">{% if field.value %}{{ field.value }}{% endif %}</textarea>
 
             {% endif %}
 
@@ -241,6 +313,13 @@
 
 <script>
   var cropper;
+  var counter = 0;
+  var files = [];
+  var image_urls = eval('{{images_list|escapejs}}') || [];
+  var csrf_token = "{{ csrf_token }}";
+  var url = "{% url 'remove_image' %}";
+  var remove_image_ids = [];
+  
 
   function togglePassword(icon, pass_field) {
       var id = document.getElementById(pass_field);
@@ -296,6 +375,8 @@
 
     // On crop button clicked
     document.getElementById('crop_button').addEventListener('click', function () {
+    
+      if(!event.target.getAttribute('multi')){
         var imgurl = cropper.getCroppedCanvas().toDataURL();
         var Img = document.getElementById("image");
         Img.setAttribute("src", imgurl);
@@ -321,11 +402,86 @@
         })
 
         cropper.destroy();
+      }
+      else{
+        var imgurl = cropper.getCroppedCanvas().toDataURL();
+        $(".preview_content_images").append(`
+          <div class="col-3 mt-5 mb-5">
+            <img id="image" class="mb-2" src="${imgurl}" style="width:100%;height:100px;"> 
+            <a href="javascript:void();" id="removeImage" onclick="removeImage(this, ${counter}, '')"><i class="fa fa-times" aria-hidden="true"></i></a>
+          </div>
+        `)
+        counter++;
+        
+        $("#id_images_multiple").removeAttr('required');
+        $("#image_cropper_modal").modal('hide');
+
+        cropper.getCroppedCanvas().toBlob(function (blob) {
+          // Create a new File object
+          var date = new Date();
+          var myFile = new File([blob], event.target.files[0].name, {
+              type: 'image/jpeg',
+              lastModified: new Date(),
+          });
+
+          files.push(myFile)
+
+          // Get a reference to our file input
+          var fileInput = document.getElementById(event.target.id);
+          // Now let's create a DataTransfer to get a FileList
+          const dataTransfer = new DataTransfer();
+          for (file in files) {  
+            dataTransfer.items.add(files[file]);
+          }
+          fileInput.files = dataTransfer.files;
+        })
+
+        cropper.destroy();
+      }
     })
 
     $("#image_cropper_modal").on("hidden.bs.modal", function () {
       cropper.destroy();
     });
+
   }
+
+  function removeImage(event, index, id){
+    event.parentElement.remove();
+    files.splice(index, 1);
+    image_urls.splice(index, 1);
+    counter--
+
+    try{
+      remove_image_ids.push(id);
+
+      $.ajax({
+          url: url,
+          type: 'POST',
+          data: {
+              'image_id': remove_image_ids.toString(),
+              "csrfmiddlewaretoken": csrf_token
+          },
+          success: function(response) {
+          },
+          catch: function(error){
+            console.log(error.text)
+          }
+      });
+    }
+    catch(e){}
+
+    if(image_urls.length < 1){
+      $("#id_images_multiple").attr('required', true);
+    }
+  }
+
+  setTimeout(() => {
+    if(image_urls.length < 1){
+      $("#id_images_multiple").attr('required', true);
+    }
+    counter = image_urls.length;
+    
+  }, 1000);
 
 </script>

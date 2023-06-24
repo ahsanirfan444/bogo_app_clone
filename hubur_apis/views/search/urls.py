@@ -7,6 +7,7 @@ router.register('all', views.SearchProductAPIView)
 router.register('popularsearch', views.PopularSearchAPIView)
 router.register('all_sub_catagories', views.SubCatagoriesView)
 router.register('create_popularsearch', views.PopularSearchAPIView)
+router.register('search_for_sub_catagories', views.SearchForSubCatagoriesView)
 
 urlpatterns = [
 

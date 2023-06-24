@@ -9,7 +9,7 @@ from django.urls import reverse_lazy
 
 class UserProfileManager(BaseUserManager):
 
-    def create_user(self, username,first_name,last_name, email,country_code, gender, contact,terms_conditions=None , is_type = None,dob = None, address= None, password=None, profile_picture=None):
+    def create_user(self, username,first_name,last_name, email,country_code, gender, i_country, i_city, contact,terms_conditions=None , is_type = None,dob = None, address= None, password=None, profile_picture=None):
 
         if not any([ username,first_name,last_name,email]):
             raise ValueError(
@@ -17,7 +17,7 @@ class UserProfileManager(BaseUserManager):
 
         email = self.normalize_email(email=email)
 
-        user = self.model(username=username,first_name=first_name,last_name=last_name, email=email, country_code=country_code, gender=gender, contact=contact,is_type=is_type, dob=dob, address=address, profile_picture=profile_picture, terms_conditions=terms_conditions)
+        user = self.model(username=username,first_name=first_name,last_name=last_name, email=email, country_code=country_code, gender=gender, i_country=i_country, i_city=i_city, contact=contact,is_type=is_type, dob=dob, address=address, profile_picture=profile_picture, terms_conditions=terms_conditions)
 
         user.set_password(password)
         user.save(using=self._db)
@@ -65,9 +65,12 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     contact = models.CharField(max_length=15, unique=True)
     country_code = models.CharField(max_length=5)
+    i_city = models.ForeignKey('hubur_apis.City', on_delete=models.CASCADE, null=True, blank=True)
+    i_country = models.ForeignKey('hubur_apis.Country', on_delete=models.CASCADE, null=True, blank=True)
     dob = models.DateField(null=True, blank=True)
     address = models.CharField(max_length=225,null=True,blank=True)
     profile_picture = models.ImageField(upload_to="profile_pictures/", default='profile_pictures/logo_min.png', null=True, blank=True)
+    bg_image = models.ImageField(upload_to="profile_pictures/", default='profile_pictures/default_user_bg.jpg')
     long = models.FloatField(null=True, blank=True)
     lat = models.FloatField(null=True, blank=True)
     terms_conditions = models.BooleanField(default=False)
@@ -97,6 +100,46 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     def is_superuser(self):
         return self.role == 4
     
+    @property
+    def get_profile_percentage(self):
+        if self.is_admin():
+            rate = 3
+            if self.get_name() == "" or self.get_name() == None:
+                rate -= 1
+            if self.dob == "" or self.dob == None:
+                rate -= 1
+            if self.profile_picture == "" or self.profile_picture == "profile_pictures/logo_min.png" or self.profile_picture == None:
+                rate -= 1
+            
+            return round((rate/3)*100)
+        
+        if self.is_vendor():
+            rate = 7
+            if self.get_name() == "" or self.get_name() == None:
+                rate -= 1
+            if self.dob == "" or self.dob == None:
+                rate -= 1
+            if self.profile_picture == "" or self.profile_picture == "profile_pictures/logo_min.png" or self.profile_picture == None:
+                rate -= 1
+            if Images.objects.filter(i_user=self.id).count() < 10:
+                rate -= 1
+            
+            try:
+                business_instance = Business.objects.get(i_user=self.id)
+                if business_instance.website == "" or business_instance.website == None:
+                    rate -= 1
+
+                if business_instance.logo_pic == "" or business_instance.logo_pic == "business_images/bag.png" or business_instance.logo_pic == None:
+                    rate -= 1
+
+                if BusinessSchedule.objects.filter(~models.Q(start_time=None), i_business=business_instance.id).count() < 7:
+                    rate -= 1
+
+            except Business.DoesNotExist:
+                pass
+            
+            return round((rate/7)*100)
+    
 
     class Meta:
         db_table = 'Users'
@@ -112,7 +155,7 @@ class OtpToken(models.Model):
         (SMS, "SMS"),
         (EMAIL, "Email")
     )
-    i_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    i_user = models.ForeignKey('hubur_apis.UserProfile', on_delete=models.CASCADE)
     code = models.CharField(max_length=4)
     medium = models.CharField(choices=MEDIUM_CHOICE, max_length=1)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -125,6 +168,37 @@ class OtpToken(models.Model):
         db_table = 'otp_token'
         ordering = ['-created_at']
         verbose_name_plural = "Otp Codes"
+
+
+class Country(models.Model):
+    name = models.CharField(max_length=20)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.name}'
+
+    class Meta:
+        db_table = 'country'
+        ordering = ['name']
+        verbose_name_plural = "Countries"
+
+
+class City(models.Model):
+    name = models.CharField(max_length=50)
+    i_country = models.ForeignKey('hubur_apis.Country', on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f'{self.name} | {self.i_country.name}'
+
+    class Meta:
+        db_table = 'city'
+        ordering = ['name']
+        verbose_name_plural = "Cities"
 
 
 class Category(models.Model):
@@ -149,7 +223,7 @@ class Category(models.Model):
 class SubCategories(models.Model):
     name = models.CharField(max_length=255, unique=True)
     image = models.ImageField(upload_to="category_images/", null=True,blank=True)
-    i_category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    i_category = models.ForeignKey('hubur_apis.Category', on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -174,6 +248,7 @@ class Business(models.Model):
         (2, "Yes")
     )
     name = models.CharField(max_length=255)
+    about = models.TextField(default="")
     contact = models.CharField(max_length=15)
     country_code = models.CharField(max_length=5)
     address = models.CharField(max_length=255)
@@ -182,8 +257,9 @@ class Business(models.Model):
     is_active = models.BooleanField(default=True)
     website = models.URLField(max_length=255, null=True, blank=True)
     logo_pic = models.ImageField(upload_to="business_images/", default='business_images/bag.png')
-    i_category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    i_subcategory = models.ManyToManyField(SubCategories)
+    i_category = models.ForeignKey('hubur_apis.Category', on_delete=models.CASCADE)
+    i_subcategory = models.ManyToManyField('hubur_apis.SubCategories')
+    i_attributes = models.ManyToManyField('hubur_apis.Attributes', null=True, blank=True)
     i_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True)
     is_claimed = models.IntegerField(choices=IS_CLAIM_CHOICE, default=1)
     place_id = models.CharField(max_length=255)
@@ -206,17 +282,21 @@ class Content(models.Model):
     CONTENT_TYPE_CHOICE = (	
         (1, "Product"),	
         (2, "Service"),	
-        (3, "Restaurant"),	
+        (3, "Menu"),	
         (4, "Health Care"),	
     )
     name = models.CharField(max_length=255)
-    disc = models.CharField(max_length=255, null=True, blank=True)
-    i_business = models.ForeignKey(Business, on_delete=models.CASCADE, null=True, blank=True)
-    picture = models.ImageField(upload_to="product_images/")
+    description = models.TextField()
+    i_business = models.ForeignKey('hubur_apis.Business', on_delete=models.CASCADE, null=True, blank=True)
     content_type = models.IntegerField(choices=CONTENT_TYPE_CHOICE, default=1)
-    i_sub_category = models.ManyToManyField(SubCategories)
-    price = models.FloatField()
-    i_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    i_sub_category = models.ForeignKey('hubur_apis.SubCategories', on_delete=models.CASCADE, null=True, blank=True)
+    i_brand = models.ForeignKey('hubur_apis.Brand', on_delete=models.CASCADE, null=True, blank=True)
+    price = models.FloatField(default=0.0, null=True, blank=True)
+    i_user = models.ForeignKey('hubur_apis.UserProfile', on_delete=models.CASCADE)
+    sku = models.CharField(max_length=15, null=True, blank=True)
+    color = models.CharField(max_length=10, null=True, blank=True)
+    code = models.CharField(max_length=20, null=True, blank=True)
+    quantity = models.IntegerField(default=0, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -224,6 +304,30 @@ class Content(models.Model):
     def __str__(self):
         return f"{self.id} | {self.name} | {self.i_sub_category.name} | {self.price} | {self.i_user.get_name()} | {self.is_active}"
 
+    def get_edit_product_url(self):
+        return reverse_lazy("edit_products", kwargs={"content_id": self.id})
+    
+    def get_delete_product_url(self):
+        return reverse_lazy("delete_products", kwargs={"pk": self.id})
+    
+    def get_edit_service_url(self):
+        return reverse_lazy("edit_services", kwargs={"content_id": self.id})
+    
+    def get_delete_service_url(self):
+        return reverse_lazy("delete_services", kwargs={"pk": self.id})
+    
+    def get_edit_health_care_service_url(self):
+        return reverse_lazy("edit_health_care_services", kwargs={"content_id": self.id})
+    
+    def get_delete_health_care_service_url(self):
+        return reverse_lazy("delete_health_care_services", kwargs={"pk": self.id})
+    
+    def get_edit_menu_url(self):
+        return reverse_lazy("edit_menu", kwargs={"content_id": self.id})
+    
+    def get_delete_menu_url(self):
+        return reverse_lazy("delete_menu", kwargs={"pk": self.id})
+    
     class Meta:
         db_table = 'contents'
         ordering = ['-created_at']
@@ -233,7 +337,7 @@ class Content(models.Model):
 class ClaimBusiness(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    i_business = models.ForeignKey(Business, on_delete=models.CASCADE)
+    i_business = models.ForeignKey('hubur_apis.Business', on_delete=models.CASCADE)
     business_email = models.EmailField(max_length=50, unique=True)
     trade_license_number = models.CharField(max_length=50)
     trade_license = models.FileField(upload_to="trade_license/", validators=[file_size])
@@ -266,17 +370,26 @@ class Images(models.Model):
         (1, "Business_Catalog"),
         (2, "Product"),
         (3, "Service"),
+        (4, "Menu"),	
+        (5, "Health Care"),	
     )
     type = models.IntegerField(choices=TYPE_CHOICE)
-    i_business = models.ForeignKey(Business, on_delete=models.CASCADE, null=True, blank=True)
+    i_business = models.ForeignKey('hubur_apis.Business', on_delete=models.CASCADE, null=True, blank=True)
+    i_content = models.ForeignKey('hubur_apis.Content', on_delete=models.CASCADE, null=True, blank=True)
     image = models.ImageField(upload_to="other_images/")
     is_active = models.BooleanField(default=True)
-    i_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    i_user = models.ForeignKey('hubur_apis.UserProfile', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.i_user.get_name()} | {self.is_active}"
+    
+    def get_edit_url(self):
+        return reverse_lazy("edit_business_catalogue", kwargs={"cat_id": self.id})
+    
+    def get_delete_url(self):
+        return reverse_lazy("delete_business_catalogue", kwargs={"pk": self.id})
 
     class Meta:
         db_table = 'images'
@@ -302,8 +415,8 @@ class BusinessSchedule(models.Model):
     start_time = models.TimeField(null=True, blank=True)
     end_time = models.TimeField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
-    i_business = models.ForeignKey(Business, on_delete=models.CASCADE)
-    i_day = models.ForeignKey(Day, on_delete=models.CASCADE)
+    i_business = models.ForeignKey('hubur_apis.Business', on_delete=models.CASCADE)
+    i_day = models.ForeignKey('hubur_apis.Day', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -322,12 +435,21 @@ class Banner(models.Model):
         (2, "Middle"),
         (3, "After Have You Been There"),
         (4, "Before My Favourites"),
+        (5, "Catagory Page"),
+        (6, "Bottom"),
+    )
+
+    PLATFORM_CHOICE = (
+        (1, "Mobile"),
+        (2, "Web")
     )	
     
     image = models.ImageField(upload_to="banner_images/", null=True, blank=True)	
     position = models.IntegerField(choices=POSITION_CHOICE)	
-    i_subcatagory = models.ForeignKey(SubCategories, on_delete=models.CASCADE, null=True, blank=True)
-    i_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    platform = models.IntegerField(choices=PLATFORM_CHOICE)	
+    i_subcatagory = models.ForeignKey('hubur_apis.SubCategories', on_delete=models.CASCADE, null=True, blank=True)
+    url = models.URLField(max_length=255, null=True, blank=True)
+    i_user = models.ForeignKey('hubur_apis.UserProfile', on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -350,8 +472,6 @@ class Banner(models.Model):
 class Brand(models.Model):
     name = models.CharField(max_length=255, unique=True)
     image = models.ImageField(upload_to="brand_images/")
-    founded_year = models.DateField()
-    founded_country = models.CharField(max_length=255)
     website = models.URLField(max_length=255, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -377,14 +497,20 @@ class Story(models.Model):
     video = models.FileField(upload_to="story_videos/", validators=[file_size], null=True,blank=True)
     image = models.ImageField(upload_to="story_images/", null=True,blank=True)
     is_active = models.BooleanField(default=True)
-    i_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    updated_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="updated_user")
-    i_business = models.ForeignKey(Business, on_delete=models.CASCADE)
+    i_user = models.ForeignKey('hubur_apis.UserProfile', on_delete=models.CASCADE)
+    updated_user = models.ForeignKey('hubur_apis.UserProfile', on_delete=models.CASCADE, related_name="updated_user")
+    i_business = models.ForeignKey('hubur_apis.Business', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.id} | {self.i_user.get_name()} | {self.i_business.name} | {self.is_active}"
+    
+    def get_deactivate_url(self):
+        return reverse_lazy("vendor_deactivate_stories", kwargs={"story_id": self.id})
+    
+    def get_delete_url(self):
+        return reverse_lazy("vendor_delete_stories", kwargs={"pk": self.id})
 
     class Meta:
         db_table = 'story_db'
@@ -393,10 +519,11 @@ class Story(models.Model):
 
 
 class Checkedin(models.Model):
-    i_story = models.ForeignKey(Story, on_delete=models.CASCADE, null=True, blank=True)
-    i_business = models.ForeignKey(Business, on_delete=models.CASCADE)
+    i_story = models.ForeignKey('hubur_apis.Story', on_delete=models.CASCADE, null=True, blank=True)
+    i_business = models.ForeignKey('hubur_apis.Business', on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=True)
     other = models.CharField(max_length=255, null=True, blank=True)
-    i_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    i_user = models.ForeignKey('hubur_apis.UserProfile', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -412,8 +539,8 @@ class Checkedin(models.Model):
 class Redemption(models.Model):
     
     code = models.CharField(max_length=255)
-    i_content = models.ForeignKey(Content, on_delete=models.CASCADE)
-    i_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    i_content = models.ForeignKey('hubur_apis.Content', on_delete=models.CASCADE)
+    i_user = models.ForeignKey('hubur_apis.UserProfile', on_delete=models.CASCADE)
     is_redeemed  = models.BooleanField(default=False)
     is_expired = models.BooleanField(default=False)
     expired_at = models.DateTimeField(null=True, blank=True)
@@ -430,18 +557,22 @@ class Redemption(models.Model):
 
 
 class PopularSearch(models.Model):
-    name = models.CharField(max_length=255)
-    url = models.URLField(max_length=255, null=True, blank=True)
+    i_brand = models.ForeignKey('hubur_apis.Brand', on_delete=models.CASCADE, null=True, blank=True)
+    i_business = models.ForeignKey('hubur_apis.Business', on_delete=models.CASCADE, null=True, blank=True)
+    i_content = models.ForeignKey('hubur_apis.Content', on_delete=models.CASCADE, null=True, blank=True)
     type = models.CharField(max_length=20, null=True, blank=True)
-    catagory = models.CharField(max_length=20, null=True, blank=True)
-    type_id = models.IntegerField()
     count = models.IntegerField(default=1)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.name} | {self.count} | {self.is_active}"
+        if self.i_business:
+            return f"{self.i_business.name} | {self.count} | {self.type} | {self.is_active}"
+        elif self.i_content:
+            return f"{self.i_content.name} | {self.count} | {self.type} | {self.is_active}"
+        else:
+            return f"{self.i_brand.name} | {self.count} | {self.type} | {self.is_active}"
 
     class Meta:
         db_table = 'popular_search_db'
@@ -450,8 +581,8 @@ class PopularSearch(models.Model):
 
 
 class UserInterest(models.Model):
-    i_category = models.ManyToManyField(Category)
-    i_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    i_category = models.ManyToManyField('hubur_apis.Category')
+    i_user = models.ForeignKey('hubur_apis.UserProfile', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -467,7 +598,7 @@ class UserInterest(models.Model):
 class TrendingDiscount(models.Model):
     name = models.CharField(max_length=255, unique=True)
     image = models.ImageField(upload_to="category_images/")
-    i_business = models.ManyToManyField(Business, related_name='trending_discount_business')
+    i_business = models.ManyToManyField('hubur_apis.Business', related_name='trending_discount_business')
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -485,3 +616,436 @@ class TrendingDiscount(models.Model):
         db_table = 'trending_discount_db'
         ordering = ['-created_at']
         verbose_name_plural = "Trending Discount"
+
+
+
+class Voting(models.Model):
+    vote = models.BooleanField()
+    i_user = models.ForeignKey('hubur_apis.UserProfile', on_delete=models.CASCADE)
+    i_business = models.ForeignKey('hubur_apis.Business', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.vote} | {self.i_user.get_name()} | {self.i_business.name}"
+    
+    class Meta:
+        db_table = 'voting_db'
+        ordering = ['-created_at']
+        verbose_name_plural = "Voting"
+
+
+class MyFavourite(models.Model):
+    i_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    i_business = models.ForeignKey(Business, on_delete=models.CASCADE, null=True, blank=True)
+    i_content = models.ForeignKey(Content, on_delete=models.CASCADE, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.i_user.get_name()} | {self.i_business.name}"
+    
+    class Meta:
+        db_table = 'my_fav_db'
+        ordering = ['-created_at']
+        verbose_name_plural = "My Favourite"
+
+
+class Visited(models.Model):
+    i_user = models.ForeignKey('hubur_apis.UserProfile', on_delete=models.CASCADE)
+    i_business = models.ForeignKey('hubur_apis.Business', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.i_user.get_name()} | {self.i_business.name}"
+    
+    class Meta:
+        db_table = 'my_visited'
+        ordering = ['-created_at']
+        verbose_name_plural = "My Visited"
+
+
+class FAQ(models.Model):
+    question = models.TextField()
+    answer = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now_add=False, auto_now=True)
+    
+    def __str__(self):
+        return self.question
+
+    class Meta:
+        verbose_name_plural = "FAQs"
+        ordering = ['-created_at']
+
+
+class Other(models.Model):
+    about_us = models.TextField(blank=True, null=True)
+    terms_condition = models.TextField(blank=True, null=True)
+    privacy_policy = models.TextField(blank=True, null=True)
+    disclaimer = models.TextField(blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.updated_at.date()} | {self.updated_at.time()}"
+
+    class Meta:
+        verbose_name_plural = "Terms, privacy Policy etc.."
+
+
+class ContactUs(models.Model):
+    country_code = models.CharField(max_length=5)
+    mobile = models.CharField(max_length=15, unique=True)
+    uan = models.CharField(max_length=15, unique=True)
+    whatsapp = models.CharField(max_length=15, unique=True)
+    email = models.EmailField(max_length=30, unique=True)
+    
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.updated_at.date()} | {self.updated_at.time()}"
+
+    class Meta:
+        verbose_name_plural = "Contact Details"
+
+
+class Booking(models.Model):
+    STATUS_CHOICE = (
+        (1, "Pending"),
+        (2, "Accepted"),
+        (3, "Cancelled"),
+        (4, "Expired")
+    )
+    booking_no = models.CharField(max_length=50)
+    persons = models.IntegerField(default=0)
+    date = models.DateTimeField()
+    status = models.IntegerField(choices=STATUS_CHOICE, default=1) 
+    i_user = models.ForeignKey('hubur_apis.UserProfile', on_delete=models.CASCADE)
+    i_business = models.ForeignKey('hubur_apis.Business', on_delete=models.CASCADE)
+    reason = models.CharField(max_length=100, null=True, blank=True)
+    
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now_add=False, auto_now=True)
+
+    def __str__(self):
+        return f"{self.i_user.get_name()} | {self.i_business.name} | {self.date.date()} | {self.date.time()}"
+
+    def get_booking_accept_url(self):
+        return reverse_lazy("accept_booking", kwargs={"book_id": self.pk})
+    
+    def get_booking_cancel_url(self):
+        return reverse_lazy("cancel_booking", kwargs={"book_id": self.pk})
+
+    class Meta:
+        verbose_name_plural = "Bookings"
+        ordering = ['-created_at']
+
+
+class MyBookmark(models.Model):
+    i_user = models.ForeignKey('hubur_apis.UserProfile', on_delete=models.CASCADE)
+    i_business = models.ForeignKey('hubur_apis.Business', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.i_user.get_name()} | {self.i_business.name}"
+    
+    class Meta:
+        db_table = 'my_bookmark_db'
+        ordering = ['-created_at']
+        verbose_name_plural = "My Bookmark"
+
+
+class Offers(models.Model):
+    TYPE_CHOICE = (
+        (1, "Daily"),
+        (2, "Weekly"),
+        (3, "Monthly"),
+        (4, "Hot")
+    )
+    DISCOUNT_CHOICE = (
+        (1, "Percentage"),
+        (2, "Fixed")
+    )
+    name = models.CharField(max_length=1000)
+    type = models.IntegerField(choices=TYPE_CHOICE, default=1)
+    image = models.ImageField(upload_to="offer_images/", null=True, blank=True)
+    discount_price = models.IntegerField()
+    discount_type = models.IntegerField(choices=DISCOUNT_CHOICE, default=1)
+    start = models.DateTimeField(null=True, blank=True)
+    end = models.DateTimeField(null=True, blank=True)
+    is_expiry = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    i_user = models.ForeignKey('hubur_apis.UserProfile', on_delete=models.CASCADE)
+    i_business = models.ForeignKey('hubur_apis.Business', on_delete=models.CASCADE)
+    i_content = models.ManyToManyField('hubur_apis.Content')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.name} | {self.get_type_display()} | {self.i_business.name} | {self.is_active}"
+    
+    def get_edit_url(self):
+        return reverse_lazy("edit_offer", kwargs={"offer_id": self.id})
+    
+    def get_delete_url(self):
+        return reverse_lazy("delete_offer", kwargs={"pk": self.id})
+    
+    class Meta:
+        db_table = 'offer_db'
+        ordering = ['-created_at']
+        verbose_name_plural = "Offers"
+
+
+class Attributes(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    is_active = models.BooleanField(default=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.name}"
+    
+    class Meta:
+        db_table = 'attributes_db'
+        ordering = ['-created_at']
+        verbose_name_plural = "Attributes"
+
+
+class SavedOffers(models.Model):
+    i_content = models.ForeignKey('hubur_apis.Content', on_delete=models.CASCADE)
+    i_user = models.ForeignKey('hubur_apis.UserProfile', on_delete=models.CASCADE)
+    i_business = models.ForeignKey('hubur_apis.Business', on_delete=models.CASCADE)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.i_user.get_name()} | {self.i_business.name}"
+    
+    class Meta:
+        db_table = 'saved_offer_db'
+        ordering = ['-created_at']
+        verbose_name_plural = "Saved Offers"
+
+
+class Reviews(models.Model):
+    display_name = models.CharField(max_length=225, null=True, blank=True)
+    display_image = models.CharField(max_length=225, null=True, blank=True)
+    review = models.CharField(max_length=5000)
+    i_content = models.ForeignKey('hubur_apis.Content', on_delete=models.CASCADE, null=True, blank=True)
+    i_user = models.ForeignKey('hubur_apis.UserProfile', on_delete=models.CASCADE, null=True, blank=True)
+    i_business = models.ForeignKey('hubur_apis.Business', on_delete=models.CASCADE, null=True, blank=True)
+    rate = models.FloatField(max_length=5)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        if self.i_user:
+            return f"rating {self.rate} star(s) | {self.i_user.get_name()} | {self.i_content.name}"
+        else:
+            return f"rating {self.rate} star(s) | {self.display_name}"
+    
+    class Meta:
+        db_table = 'review_db'
+        ordering = ['-created_at']
+        verbose_name_plural = "Reviews"
+
+
+class Notification(models.Model):
+    TYPE_CHOICE = (
+        (1, "Redeem"),
+        (2, "Follow/Unfollow"),
+        (3, "Message"),
+        (4, "Friend Story"),
+        (5, "Saved Item Expiry Day"),
+        (6, "Vendor Created Deal"),
+    )
+    user = models.ForeignKey('hubur_apis.UserProfile', related_name='receiver', on_delete=models.CASCADE)
+    sender = models.ForeignKey('hubur_apis.UserProfile', related_name='sender', on_delete=models.CASCADE)
+    content = models.ForeignKey('hubur_apis.Content', on_delete=models.CASCADE, null=True, blank=True)
+    title = models.CharField(max_length=512, null=False, blank=False)
+    notification_type = models.IntegerField(choices=TYPE_CHOICE, null=True, blank=True)
+    body = models.CharField(max_length=512, null=False, blank=False)
+    reviewed = models.BooleanField(default=False)
+    action = models.CharField(max_length=512, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.title} | {self.get_notification_type_display()} | {self.user.get_name()}"
+    
+    class Meta:
+        db_table = 'notification_db'
+        ordering = ['-created_at']
+        verbose_name_plural = "Notifications"
+
+
+class FriendList(models.Model):
+    i_user = models.ForeignKey('hubur_apis.UserProfile', related_name='user', on_delete=models.CASCADE)
+    friends = models.ForeignKey('hubur_apis.UserProfile', related_name='friends', on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):  
+        return f"{self.i_user.get_name()} | {self.friends.get_name()}"
+
+    
+    class Meta:
+        db_table = 'friend_list_db'
+        ordering = ['-created_at']
+        verbose_name_plural = "Friend List"
+
+
+
+class RewardPoints(models.Model):
+    TYPE_CHOICE = (
+        (1, "Checkin"),
+        (2, "Redemption"),
+        (3, "Story"),
+        (4, "Vote"),
+    )
+    type = models.PositiveIntegerField(choices=TYPE_CHOICE, default=1)
+    points = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.get_type_display()} | {self.points}"
+    
+    class Meta:
+        db_table = 'reward_points_db'
+        verbose_name_plural = "Reward Points"
+
+
+class Level(models.Model):
+    TYPE_CHOICE = (
+        (1,"Gold"),
+        (2,"Silver"),
+        (3,"Bronze")
+    )
+    name = models.CharField(max_length=255)
+    description = models.CharField(max_length=255, null=True, blank=True)
+    type = models.PositiveIntegerField(choices=TYPE_CHOICE,default=1)
+    points = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.name} | {self.get_type_display()} | {self.points}"
+    
+    class Meta:
+        db_table = 'level_db'
+        verbose_name_plural = "Levels"
+
+
+class UserReward(models.Model):
+    i_user = models.ForeignKey('hubur_apis.UserProfile', on_delete=models.CASCADE)
+    i_business = models.ForeignKey('hubur_apis.Business', on_delete=models.CASCADE)
+    i_content = models.ForeignKey('hubur_apis.Content', on_delete=models.CASCADE, null=True, blank=True)
+    i_point = models.ForeignKey('hubur_apis.RewardPoints', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+    @property
+    def total_points(self):
+        total = sum(UserReward.objects.filter(i_user=self.i_user).values_list('i_point__points',flat=True))
+        return total
+    
+    @property
+    def user_level(self):
+        user_points = int(self.total_points)
+        all_levels = Level.objects.all()
+        gold = all_levels.filter(type=1).first()
+        silver = all_levels.filter(type=2).first()
+        bronze = all_levels.filter(type=3).first()
+
+        if gold and silver and bronze:
+            if user_points >= gold.points:
+                obj = {"name":gold.name, "obj":gold}
+
+            elif user_points >= silver.points:
+                obj = {"name":silver.name, "obj":silver}
+
+            elif user_points >= bronze.points:
+                obj = {"name":bronze.name, "obj":bronze}
+
+            else:
+                obj = {"name":"Level 0", "obj":None}
+            
+            return obj
+
+    def __str__(self):
+        if self.i_content:
+            return f"{self.i_user.get_name()} | {self.i_content.name} | {self.i_point.get_type_display()} | {self.i_point.points} || Total points are: {self.total_points} | {self.user_level['name']}"
+        else:
+            return f"{self.i_user.get_name()} | {self.i_business.name} | {self.i_point.get_type_display()} | {self.i_point.points} || Total points are: {self.total_points} | {self.user_level['name']}"
+    
+    class Meta:
+        db_table = 'user_reward_db'
+        ordering = ['-created_at']
+        verbose_name_plural = "User Reward"
+
+
+class Message(models.Model):
+    type_choice = (
+        (1, "text"),
+        (2, "image"),
+        (3, "audio"),
+        (4, "video"),
+        (5, "profile"),
+        (6, "story"),
+        (7, "business"),
+        (8, "content")
+    )
+    type = models.IntegerField(choices=type_choice, default=1)
+    sender = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='msg_sender')
+    receiver = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='msg_receiver')
+    channel_id = models.CharField(max_length=100)
+    content = models.CharField(max_length=1000, null=True, blank=True)
+    share_data = models.JSONField(null=True, blank=True)
+    attachment = models.URLField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        if self.content:
+            return f'{self.sender.get_name()} | {self.receiver.get_name()} | {self.channel_id} | {self.content} | {self.get_type_display()}'
+        elif self.share_data:
+            return f'{self.sender.get_name()} | {self.receiver.get_name()} | {self.channel_id} | {self.share_data} | {self.get_type_display()}'
+        else:
+            return f'{self.sender.get_name()} | {self.receiver.get_name()} | {self.channel_id} | {self.attachment} | {self.get_type_display()}'
+    
+    class Meta:
+        db_table = 'message_db'
+        ordering = ['-created_at']
+        verbose_name_plural = "Messages"
+
+    
+class Chat(models.Model):
+    user_1 = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='user_1')
+    user_2 = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='user_2')
+    channel_id = models.CharField(max_length=100, unique=True)
+    last_message = models.CharField(max_length=1000, default="")
+    is_read = models.BooleanField(default=False)
+    count = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.user_1.get_name()} | {self.user_2.get_name()} | {self.channel_id} | {self.last_message}'
+    
+    class Meta:
+        db_table = 'chat_db'
+        ordering = ['-created_at']
+        verbose_name_plural = "Chats"
+
+
+class UserOnlineStatus(models.Model):
+    i_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    is_online = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f'{self.i_user.get_name()} | {self.is_online}'
+    
+    class Meta:
+        db_table = 'user_online_status_db'
+        ordering = ['-created_at']
+        verbose_name_plural = "User Online Status"

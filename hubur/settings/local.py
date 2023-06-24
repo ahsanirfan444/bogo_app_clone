@@ -47,7 +47,6 @@ ALLOWED_HOSTS = ['*']
 #         'NAME': os.path.join(tempfile.gettempdir(), 'hubur_local.sqlite3'),
 #     }
 # }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -58,16 +57,6 @@ DATABASES = {
         'PORT': os.getenv("LOCAL_DB_PORT")
     }
 }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': os.getenv("PRO_DB_NAME"),
-#         'USER': os.getenv("PRO_DB_USER"),
-#         'PASSWORD': os.getenv("PRO_DB_PASSWORD"),
-#         'HOST': os.getenv("PRO_DB_HOST"),
-#         'PORT': os.getenv("PRO_DB_PORT")
-#     }
-# }
 
 #==================================================Static Files directory==================================================
 
@@ -91,3 +80,4 @@ DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
 #==================================================Internationalization==================================================
 LANGUAGE_CODE = os.getenv("LANGUAGE_CODE")
 TIME_ZONE = os.getenv("TIME_ZONE")
+

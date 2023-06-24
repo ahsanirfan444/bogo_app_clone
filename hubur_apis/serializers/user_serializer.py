@@ -6,21 +6,46 @@ import django.contrib.auth.password_validation as validators
 from django.core import exceptions
 import global_methods, notifications
 from django.db.models import Q
+from global_methods import format_number
 
 class UserProfileSerializer(serializers.ModelSerializer):
     profile_picture = global_methods.Base64ImageField(required=False, default='profile_pictures/logo_min.png')
+    city_name = serializers.SerializerMethodField()
+    country_name = serializers.SerializerMethodField()
+
     class Meta:
         model = models.UserProfile
-        fields = ('id','first_name', 'last_name', 'email', 'contact', 'profile_picture', 'password', 'dob','is_type', 'country_code', 'address','country_code','gender','terms_conditions')
+        fields = ('id', 'first_name', 'last_name', 'email', 'contact', 'profile_picture', 'password', 'dob', 'is_type', 'address', 'country_code', 'gender', 'terms_conditions', 'i_city', 'i_country', 'bg_image','city_name','country_name',)
         extra_kwargs = {
             'password': {
                 'write_only': True,
             },
             'id': {
                 "read_only": True,
-            }
+            },
         }
 
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['voting'] = format_number(models.Voting.objects.filter(i_user=instance).count())
+        response['checkins'] = format_number(models.Checkedin.objects.filter(i_user=instance, is_active=True).count())
+        response['my_favorites'] = format_number(models.MyFavourite.objects.filter(i_user=instance).count())
+        response['my_booking'] = format_number(models.Booking.objects.filter(i_user=instance).count())
+        response['my_bookmark'] = format_number(models.MyBookmark.objects.filter(i_user=instance).count())
+        response['my_reviews'] = format_number(models.Reviews.objects.filter(i_user=instance).count())
+        response['my_saved_offer'] = format_number(models.SavedOffers.objects.filter(i_user=instance).count())
+        response['my_friends'] = format_number(models.FriendList.objects.filter(i_user=instance).count())
+        response['my_rewards'] = format_number(models.UserReward.objects.filter(i_user=instance).count())
+        response['i_city'] = str(response['i_city'])
+        response['i_country'] = str(response['i_country'])
+        return response
+  
+    def get_city_name(self, obj):
+        return obj.i_city.name
+    
+    def get_country_name(self, obj):
+        return obj.i_country.name
+    
     def get_full_url(self):
         request = self.context.get('request')
         url = models.UserProfile.profile_picture.url
@@ -38,7 +63,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
         return super(UserProfileSerializer, self).validate(data)
 
-        
     def create(self, validated_data):
         """ Creates and returns the new User """
         user = None
@@ -57,13 +81,16 @@ class UserProfileSerializer(serializers.ModelSerializer):
         email = validated_data.get('email')
         username = email.split('@')[0]
         validated_data['username'] = username
-        
+
         if medium == '1':
             user = models.UserProfile.objects.create_user(**validated_data)
             user.set_password(validated_data.get('password'))
             user.save()
             if is_type == '1':
+                sms_message = "Your otp verification code is %s " % code_dict['sms_code']
                 models.OtpToken.objects.create(i_user=user,code=code_dict['sms_code'],medium = "1")
+                contact_no = "+"+str(validated_data['country_code']+validated_data['contact'])
+                notifications.sendSMSToSingleUser(sms_message,contact_no)
             return user
         elif medium == '2':
             if "gender" not in validated_data or validated_data['gender'] is None:
@@ -75,93 +102,138 @@ class UserProfileSerializer(serializers.ModelSerializer):
                 notifications.sendEmailToSingleUser(html_message, email_address, subject)
                 models.OtpToken.objects.create(i_user=user,code=code_dict['email_code'],medium = "2")
             return user
-       
-    def update(self, instance, validated_data):
         
+    def update(self, instance, validated_data):
+
         if "password" in validated_data:
             password = validated_data.pop("password")
-            
+
             instance.set_password(password)
-        
+
         return super().update(instance, validated_data)
 
 class GetUserProfileSerializer(serializers.ModelSerializer):
+    city = serializers.CharField(source="i_city.name")
+    country = serializers.CharField(source="i_country.name")
     class Meta:
         model = models.UserProfile
-        fields = ('id','first_name', 'last_name', 'email', 'contact', 'profile_picture', 'dob', 'country_code', 'address', 'is_verified','long','lat','is_type','gender','terms_conditions',)
+        fields = ('id','first_name','last_name','username','email','contact','city','country','profile_picture','dob','country_code','address','is_verified','long','lat','is_type','gender','terms_conditions','bg_image',)
+        extra_kwargs = {
+            'i_city': {
+                'write_only': True,
+            },
+            'i_country': {
+                'write_only': True,
+            }
+        }
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
+        response['voting'] = format_number(models.Voting.objects.filter(i_user=instance).count())
+        response['checkins'] = format_number(models.Checkedin.objects.filter(i_user=instance, is_active=True).count())
+        response['my_favorites'] = format_number(models.MyFavourite.objects.filter(i_user=instance).count())
+        response['my_booking'] = format_number(models.Booking.objects.filter(i_user=instance).count())
+        response['my_bookmark'] = format_number(models.MyBookmark.objects.filter(i_user=instance).count())
+        response['my_reviews'] = format_number(models.Reviews.objects.filter(i_user=instance).count())
+        response['my_saved_offer'] = format_number(models.SavedOffers.objects.filter(i_user=instance).count())
+        response['my_friends'] = format_number(models.FriendList.objects.filter(i_user=instance).count())
+        response['my_rewards'] = format_number(models.UserReward.objects.filter(i_user=instance).count())
+        response['i_city'] = response['city']
+        response['i_country'] = response['country']
+        del response['city'], response['country']
+        response['is_friend'] = False
+        user_obj = self.context.get("user_obj")
+        if user_obj:
+            friends_list = list(models.FriendList.objects.filter(i_user=user_obj).values_list("friends",flat=True))
+            if instance.id in friends_list:
+                response['is_friend'] = True
+                
         return response
 
 
 class EmailLoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField()
-    
+
     def validate(self, data):
-        user = models.UserProfile.objects.filter(email = data['email']).exists()
+        user = models.UserProfile.objects.filter(email=data['email']).exists()
         if user:
-            user = models.UserProfile.objects.get(email = data['email'])
+            user = models.UserProfile.objects.get(email=data['email'])
             if user.check_password(data['password']):
                 if user.is_active and user.is_verified:
                     return super(EmailLoginSerializer, self).validate(data)
                 else:
                     code_dict = global_methods.generate_otp_tokens()
                     models.OtpToken.objects.filter(i_user=user).delete()
-                    models.OtpToken.objects.create(i_user=user, code=code_dict['email_code'], medium = "2")
+                    models.OtpToken.objects.create(
+                        i_user=user, code=code_dict['email_code'], medium="2")
                     email_address = user.email
                     subject = 'OTP for hubur'
-                    html_message = "Code has been resend to you. Your otp verification code is %s " % code_dict['email_code']
-                    notifications.sendEmailToSingleUser(html_message, email_address, subject)
-                    raise serializers.ValidationError({"email":"Please Verfy your account. OTP has been send to you."})
+                    html_message = "Code has been resend to you. Your otp verification code is %s " % code_dict[
+                        'email_code']
+                    notifications.sendEmailToSingleUser(
+                        html_message, email_address, subject)
+                    raise serializers.ValidationError(
+                        {"email": "Please Verfy your account. OTP has been send to you."})
             else:
-                raise serializers.ValidationError({"password":"Incorrect Password"})
+                raise serializers.ValidationError(
+                    {"password": "Incorrect Password"})
         else:
             raise serializers.ValidationError("No user Exist !")
-        
+
+
 class ContactLoginSerializer(serializers.Serializer):
     contact = serializers.CharField()
     country_code = serializers.CharField()
     password = serializers.CharField()
-    
+
     def validate(self, data):
         if '+' in data['country_code']:
-            data['country_code'] = data['country_code'].replace("+","")
-        user = models.UserProfile.objects.filter(contact = data['contact'], country_code = data['country_code']).exists()
+            data['country_code'] = data['country_code'].replace("+", "")
+        user = models.UserProfile.objects.filter(
+            contact=data['contact'], country_code=data['country_code']).exists()
         if user:
-            user = models.UserProfile.objects.get(contact = data['contact'], country_code = data['country_code'])
+            user = models.UserProfile.objects.get(
+                contact=data['contact'], country_code=data['country_code'])
             if user.check_password(data['password']):
                 if user.is_active and user.is_verified:
                     return super(ContactLoginSerializer, self).validate(data)
                 else:
                     code_dict = global_methods.generate_otp_tokens()
                     models.OtpToken.objects.filter(i_user=user).delete()
-                    models.OtpToken.objects.create(i_user=user, code=code_dict['email_code'], medium = "2")
+                    models.OtpToken.objects.create(
+                        i_user=user, code=code_dict['email_code'], medium="2")
                     email_address = user.email
                     subject = 'OTP for hubur'
-                    html_message = "Code has been resend to you. Your otp verification code is %s " % code_dict['email_code']
-                    notifications.sendEmailToSingleUser(html_message, email_address, subject)
-                    raise serializers.ValidationError({"contact":"Please Verfy your account. OTP has been send to you."})
+                    html_message = "Code has been resend to you. Your otp verification code is %s " % code_dict[
+                        'email_code']
+                    notifications.sendEmailToSingleUser(
+                        html_message, email_address, subject)
+                    raise serializers.ValidationError(
+                        {"contact": "Please Verfy your account. OTP has been send to you."})
             else:
-                raise serializers.ValidationError({"password":"Incorrect Password"})
+                raise serializers.ValidationError(
+                    {"password": "Incorrect Password"})
         else:
-            raise serializers.ValidationError({"contact":"No user Exist !"})
+            raise serializers.ValidationError({"contact": "No user Exist !"})
+
 
 class VerifyUserSerializer(serializers.Serializer):
     code = serializers.CharField(max_length=4)
     email = serializers.EmailField(required=False)
     sms = serializers.IntegerField(required=False)
     country_code = serializers.CharField(required=False)
-     
 
     def create(self, validated_data):
         if 'email' in validated_data:
-            query = Q(medium="2", code=validated_data['code'], i_user__email=validated_data['email'])
+            query = Q(
+                medium="2", code=validated_data['code'], i_user__email=validated_data['email'])
             verify_query = Q(email=validated_data['email'])
         elif 'sms' in validated_data:
-            query = Q(medium="1", code=validated_data['code'], i_user__contact=validated_data['sms'],i_user__country_code=validated_data['country_code'])
-            verify_query = Q(contact=validated_data['sms'],country_code=str(validated_data['country_code']))
+            query = Q(medium="1", code=validated_data['code'], i_user__contact=validated_data['sms'],
+                      i_user__country_code=validated_data['country_code'])
+            verify_query = Q(contact=validated_data['sms'], country_code=str(
+                validated_data['country_code']))
 
         else:
             return {'status': 'Failed to verify'}
@@ -176,7 +248,8 @@ class VerifyUserSerializer(serializers.Serializer):
                 return {'status': 'expired'}
             else:
                 if models.UserProfile.objects.filter(verify_query).exists():
-                    user = models.UserProfile.objects.filter(verify_query).first()
+                    user = models.UserProfile.objects.filter(
+                        verify_query).first()
                     user.is_active = True
                     user.is_verified = True
                     user.save()
@@ -209,7 +282,7 @@ class VerifyUserSerializer(serializers.Serializer):
 class ResetPasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(write_only=True)
     new_password = serializers.CharField(write_only=True)
-    confirm_password = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True)
 
     def create(self, validated_data):
         user = self.context.get("user")
@@ -221,7 +294,7 @@ class ResetPasswordSerializer(serializers.Serializer):
         user = self.context.get("user")
         old_password = data.get('old_password')
         new_password = data.get('new_password')
-        confirm_password = data.get('confirm_password')
+        confirm_password = data.get('password')
 
         errors = dict()
         try:
@@ -247,23 +320,31 @@ class ForgotPasswordSerializer(serializers.Serializer):
     sms = serializers.IntegerField(required=False)
     country_code = serializers.CharField(required=False)
     medium = serializers.CharField(max_length=1)
-    
 
     def create(self, validated_data):
         code_dict = global_methods.generate_otp_tokens()
         if validated_data.get('medium') == "2":
-            user = models.UserProfile.objects.get(email=validated_data['email'])
+            user = models.UserProfile.objects.get(
+                email=validated_data['email'])
             models.OtpToken.objects.filter(i_user=user).delete()
 
-            otp_obj = models.OtpToken.objects.create(i_user=user, code=code_dict['email_code'], medium = "2")
+            otp_obj = models.OtpToken.objects.create(
+                i_user=user, code=code_dict['email_code'], medium="2")
             email_address = validated_data['email']
             subject = 'OTP for hubur'
             html_message = "Your otp verification code is %s " % code_dict['email_code']
-            notifications.sendEmailToSingleUser(html_message, email_address, subject)
+            notifications.sendEmailToSingleUser(
+                html_message, email_address, subject)
         else:
-            user = models.UserProfile.objects.get(contact=validated_data['sms'],country_code=validated_data['country_code'])
+            user = models.UserProfile.objects.get(
+                contact=validated_data['sms'], country_code=validated_data['country_code'])
             models.OtpToken.objects.filter(i_user=user).delete()
-            otp_obj = models.OtpToken.objects.create(i_user=user, code=code_dict['sms_code'], medium = "1")
+            otp_obj = models.OtpToken.objects.create(
+                i_user=user, code=code_dict['sms_code'], medium="1")
+            
+            sms_message = "Your otp verification code is %s " % code_dict['sms_code']
+            contact_no = "+"+str(validated_data['country_code'])+str(validated_data['sms'])
+            notifications.sendSMSToSingleUser(sms_message,contact_no)
 
         return otp_obj
 
@@ -271,11 +352,19 @@ class ForgotPasswordSerializer(serializers.Serializer):
         if value['medium'] == "2":
             if not (models.UserProfile.objects.filter(email=value['email']).exists()):
                 raise serializers.ValidationError('No email found')
-            return value
+            elif models.UserProfile.objects.filter(email=value['email'],is_type=2):
+                raise serializers.ValidationError('Your Profile is social and password can not be changed.')
+            else:
+                return value
         elif value['medium'] == "1":
-            if not (models.UserProfile.objects.filter(contact=value['sms']).exists()):
+            if '+' in value['country_code']:
+                value['country_code'] = str(value['country_code']).replace("+","")
+            if not (models.UserProfile.objects.filter(contact=value['sms'], country_code=value['country_code']).exists()):
                 raise serializers.ValidationError('No Contact found')
-            return value
+            elif models.UserProfile.objects.filter(contact=value['sms'], country_code=value['country_code'], is_type=2):
+                raise serializers.ValidationError('Your Profile is social and password can not be changed.')
+            else:
+                return value
         else:
             raise serializers.ValidationError('No Medium found')
 
@@ -285,23 +374,32 @@ class ResendCodeSerializer(serializers.Serializer):
     sms = serializers.IntegerField(required=False)
     country_code = serializers.CharField(required=False)
     medium = serializers.CharField(max_length=1)
-    
 
     def create(self, validated_data):
         code_dict = global_methods.generate_otp_tokens()
         if validated_data.get('medium') == "2":
-            user = models.UserProfile.objects.get(email=validated_data['email'])
+            user = models.UserProfile.objects.get(
+                email=validated_data['email'])
             models.OtpToken.objects.filter(i_user=user).delete()
 
-            otp_obj = models.OtpToken.objects.create(i_user=user, code=code_dict['email_code'], medium = "2")
+            otp_obj = models.OtpToken.objects.create(
+                i_user=user, code=code_dict['email_code'], medium="2")
             email_address = validated_data['email']
             subject = 'OTP for hubur'
-            html_message = "Code has been resend to you. Your otp verification code is %s " % code_dict['email_code']
-            notifications.sendEmailToSingleUser(html_message, email_address, subject)
+            html_message = "Code has been resend to you. Your otp verification code is %s " % code_dict[
+                'email_code']
+            notifications.sendEmailToSingleUser(
+                html_message, email_address, subject)
         else:
-            user = models.UserProfile.objects.get(contact=validated_data['sms'],country_code=validated_data['country_code'])
+            user = models.UserProfile.objects.get(
+                contact=validated_data['sms'], country_code=validated_data['country_code'])
             models.OtpToken.objects.filter(i_user=user).delete()
-            otp_obj = models.OtpToken.objects.create(i_user=user, code=code_dict['sms_code'], medium = "1")
+            otp_obj = models.OtpToken.objects.create(
+                i_user=user, code=code_dict['sms_code'], medium="1")
+            
+            sms_message = "Your otp verification code is %s " % code_dict['sms_code']
+            contact_no = "+"+str(validated_data['country_code'])+str(validated_data['sms'])
+            notifications.sendSMSToSingleUser(sms_message,contact_no)
 
         return otp_obj
 
@@ -311,12 +409,13 @@ class ResendCodeSerializer(serializers.Serializer):
                 raise serializers.ValidationError('No email found')
             return value
         elif value['medium'] == "1":
-            if not (models.UserProfile.objects.filter(contact=value['sms']).exists()):
+            if '+' in value['country_code']:
+                value['country_code'] = str(value['country_code']).replace("+","")
+            if not (models.UserProfile.objects.filter(contact=value['sms'], country_code=value['country_code']).exists()):
                 raise serializers.ValidationError('No Contact found')
             return value
         else:
             raise serializers.ValidationError('No Medium found')
-
 
 
 class ChangePassAfterVerifySerializer(serializers.Serializer):
@@ -330,10 +429,15 @@ class ChangePassAfterVerifySerializer(serializers.Serializer):
     def create(self, validated_data):
         if 'email' in validated_data:
             query = Q(email=validated_data['email'])
-            token_query = Q(i_user__email=validated_data['email'], code=validated_data['code'], medium='2')
+            token_query = Q(
+                i_user__email=validated_data['email'], code=validated_data['code'], medium='2')
         elif 'sms' in validated_data:
-            query = Q(contact=validated_data['sms'],country_code=validated_data['country_code'])
-            token_query = Q(i_user__contact=validated_data['sms'],i_user__country_code=validated_data['country_code'], code=validated_data['code'], medium='1')
+            if '+' in validated_data['country_code']:
+                validated_data['country_code'] = str(validated_data['country_code']).replace("+","")
+            query = Q(
+                contact=validated_data['sms'], country_code=validated_data['country_code'])
+            token_query = Q(
+                i_user__contact=validated_data['sms'], i_user__country_code=validated_data['country_code'], code=validated_data['code'], medium='1')
         else:
             return {'status': 'Medium is not selected'}
 
@@ -374,3 +478,17 @@ class ChangePassAfterVerifySerializer(serializers.Serializer):
         if errors:
             raise serializers.ValidationError(errors)
         return super(ChangePassAfterVerifySerializer, self).validate(data)
+
+
+class CitySerializer(serializers.ModelSerializer):
+    country = serializers.CharField(source="i_country.name")
+
+    class Meta:
+        model = models.City
+        fields = ('id', 'name', "country",)
+
+
+class CountrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Country
+        fields = ('id', 'name',)

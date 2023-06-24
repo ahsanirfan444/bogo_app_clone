@@ -23,6 +23,8 @@ class CreateBannersForm(forms.ModelForm):
         widgets = {
             "i_subcatagory": forms.Select(attrs={"class": "form-control"}),
             "position": forms.Select(attrs={"class": "form-control"}),
+            "platform": forms.Select(attrs={"class": "form-control"}),
+            "url": forms.TextInput(attrs={'class':'form-control'}),
             "is_active": forms.Select(attrs={"class": "form-control"}, choices=ACTIVE_CHOICES)
         }
 
@@ -46,5 +48,7 @@ class EditBannersForm(forms.ModelForm):
         widgets = {
             "i_subcatagory": forms.Select(attrs={"class": "form-control"}),
             "position": forms.Select(attrs={"class": "form-control"}),
+            "platform": forms.Select(attrs={"class": "form-control"}),
+            "url": forms.TextInput(attrs={'class':'form-control'}),
             "is_active": forms.Select(attrs={"class": "form-control"}, choices=ACTIVE_CHOICES)
         }

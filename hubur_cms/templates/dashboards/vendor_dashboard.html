@@ -279,9 +279,8 @@
                     <div class="card-header pt-7">
                         <!--begin::Title-->
                         <h3 class="card-title align-items-start flex-column">
-                            <span class="card-label fw-bold text-dark">World Sales</span>
-                            <span class="text-gray-400 pt-2 fw-semibold fs-6">Top Selling
-                                Countries</span>
+                            <span class="card-label fw-bold text-dark">Validate Coupon</span>
+                            <span class="text-gray-400 pt-2 fw-semibold fs-6">Enter code to validate the voucher code.</span>
                         </h3>
                         <!--end::Title-->
 
@@ -290,7 +289,24 @@
                     <!--begin::Body-->
                     <div class="card-body d-flex flex-center">
                         <!--begin::Map container-->
-                        <div id="kt_maps_widget_1_map" class="w-100 h-350px"></div>
+                            <div class="w-100 h-350px">
+                                <img class="mx-auto h-150px h-lg-200px theme-light-show d-block" src="{% static 'assets/media/illustrations/misc/upgrade.svg' %}" alt="">
+                                <form method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <input type="text" class="form-control w-md-75 me-auto ms-auto mt-10 d-block" id="id_validate_voucher" name="validate_voucher" placeholder="Enter Coupon Here" autocomplete="new-password" required>
+                                    <div class="d-grid mt-10 mb-10 w-md-50 w-md-50 me-auto ms-auto d-block">
+                                        <button type="submit" class="btn btn-primary">
+                                            <!--begin::Indicator label-->
+                                            <span class="indicator-label">Validate</span>
+                                            <!--end::Indicator label-->
+                                            <!--begin::Indicator progress-->
+                                            <span class="indicator-progress">Please wait...
+                                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                            <!--end::Indicator progress-->
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
                         <!--end::Map container-->
                     </div>
                     <!--end::Body-->

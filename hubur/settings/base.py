@@ -47,8 +47,14 @@ INSTALLED_APPS = [
     'hubur_cms',
     'rest_framework',
     'drf_yasg',
-    'django_filters'
+    'django_filters',
+    'django_crontab',
+    'corsheaders',
+    'push_notifications'
 ]
+
+
+#==================================================Middlewares==================================================
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -58,6 +64,9 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+    # "django.middleware.cache.UpdateCacheMiddleware",
+    # "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 # ==================================================Base Url configuration==================================================
@@ -112,9 +121,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # ==================================================Internationalization==================================================
 
 USE_I18N = True
-
-USE_L10N = False
-
+USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
@@ -164,3 +171,28 @@ PASSWORD_RESET_TIMEOUT = 300
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ==================================================CORS Settings==================================================
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ORIGIN_WHITELIST = [
+    'https://localhost:3000'
+]
+
+# ==================================================Push notification settings==================================================
+
+PUSH_NOTIFICATIONS_SETTINGS = {
+    "FCM_API_KEY": os.getenv("FCM_API_KEY"),
+    "APNS_CERTIFICATE": os.path.join(BASE_DIR, "keys/huburway_p12_Certificates.p12"),
+    "APNS_TOPIC": os.getenv("APNS_TOPIC"),
+    "WP_PRIVATE_KEY": os.path.join(BASE_DIR, "keys/private_key.pem"),
+    "WP_CLAIMS": {'sub': "mailto: shahnawazmemon78@gmail.com"},
+    "UPDATE_ON_DUPLICATE_REG_ID": True
+}
+
+#==================================================SMS settings=================================================
+
+TWILLIO_ACCOUNT_SID = os.getenv("TWILLIO_ACCOUNT_SID")
+TWILLIO_AUTH_TOKEN = os.getenv("TWILLIO_AUTH_TOKEN")
+TWILLIO_NUMBER = os.getenv("TWILLIO_NUMBER")

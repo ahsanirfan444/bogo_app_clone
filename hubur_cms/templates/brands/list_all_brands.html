@@ -6,10 +6,6 @@
 
 <style>
 .dataTables_length{
-    margin: 10px 0px 0px 25px;
-}
-
-#kt_table_users_length{
     display: none !important;
 }
 </style>
@@ -51,15 +47,13 @@
                 <!--begin::Table container-->
                 <div class="table-responsive">
                     <!--begin::Table-->
-                    <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4" id="kt_table_users">
+                    <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4" id="table1">
                         <!--begin::Table head-->
                         <thead>
                             <tr class="fw-bold text-muted">
                                 <th class="min-w-50px">S.No</th>
                                 <th class="min-w-100px">Image</th>
                                 <th class="min-w-100px">Name</th>
-                                <th class="min-w-100px">Founded Year</th>
-                                <th class="min-w-100px">Founded Country</th>
                                 <th class="min-w-100px">Website</th>
                                 <th class="min-w-100px">Status</th>
                                 <th class="min-w-100px">Actions</th>
@@ -85,16 +79,6 @@
                                     <td>
                                         <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
                                         <span class="fw-semibold  d-block fs-7">{{ brand.name }}</span>
-                                    </td>
-
-                                    <td>
-                                        <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
-                                        <span class="fw-semibold  d-block fs-7">{{ brand.founded_year }}</span>
-                                    </td>
-
-                                    <td>
-                                        <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
-                                        <span class="fw-semibold  d-block fs-7">{{ brand.founded_country }}</span>
                                     </td>
 
                                     <td>

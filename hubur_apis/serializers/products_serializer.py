@@ -7,5 +7,5 @@ class GetProductsSerializer(serializers.ModelSerializer):
     i_sub_category = GetSubCategorySerializer(many=True)
     class Meta:
         model = models.Content
-        fields = ('id','name', 'disc', 'picture', 'category_name','i_sub_category', 'price', )
+        fields = ('id','name', 'description', 'picture', 'category_name','i_sub_category', 'price', )
 

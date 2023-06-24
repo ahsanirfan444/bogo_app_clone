@@ -31,7 +31,7 @@ class AdminClaimBusinessesApprove(AuthBaseViews):
 
             link = request.build_absolute_uri(reverse_lazy('submit_vendor_profile_details'))+'?place_id='+instance.i_business.place_id
 
-            html_content = render_to_string('includes/approved_claim_business.html', {'business': instance, 'link': link})
+            html_content = render_to_string('includes/emails/approved_claim_business.html', {'business': instance, 'link': link})
        
             notifications.sendEmailToSingleUser(html_content, instance.business_email, 'Your request has approved successfully')
 
@@ -52,7 +52,7 @@ class AdminClaimBusinessesReject(AuthBaseViews):
             instance = models.ClaimBusiness.objects.get(id=claim_id)
             instance.delete()
 
-            html_content = render_to_string('includes/reject_claim_business.html', {'business': instance})
+            html_content = render_to_string('includes/emails/reject_claim_business.html', {'business': instance})
        
             notifications.sendEmailToSingleUser(html_content, instance.business_email, 'Your request has been rejected')
 

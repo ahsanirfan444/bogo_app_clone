@@ -2,7 +2,7 @@
 from hubur_apis import models
 from rest_framework import serializers
 from datetime import datetime, timedelta, timezone
-
+from django.utils.timesince import timesince
 
 class ImageSerializer(serializers.ModelSerializer):
     file = serializers.FileField(max_length=None, allow_null=True)
@@ -24,7 +24,7 @@ class ImageSerializer(serializers.ModelSerializer):
         elif validated_data['file']['status'] == 'video':
             validated_data['video'] = file_obj
             del validated_data['file']
-            models.Story.objects.create(**validated_data)
+            validated_data['i_story'] = models.Story.objects.create(**validated_data)
             validated_data['file'] = file_obj
             return validated_data
         else:
@@ -75,25 +75,49 @@ class ImageSerializer(serializers.ModelSerializer):
                 
             else:
                 return super().validate(data)
+            
+class UserPicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.UserProfile
+        fields = ('profile_picture',)
+
+class BusinessLogoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Business
+        fields = ('logo_pic',)
+
 
 class StoriesSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source = "i_user.first_name")
     last_name = serializers.CharField(source = "i_user.last_name")
+    user_id = serializers.IntegerField(source = "i_user.id")
+    i_business = serializers.SerializerMethodField()
+    i_user = serializers.SerializerMethodField()
     class Meta:
         model = models.Story
-        fields = ("caption","video","image","updated_at","first_name","last_name",)
+        fields = ("id","caption","video","image","updated_at","user_id","first_name","last_name","i_business","i_user",)
+
+    def get_i_business(self, obj):
+        logo_pic = BusinessLogoSerializer(obj.i_business).data['logo_pic']
+        return logo_pic
+    
+    def get_i_user(self, obj):
+        profile_pic = UserPicSerializer(obj.i_user).data['profile_picture']
+        return profile_pic
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
-        from django.utils.timesince import timesince
+        
 
         now = datetime.now(timezone.utc) 
         story_creation_time = datetime.strptime(response['updated_at'], "%Y-%m-%dT%H:%M:%S.%f%z")
 
         time_difference = timesince(story_creation_time, now)
-        response['created_at'] = time_difference
-        del response['updated_at']
-
+        response['created_at'] = time_difference + " ago"
+        response['logo_pic'] = response['i_business']
+        response['user_profile_pic'] = response['i_user']
+        del response['updated_at'],response['i_business'], response['i_user']
+        
         response['user'] = response['first_name'] + " " + response['last_name']        
         del response['first_name'],response['last_name']
 
@@ -144,4 +168,32 @@ class BusinessStoryListSerializer(serializers.ModelSerializer):
     
     def to_representation(self, data):
         response = super().to_representation(data)
+        return response
+    
+class UserStoriesSerializer(serializers.ModelSerializer):
+    business_id = serializers.IntegerField(source = "i_business.id")
+    business_name = serializers.CharField(source = "i_business.name")
+    business_category = serializers.CharField(source = "i_business.i_category.name")
+    i_business = serializers.SerializerMethodField()
+
+    class Meta:
+        model = models.Story
+        fields = ("id","caption","video","image","updated_at","business_id","business_name","business_category","i_business","is_active",)
+
+    def get_i_business(self, obj):
+        logo_pic = BusinessLogoSerializer(obj.i_business).data['logo_pic']
+        return logo_pic
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        
+
+        now = datetime.now(timezone.utc) 
+        story_creation_time = datetime.strptime(response['updated_at'], "%Y-%m-%dT%H:%M:%S.%f%z")
+
+        time_difference = timesince(story_creation_time, now)
+        response['created_at'] = time_difference + " ago"
+        response['business_logo'] = response['i_business']
+        del response['updated_at'], response['i_business']
+
         return response

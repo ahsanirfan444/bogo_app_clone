@@ -73,14 +73,6 @@ input:checked + .slider:before {
 }
 
 .dataTables_length{
-    margin: 10px 0px 0px 25px;
-}
-
-#kt_table_users_length{
-    display: none !important;
-}
-
-#kt_table_vendors_length{
     display: none !important;
 }
 
@@ -144,7 +136,7 @@ input:checked + .slider:before {
                             <!--begin::Table container-->
                             <div class="table-responsive">
                                 <!--begin::Table-->
-                                <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4" id="kt_table_users">
+                                <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4" id="table1">
                                     <!--begin::Table head-->
                                     <thead>
                                         <tr class="fw-bold text-muted">
@@ -301,7 +293,7 @@ input:checked + .slider:before {
                                     </svg>
                                 </span>
                                 <!--end::Svg Icon-->
-                                <input type="text" data-kt-user-table-filter="search_vendors" class="form-control form-control-solid w-250px ps-14" placeholder="Search Vendors" />
+                                <input type="text" data-kt-user-table-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Search Vendors" />
                             </div>
                             <!--end::Search-->
                         </div>
@@ -313,7 +305,7 @@ input:checked + .slider:before {
                             <!--begin::Table container-->
                             <div class="table-responsive">
                                 <!--begin::Table-->
-                                <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4" id="kt_table_vendors">
+                                <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4" id="table2">
                                     <!--begin::Table head-->
                                     <thead>
                                         <tr class="fw-bold text-muted">
@@ -326,7 +318,7 @@ input:checked + .slider:before {
                                             <th class="min-w-100px">Category</th>
                                             <th class="min-w-100px">Is Verified?</th>
                                             <th class="min-w-100px">Status</th>
-                                            <th class="min-w-100px">Actions</th>
+                                            <!-- <th class="min-w-100px">Actions</th> -->
                                         </tr>
                                     </thead>
                                     <!--end::Table head-->
@@ -439,13 +431,7 @@ input:checked + .slider:before {
                                                     </td>
                                                 {% endif %}
 
-                                                <td>
-                                                    <div class="justify-content-between flex-shrink-0">
-                                                        <a href="{% url 'vendor_profile_overview' vendor_id=vendor.id %}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
-                                                            <i data-feather="user" data-toggle="tooltip" data-placement="top" title="View {{ vendor.get_name }}'s Profile"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
+                                                
                                             </tr>
                                         {% endfor %}
                                     </tbody>

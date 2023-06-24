@@ -8713,6 +8713,10 @@ fieldset:disabled .btn {
     width: 15px !important
 }
 
+.w-18px {
+    width: 18px !important
+}
+
 .w-20px {
     width: 20px !important
 }
@@ -33916,6 +33920,12 @@ html:not([data-theme=dark]) .theme-light-bg-body {
     margin-bottom: 15px;
 }
 
+.menu-item .child {
+    display: block;
+    padding: .15rem 0;
+    margin-bottom: 0px;
+}
+
 .menu-item.active {
     background: linear-gradient(90deg, rgba(106,174,255,1) 1%, rgba(127,155,254,1) 30%, rgb(144 100 230) 70%);
     -webkit-transition: all 0.5s ease;
@@ -56888,7 +56898,7 @@ i[class^=fa-],
 i[class^=fonticon-],
 i[class^=la-] {
     line-height: 1;
-    font-size: 1rem;
+    font-size: 18px;
     color: var(--kt-text-muted)
 }
 

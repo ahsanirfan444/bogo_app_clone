@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load generic %}
+{% block page_content %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'countrycodepicker/build/css/intlTelInput.css' %}">
+{% endblock %}
+
+<div id="kt_app_content" class="app-content flex-column-fluid">
+	<!--begin::Content container-->
+	<div id="kt_app_content_container" class="app-container container-xxl">
+		<!--begin::details View-->
+		<div class="card mt-10 mb-2 mb-xl-10" id="kt_profile_details_view">
+			{% include 'includes/generic_form.html' with form=form form_heading='Edit Contact Details' button_text="Save" %}
+		</div>
+		<!--end::details View-->
+	</div>
+	<!--end::Content container-->
+</div>
+
+{% endblock %}
+
+{% block extra_script %}
+	<script src="{% static 'countrycodepicker/build/js/intlTelInput.min.js' %}"></script>
+	<script src="{% static 'countrycodepicker/build/js/intlTelInput-jquery.min.js' %}"></script>
+
+	<script>
+		var mobile_input = document.querySelector("#id_mobile");
+		var uan_input = document.querySelector("#id_uan");
+		var whatsapp_input = document.querySelector("#id_whatsapp");
+		
+
+		window.intlTelInput(mobile_input, ({initialCountry : 'ae', onlyCountries: ['ae'], separateDialCode: true}));
+		window.intlTelInput(uan_input, ({initialCountry : 'ae', onlyCountries: ['ae'], separateDialCode: true}));
+		window.intlTelInput(whatsapp_input, ({initialCountry : 'ae', onlyCountries: ['ae'], separateDialCode: true}));
+
+		
+		var defaultThemeMode = "light"; var themeMode; if (document.documentElement) { if (document.documentElement.hasAttribute("data-theme-mode")) { themeMode = document.documentElement.getAttribute("data-theme-mode"); } else { if (localStorage.getItem("data-theme") !== null) { themeMode = localStorage.getItem("data-theme"); } else { themeMode = defaultThemeMode; } } if (themeMode === "system") { themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; } document.documentElement.setAttribute("data-theme", themeMode); }
+	</script>
+{% endblock %}

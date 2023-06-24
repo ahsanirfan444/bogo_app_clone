@@ -18,6 +18,7 @@ class CreateBrandForm(forms.ModelForm):
 
         widgets = {
             "founded_year": forms.DateInput(attrs={'type': 'date'}),
+            "website": forms.TextInput(attrs={'class':'form-control'}),
             "is_active": forms.Select(attrs={"class": "form-control"}, choices=ACTIVE_CHOICES)
         }
 
@@ -36,5 +37,6 @@ class EditBrandForm(forms.ModelForm):
 
         widgets = {
             "founded_year": forms.DateInput(attrs={'type': 'date'}),
+            "website": forms.TextInput(attrs={'class':'form-control'}),
             "is_active": forms.Select(attrs={"class": "form-control"}, choices=ACTIVE_CHOICES)
         }

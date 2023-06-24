@@ -7,3 +7,9 @@ class TrendingDiscountSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.TrendingDiscount
         fields = ("id","name","image",)
+
+
+class TrendingDiscountForCatagoriesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.TrendingDiscount
+        fields = ("id","name",)

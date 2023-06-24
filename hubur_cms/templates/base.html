@@ -26,6 +26,7 @@
     <link href="{% static 'assets/plugins/global/plugins.bundle.css' %}" rel="stylesheet" type="text/css" />
     <link href="{% static 'assets/css/style.bundle.css' %}" rel="stylesheet" type="text/css" />
     <link href="{% static 'assets/css/feather-icon.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'assets/fonts/fontawesome/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.0.0/cropper.min.css" integrity="sha256-FeDcPwV8ZgxG1MU5L/b2i8clOmqZJKK0eyDHqrQaXxY=" crossorigin="anonymous" />
     {% block extra_css %}
     
@@ -361,35 +362,45 @@
                                 {% for tab in tabs %}
                                 {% if tab.actions %}
 
-                                <div data-kt-menu-trigger="click" class="menu-item here show menu-accordion">
+                                <div data-kt-menu-trigger="click" class="menu-item here menu-accordion">
                                     <!--begin:Menu link-->
                                     <span class="menu-link">
                                         <span class="menu-icon">
                                             <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                             <span class="svg-icon svg-icon-2">
-                                                <i data-feather="{{ tab.icon }}"></i>
+                                                {% if tab.type == 'feather' %}
+                                                    <i data-feather="{{ tab.icon }}"></i>
+                                                {% else %}
+                                                    <i class="fa fa-{{ tab.icon }}"></i>
+                                                {% endif %}
                                             </span>
                                             <!--end::Svg Icon-->
                                         </span>
                                         <span class="menu-title">{{ tab.display_name }}</span>
+                                        {% if tab.display_name == 'Businesses' and new_claim_requests > 0 %}
+                                            <div style="width: 20px;height: 20px;background-color: white;border-radius: 10px;display: flex;justify-content: center;align-items: center;animation: shadow-pulse-dots 1s infinite;">
+                                                <p style="margin: 0px;color: black;font-size: 10px;">{{ new_claim_requests }}</p>
+                                            </div>
+                                        {% endif %}
                                         <span class="menu-arrow"></span>
                                     </span>
                                     <!--end:Menu link-->
                                     <!--begin:Menu sub-->
-                                    <div class="menu-sub menu-sub-accordion">
+                                    <div class="menu-sub menu-sub-accordion mt-3">
                                         {% for action in tab.actions %}
                                         <!--begin:Menu item-->
-                                        <div class="menu-item {% if action.active == True %}active{% endif %}">
+                                        <div class="menu-item child {% if action.active == True %}active{% endif %}">
                                             <!--begin:Menu link-->
                                             <a class="menu-link" href="{{ action.link_url }}" id="{{ action.id }}">
-                                                <span class="menu-icon">
-                                                    <!--begin::Svg Icon | path: icons/duotune/abstract/abs014.svg-->
-                                                    <span class="svg-icon svg-icon-2">
-                                                        <i data-feather="{{ action.icon }}"></i>
-                                                    </span>
-                                                    <!--end::Svg Icon-->
+                                                <span class="menu-bullet">
+                                                    <span class="bullet bullet-dot"></span>
                                                 </span>
                                                 <span class="menu-title">{{ action.display_name }}</span>
+                                                {% if action.display_name == 'Claim Request' and new_claim_requests > 0 %}
+                                                    <div style="width: 20px;height: 20px;background-color: white;border-radius: 10px;display: flex;justify-content: center;align-items: center;animation: shadow-pulse-dots 1s infinite;">
+                                                        <p style="margin: 0px;color: black;font-size: 10px;">{{ new_claim_requests }}</p>
+                                                    </div>
+                                                {% endif %}
                                             </a>
                                             <!--end:Menu link-->
                                         </div>
@@ -409,14 +420,18 @@
                                         <span class="menu-icon">
                                             <!--begin::Svg Icon | path: icons/duotune/abstract/abs014.svg-->
                                             <span class="svg-icon svg-icon-2">
-                                                <i data-feather="{{ tab.icon }}"></i>
+                                                {% if tab.type == 'feather' %}
+                                                    <i data-feather="{{ tab.icon }}"></i>
+                                                {% else %}
+                                                    <i class="fa fa-{{ tab.icon }}"></i>
+                                                {% endif %}
                                             </span>
                                             <!--end::Svg Icon-->
                                         </span>
                                         <span class="menu-title">{{ tab.display_name }}</span>
-                                        {% if tab.display_name == 'Claim Request' and new_claim_requests > 0 %}
+                                        {% if tab.display_name == 'Bookings' and new_booking_requests > 0 %}
                                             <div style="width: 20px;height: 20px;background-color: white;border-radius: 10px;display: flex;justify-content: center;align-items: center;animation: shadow-pulse-dots 1s infinite;">
-                                                <p style="margin: 0px;color: black;font-size: 10px;">{{ new_claim_requests }}</p>
+                                                <p style="margin: 0px;color: black;font-size: 10px;">{{ new_booking_requests }}</p>
                                             </div>
                                         {% endif %}
                                     </a>
@@ -503,7 +518,7 @@
     </div>
     <!--end::Scrolltop-->
 
-    <!--begin::Modal-->
+    <!--begin::Cropper Modal-->
 		<div class="modal fade" id="image_cropper_modal" tabindex="-1" aria-hidden="true">
 			<!--begin::Modal dialog-->
 			<div class="modal-dialog modal-dialog-centered mw-900px">
@@ -551,7 +566,54 @@
 			</div>
 			<!--end::Modal dialog-->
 		</div>
-	<!--end::Modal-->
+	<!--end::Cropper Modal-->
+
+    <!--begin:: Generic Modal -->
+    <div class="modal fade" id="genericModal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true"
+        data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <!--begin::Modal header-->
+					<div class="modal-header">
+						<!--begin::Modal title-->
+						<h2 class="modal-title" id="modalTitle"></h5>
+						<!--end::Modal title-->
+						<!--begin::Close-->
+						<div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+							<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+							<span class="svg-icon svg-icon-1">
+								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+									<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+								</svg>
+							</span>
+							<!--end::Svg Icon-->
+						</div>
+						<!--end::Close-->
+					</div>
+				<!--end::Modal header-->
+
+                <form class="form w-100" method="POST" enctype="multipart/form-data" accept-charset="utf-8" autocomplete="off">
+                    {% csrf_token %}
+
+                    <!--begin::Modal body-->
+                    <div class="modal-body" id="modalBodyContent">
+                        
+                    </div>
+                    <!--end::Modal body-->
+
+                    <!--begin::Modal footer-->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" id="submitButton" class="btn btn-primary">Submit</button>
+                    </div>
+                    
+                    <!--end::Modal footer-->
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--end:: Generic Modal -->
 
     <!--begin::Javascript-->
 
@@ -599,7 +661,11 @@
 
         $("input[type=file]").on("click", function(e){
         e.stopPropagation();
-        })    
+        })   
+        
+        $(".menu-item.child.active").parent().parent().addClass('hover');
+        $(".menu-item.child.active").parent().parent().addClass('show');
+        $(".menu-item.child.active").parent().addClass('show');
     </script>
     {% block extra_script %}
     

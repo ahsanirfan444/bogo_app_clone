@@ -1,0 +1,114 @@
+[
+{
+    "model": "push_notifications.gcmdevice",
+    "pk": 28,
+    "fields": {
+        "name": "SM-N971N",
+        "active": true,
+        "user": 8,
+        "date_created": "2023-06-15T14:23:54.226Z",
+        "application_id": null,
+        "device_id": null,
+        "registration_id": "dfmMZui9RnePvHBlErGIdI:APA91bFOqZJr6Nqg-8EOLgNnC2rFcWPrgIGNesD_Ju2LrRL0CVx5U4NMq6BHB-AMeQP4nY8JuxVDPlm1hy5Umm2RH3rka87epm60Un7ub2vepnneheTWv_uUSvEBPi1tvZ55kya_LkUR",
+        "cloud_message_type": "FCM"
+    }
+},
+{
+    "model": "push_notifications.gcmdevice",
+    "pk": 49,
+    "fields": {
+        "name": "iPhone",
+        "active": false,
+        "user": 18,
+        "date_created": "2023-06-16T13:05:24.241Z",
+        "application_id": null,
+        "device_id": null,
+        "registration_id": "epykXdZ5h0_-gT6RKoRuN9:APA91bHuhOTjWziu9q5701n5c95HS2AIxpz3HPfoBr8N-Ee5hEA8ChbjrJpv_qGUMgZNMBh5ldcwUGz-xvyaSDColphezVzweMHiRFYzuWu46l7P6wJG1emU1CuTJkxA7ciT-f7xUYjr",
+        "cloud_message_type": "FCM"
+    }
+},
+{
+    "model": "push_notifications.gcmdevice",
+    "pk": 50,
+    "fields": {
+        "name": "KSA-LX9",
+        "active": false,
+        "user": 119,
+        "date_created": "2023-06-20T11:20:27.367Z",
+        "application_id": null,
+        "device_id": null,
+        "registration_id": "eaCEPh2VRviz8v2hWiVKgR:APA91bG8P7qspeTxs8E-LpDxB_2PoMxYfHxyqyjVVhA3ndiAmnBJtXuBhtZNwyTrkMCA0mEEN7cSie6uWg44MkfqCl8ZAtDkEvywN4F0qlB2EXO8JG9JGUGGuleiLPJ4k0JO3l1VCEwi",
+        "cloud_message_type": "FCM"
+    }
+},
+{
+    "model": "push_notifications.gcmdevice",
+    "pk": 55,
+    "fields": {
+        "name": "2201117TG",
+        "active": true,
+        "user": 10,
+        "date_created": "2023-06-20T13:22:31.251Z",
+        "application_id": null,
+        "device_id": null,
+        "registration_id": "fl5fMUZtTxmvs6nq-yCXMA:APA91bHnltkWhHfbZR6Q4xqX-aXXE-TKjvSING9t6F2VbkE2JGXFhzGgDDlQFrlkGcEL9Wz_mVa6xTn88vjqOH09WhFdUjz5TEJzURHmVKwov8bCob5MJu609rU1C5JAhKmoV6lsFzO9",
+        "cloud_message_type": "FCM"
+    }
+},
+{
+    "model": "push_notifications.gcmdevice",
+    "pk": 57,
+    "fields": {
+        "name": "SM-N971N",
+        "active": true,
+        "user": 8,
+        "date_created": "2023-06-21T07:55:56.131Z",
+        "application_id": null,
+        "device_id": null,
+        "registration_id": "dbAH3GpgQa-YJuuP6V63ZA:APA91bGeUrurTQYawEQQTzxmqPpg9mbDf0_xSJPsL2KnzxVpXhmFzfD5M46usvd9qtVVPHo1YCNQXVud0pAMc195LTRRm0KSEd9qw6lrH0qE1MyY1FfKDqY-rQlP3cyb30iPQ18EwtGs",
+        "cloud_message_type": "FCM"
+    }
+},
+{
+    "model": "push_notifications.gcmdevice",
+    "pk": 58,
+    "fields": {
+        "name": "LDN-L21",
+        "active": true,
+        "user": 11,
+        "date_created": "2023-06-21T09:34:40.096Z",
+        "application_id": null,
+        "device_id": null,
+        "registration_id": "eFUcSwVYQUWutFuRlGv7S_:APA91bERCKHMokj4_bc9RnktqenMabOO6IUMW1Hq5AzSKbPi1xne9IqjqnkD2Fp9Qtp2knOJRenxejnCDWmSdrDZAg-AGKSvQSt23QHmuKfI_kmv4dYESV-u5JsNcbEYFSSAOhnv7dO2",
+        "cloud_message_type": "FCM"
+    }
+},
+{
+    "model": "push_notifications.gcmdevice",
+    "pk": 59,
+    "fields": {
+        "name": "sdk_gphone64_x86_64",
+        "active": true,
+        "user": 7,
+        "date_created": "2023-06-21T16:40:34.804Z",
+        "application_id": null,
+        "device_id": null,
+        "registration_id": "f94OpNymS8irp3Zb2BAduC:APA91bH3vzxdvSRDGyZ8mZnKt9QaKTv5TYITca_Q7GcqGH1j31_g5NuE0WBUpXjifc9NI_EL-gDthf_AEbKnEZWmfWdH9n-s_eAFGpTm7qwDBg5vSl3BllUNE0_zjMZtiO_3iZeXF9cz",
+        "cloud_message_type": "FCM"
+    }
+},
+{
+    "model": "push_notifications.gcmdevice",
+    "pk": 60,
+    "fields": {
+        "name": "SM-N971N",
+        "active": true,
+        "user": 8,
+        "date_created": "2023-06-22T06:53:36.407Z",
+        "application_id": null,
+        "device_id": null,
+        "registration_id": "c8ewF9yiR3iUYOaAeJkUh8:APA91bHmar4B9Hqt9Y1MEYGBg4u_j0AlK-8tqy2ir8a7vLU8V9R1qGleV4iKPeaKTJkFkZkZ-Ql-k9NCiqNPM45VRkxRDdNW559owfJzGjUTsJBFrU2o88lW4R3qqnmYEcv6sbsDX3Af",
+        "cloud_message_type": "FCM"
+    }
+}
+]

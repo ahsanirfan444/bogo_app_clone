@@ -26,7 +26,7 @@ class ProfileDetailsForm(forms.ModelForm):
     
     class Meta:
         model = models.UserProfile
-        exclude = ('is_active', 'is_staff', 'is_type', 'is_verified', 'is_superuser', 'lat', 'long', 'password', 'groups', 'last_login', 'user_permissions', 'address', 'terms_conditions')
+        exclude = ('is_active', 'is_staff', 'is_type', 'is_verified', 'is_superuser', 'lat', 'long', 'password', 'groups', 'last_login', 'user_permissions', 'address', 'terms_conditions', 'i_country', 'i_city', 'bg_image',)
         labels = {
             "dob": ('Date of Birth'),
         }
@@ -46,6 +46,14 @@ class BusinessDetailsForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['i_subcategory'].queryset  = models.SubCategories.objects.filter(i_category=self.category.id)
         self.fields['i_category'].disabled = True
+
+        fields_to_delete = None
+        if not self.instance.i_category.name == "Restaurant":
+            fields_to_delete = ('i_attributes',)
+
+        if fields_to_delete:
+            for field in fields_to_delete:
+                del self.fields[field]
         
     
     class Meta:
@@ -54,9 +62,32 @@ class BusinessDetailsForm(forms.ModelForm):
         labels = {
             "logo_pic": ('Logo'),
             "i_category": ('Category'),
-            "i_subcategory": ('Sub-Category')
+            "i_subcategory": ('Sub-Category'),
+            "i_attributes": ('Attributes')
         }
         widgets = {
             'i_subcategory': forms.CheckboxSelectMultiple(),
-            'i_category': forms.Select(attrs={'class':'form-control'})
+            'i_category': forms.Select(attrs={'class':'form-control'}),
+            'website': forms.TextInput(attrs={'class':'form-control'}),
+            'description': forms.Textarea(attrs={"rows":3}),
+            'i_attributes': forms.CheckboxSelectMultiple()
+        }
+
+
+class BusinessCatalogueForm(forms.ModelForm):    
+    
+    class Meta:
+        model = models.Images
+        fields = ('image', )
+
+
+class ProfileContactSettingsForm(forms.ModelForm):
+    country_code = forms.CharField(widget=forms.HiddenInput(attrs={'value':'+971'}), required=False)
+    
+    class Meta:
+        model = models.ContactUs
+        exclude = ('updated_at',)
+
+        labels = {
+            "uan": ('UAN'),
         }

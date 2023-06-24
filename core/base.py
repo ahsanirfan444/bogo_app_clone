@@ -1,25 +1,22 @@
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.views.generic import View
 from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.http import Http404, HttpResponseRedirect
-from django.db.models import Sum
-from constants import SITE_TABS, SITE_VERSION
-
+from constants import SITE_TABS
+from datetime import datetime
 from hubur_apis import models
 
 
 class AuthBaseViews(View, LoginRequiredMixin):
     TEMPLATE_NAME = 'base.html'
     SITE_TITLE = "Hubur Way"
-    YEAR = "2023"
+    SITE_VERSION = '1.2'
+    YEAR = datetime.now().year
     SHOW_SEARCH = False
     CREATE_URL = None
     CREATE_URL_TITLE = None
-    EXTRA_URL = None
-    EXTRA_URL_TITLE = None
-    EXTRA_ICON = "ri-send-plane-fill"
 
     def get(self, request, *args, **kwargs):
         raise ValueError("GET method not implemented")
@@ -32,7 +29,7 @@ class AuthBaseViews(View, LoginRequiredMixin):
         self.args = args
         self.kwargs = kwargs
 
-        if not self.request.user.is_authenticated:
+        if not self.request.user.is_authenticated or not self.request.user.is_active:
             return redirect_to_login(self.request.get_full_path(), reverse_lazy("login_url"))
 
         return super().dispatch(request, *args, **kwargs)
@@ -60,9 +57,9 @@ class AuthBaseViews(View, LoginRequiredMixin):
     def tab_context(self):
         selected_tabs = []
 
-        def getTabs(role):
+        def getTabs(role, category):
             for tab in SITE_TABS:
-                if role in tab['visible']:
+                if role in tab['visible'] and (category in tab['visible_categories'] or category == "all"):
                     if self.request.path == str(tab['link_url']):
                         tab['active'] = True
                     elif str(tab['link_url']) == "#":
@@ -83,35 +80,49 @@ class AuthBaseViews(View, LoginRequiredMixin):
                     selected_tabs.append(tab)
 
         if self.request.user.is_admin():
-            getTabs(role="admin")
+            getTabs(role="admin", category='all')
         elif self.request.user.is_vendor():
-            getTabs(role="vendor")
+            try:
+                getTabs(role="vendor", category=self.get_vendor_business().i_category.name)
+            except Exception:
+                getTabs(role="vendor", category='all')
 
         return selected_tabs
     
+    def get_vendor_business(self):
+        """Method to get vendor business details"""
+        try:
+            vendor_business = models.Business.objects.get(i_user=self.request.user)
+        except models.Business.DoesNotExist:
+            vendor_business = None
+
+        return vendor_business
+        
+    
     def get_default_context(self):
         new_claim_requests = models.ClaimBusiness.objects.filter(approve=False).count()
+        business_id = models.Business.objects.filter(i_user=self.request.user).values_list('id', flat=True)
+        total_checkins = models.Checkedin.objects.filter(i_business__in=business_id).count()
+        new_booking_requests = models.Booking.objects.filter(status=1, i_business__in=business_id).count()
     
         return {
             'tabs': self.tab_context(),
-            'SITE_VERSION': SITE_VERSION,
+            'SITE_VERSION': self.SITE_VERSION,
             'YEAR': self.YEAR,
             'SITE_TITLE': self.SITE_TITLE,
             'SHOW_SEARCH': self.SHOW_SEARCH,
             'CREATE_URL': self.CREATE_URL,
             'CREATE_URL_TITLE': self.CREATE_URL_TITLE,
-            "EXTRA_URL": self.EXTRA_URL,
-            "EXTRA_ICON": self.EXTRA_ICON,
-            "EXTRA_URL_TITLE": self.EXTRA_URL_TITLE,
-            "new_claim_requests": new_claim_requests
+            'new_claim_requests': new_claim_requests,
+            'total_checkins': total_checkins,
+            'vendor_business': self.get_vendor_business(),
+            'new_booking_requests': new_booking_requests
         }
 
     def render(self, context, **kwargs):
         default_context = self.get_default_context()
         default_context.update(context)
 
-        # adminNotifications = self.getNotificationContext()
-        # default_context.update(adminNotifications)
 
         return render(
             request=self.request,
@@ -123,13 +134,7 @@ class AuthBaseViews(View, LoginRequiredMixin):
 
 class NonAuthBaseViews(View):
     SITE_TITLE = "Hubur Way"
-    YEAR = "2023"
-    SHOW_SEARCH = False
-    CREATE_URL = None
-    CREATE_URL_TITLE = None
-    EXTRA_URL = None
-    EXTRA_URL_TITLE = None
-    EXTRA_ICON = "ri-send-plane-fill"
+    SITE_VERSION = '1.2'
 
     def get(self, request, *args, **kwargs):
         raise ValueError("GET method not implemented")
@@ -151,23 +156,13 @@ class NonAuthBaseViews(View):
 
     def get_default_context(self):
         return {
-            'SITE_VERSION': SITE_VERSION,
-            'YEAR': self.YEAR,
+            'SITE_VERSION': self.SITE_VERSION,
             'SITE_TITLE': self.SITE_TITLE,
-            'SHOW_SEARCH': self.SHOW_SEARCH,
-            'CREATE_URL': self.CREATE_URL,
-            'CREATE_URL_TITLE': self.CREATE_URL_TITLE,
-            "EXTRA_URL": self.EXTRA_URL,
-            "EXTRA_ICON": self.EXTRA_ICON,
-            "EXTRA_URL_TITLE": self.EXTRA_URL_TITLE
         }
 
     def render(self, context, **kwargs):
         default_context = self.get_default_context()
         default_context.update(context)
-
-        # adminNotifications = self.getNotificationContext()
-        # default_context.update(adminNotifications)
 
         return render(
             request=self.request,

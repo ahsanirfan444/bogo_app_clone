@@ -11,11 +11,11 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='images',
-            name='i_business',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='hubur_apis.business'),
-        ),
+        # migrations.AddField(
+        #     model_name='images',
+        #     name='i_business',
+        #     field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='hubur_apis.business'),
+        # ),
         migrations.AlterField(
             model_name='images',
             name='image',

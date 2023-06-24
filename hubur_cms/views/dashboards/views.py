@@ -1,8 +1,13 @@
+from datetime import datetime
+import json
 from core.base import AuthBaseViews
 from hubur_apis import models
 from django.conf import settings
 from django.utils.decorators import method_decorator
 from core.decorators import vendor_required, admin_required
+from django.urls import reverse_lazy
+from django.contrib import messages
+import notifications
 
 @method_decorator([admin_required], name="dispatch")
 class AdminDasboardView(AuthBaseViews):
@@ -26,3 +31,29 @@ class VendorDasboardView(AuthBaseViews):
         return self.render({
             
         })
+    
+    def post(self, request, *args, **kwargs):
+        voucher_code = request.POST.get('validate_voucher')
+        try:
+            instance = models.Redemption.objects.get(code=voucher_code, is_redeemed=False, is_expired=False)
+            content_instance = models.Content.objects.filter(id=instance.i_content.id, i_business=self.get_vendor_business())
+            content_image = models.Images.objects.filter(i_content=instance.i_content)[:1][0]
+            
+            if content_instance.exists(): 
+                instance.is_redeemed = True
+                instance.save()
+
+                title = instance.i_content.name
+                msg = f"you just redeem the offer from {self.get_vendor_business().name}"
+                notifications.sendNotificationToSingleUser(instance.i_user.id, msg, title, request.user.id, instance.i_content.id, 'post_review',notification_type=1, activityAndroid="FLUTTER_NOTIFICATION_CLICK", activityIOS="FLUTTER_NOTIFICATION_CLICK" , **{"sender": str(self.get_vendor_business().id), "sender_name": str(self.get_vendor_business().name), "content": str(instance.i_content.id), "content_image": str(content_image.image.url), "actions": "post_review" })
+
+                messages.success(request, "Coupon validated successfully")
+                return self.redirect(reverse_lazy("vendor_dashboard"))
+            else:
+                messages.error(request, "In-valid coupon")
+                return self.redirect(reverse_lazy("vendor_dashboard"))
+            
+        except models.Redemption.DoesNotExist:
+            messages.error(request, "In-valid coupon")
+            return self.redirect(reverse_lazy("vendor_dashboard"))
+        
