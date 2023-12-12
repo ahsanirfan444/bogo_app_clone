@@ -30,6 +30,7 @@ urlpatterns = [
     path("friend_list/", include('hubur_apis.views.friendlist.urls')),
     path("my_rewards/", include('hubur_apis.views.my_rewards.urls')),
     path("chat/", include('hubur_apis.views.chat.urls')),
+    path("campaign/", include('hubur_apis.views.campaign.urls')),
 
     # Device registration URLs
     path("device/", include("hubur_apis.views.device_registration.urls"))

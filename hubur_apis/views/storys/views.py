@@ -35,19 +35,21 @@ class UploadViewSet(viewsets.ModelViewSet):
 
                 user_friend_list = list(models.FriendList.objects.filter(friends=request.user, is_active=True).values_list("i_user_id",flat=True))
                 msg = str(request.user.get_name()) + " Uploaded a new story"
-                notifications.sendNotificationToMultipleUser(user_friend_list,msg=msg, title="Story",sender_id=str(request.user.id),content_id=None,action='story_uploaded',
-                                                        notification_type=4, activityAndroid="FLUTTER_NOTIFICATION_CLICK", activityIOS="FLUTTER_NOTIFICATION_CLICK")
+                msg_ar = str(request.user.get_name()) + " تم تحميل قصة جديدة"
+                
+                notifications.sendNotificationToMultipleUser(user_friend_list,msg=msg, msg_ar=msg_ar, title="Story", title_ar="قصة", sender_id=str(request.user.id),content_id=None,action='story_uploaded',
+                                                        notification_type=4, activityAndroid="FLUTTER_NOTIFICATION_CLICK", activityIOS="FLUTTER_NOTIFICATION_CLICK", user_id=str(request.user.id), actions='story_uploaded')
 
                 reward_point = models.RewardPoints.objects.filter(type=3)
                 if reward_point:
                     models.UserReward.objects.create(i_user=request.user, i_business=story_obj['i_business'], i_point=reward_point[0])
 
                 last_24_hours = datetime.now() - timedelta(hours=24)
-                user_checkedin = models.Checkedin.objects.filter(i_user=story_obj['i_user'], i_business=story_obj['i_business'], created_at__gte=last_24_hours)
+                user_checkedin = models.Checkedin.objects.filter(i_user=story_obj['i_user'], i_business=story_obj['i_business'], created_at__gte=last_24_hours).exclude(i_business__i_user__is_active=False)
                 if user_checkedin:
                     user_checkedin.update(i_story=story_obj['i_story'], updated_at=datetime.now())
                 else:
-                    models.Checkedin.objects.create(**story_obj)
+                    if story_obj['i_business'].is_claimed == 2: models.Checkedin.objects.create(**story_obj) 
                 return Response({'error': [], 'error_code': '', 'data': ["Story Uploaded"],'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
             else:
                 error_list = []
@@ -80,7 +82,7 @@ class UploadViewSet(viewsets.ModelViewSet):
             else:
                 return Response({'error': [], 'error_code': '', 'data': ["Enable your location"],'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
         
-        business_objs = models.Business.objects.filter(is_active=True).order_by('-created_at')
+        business_objs = models.Business.objects.filter(is_active=True).exclude(i_user__is_active=False).order_by('-created_at')
         for business in business_objs:
             total_distance = distance(user_long,user_lat,business.long,business.lat)
             if float(total_distance) <= 10:
@@ -90,14 +92,12 @@ class UploadViewSet(viewsets.ModelViewSet):
         business_serializer = StoryListSerializer(all_business_obj,many=True)
         return Response({'error': [], 'error_code': '', 'data': business_serializer.data,'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
             
-
-    
     def retrieve(self, request, pk=None):
         if pk:
-            business_obj = models.Business.objects.filter(id=pk, is_active=True).exists()
+            business_obj = models.Business.objects.filter(id=pk, is_active=True).exclude(i_user__is_active=False).exists()
             if business_obj:
 
-                story_obj = models.Story.objects.filter(is_active=True, i_business=pk).order_by("-created_at")
+                story_obj = models.Story.objects.filter(is_active=True,i_user__is_active=True, i_business=pk).order_by("-created_at")
                 serializer = self.paginate_queryset(story_obj)
                 serializer = StoriesSerializer(serializer, many=True)
 
@@ -114,7 +114,7 @@ class UserStoryViewSet(viewsets.ModelViewSet):
 
     def retrieve(self,request, pk=None):
         if pk:
-            story_obj = models.Story.objects.filter(i_user=pk)
+            story_obj = models.Story.objects.filter(i_user=pk, i_business__is_active=True).exclude(i_business__i_user__is_active=False)
             story_obj = self.paginate_queryset(story_obj)
             serializer = UserStoriesSerializer(story_obj,many=True)
             return Response({'error': [], 'error_code': '', 'data': serializer.data,'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)       
@@ -123,7 +123,7 @@ class UserStoryViewSet(viewsets.ModelViewSet):
     
     def list(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            story_obj = models.Story.objects.filter(i_user=request.user)
+            story_obj = models.Story.objects.filter(i_user=request.user, i_business__is_active=True).exclude(i_business__i_user__is_active=False)
             story_obj = self.paginate_queryset(story_obj)
             serializer = UserStoriesSerializer(story_obj,many=True)
             return Response({'error': [], 'error_code': '', 'data': serializer.data,'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)       
@@ -140,7 +140,7 @@ class DeleteStory(viewsets.ModelViewSet):
       
         try:
             story_obj = models.Story.objects.get(id=pk, i_user=request.user)
-            models.Checkedin.objects.get(i_story=story_obj).delete()
+            models.Checkedin.objects.filter(i_story=story_obj).delete()
             story_obj.delete()
             return Response({'error': [], 'error_code': '', 'data': ["Successfully Deleted"],'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
         except:

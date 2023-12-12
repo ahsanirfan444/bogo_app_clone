@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load generic %}
 
 {% block page_content %}
 
@@ -9,8 +10,8 @@
         <div class="card mt-10 mb-5 mb-xl-8">
             <div class="card-header border-0 pt-5">
                 <h3 class="card-title align-items-start flex-column">
-                    <span class="card-label fw-bold fs-3 mb-1">About Us</span>
-                    <span class="text-muted mt-1 fw-semibold fs-7">Manage and Update the description of your Business.</span>
+                    <span class="card-label fw-bold fs-3 mb-1">{{current_language|keyvalue:"About Us"}}</span>
+                    <span class="text-muted mt-1 fw-semibold fs-7">{{ current_language.about_us_tagline }}</span>
                 </h3>
             </div>
             <div class="card-body py-3">
@@ -21,8 +22,8 @@
             <div class="card-footer text-center" style="display: flow-root; background: #ffffff;">
                 <form method="post">
                     {% csrf_token %}
-                    <input type="hidden" name="about_us" id="id_about_us">
-                    <input type="submit" class="btn btn-primary" value="Save">
+                    <input type="hidden" id="id_about_us" {% if request.user.lang_code == 1 %}  name="about_us" {% else %}  name="about_us_ar" {% endif %}>
+                    <input type="submit" class="btn btn-primary" value="{{ current_language.save_btn_text }}">
                 </form>
             </div>
         </div>

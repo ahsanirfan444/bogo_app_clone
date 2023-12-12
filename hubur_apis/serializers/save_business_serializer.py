@@ -6,11 +6,11 @@ from rest_framework import serializers
 
 class VisitedBusinessSerializer(serializers.ModelSerializer):
     catagory = serializers.CharField(source="i_category.name")
-    i_subcategory = SubCatListSerializer(many=True)
+    # i_subcategory = SubCatListSerializer(many=True)
 
     class Meta:
          model = models.Business
-         fields = ("id","name","address","logo_pic","catagory","i_subcategory",)
+         fields = ("id","name","address","logo_pic","catagory","i_subcategory", "is_featured",)
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.get('context')
@@ -24,9 +24,13 @@ class VisitedBusinessSerializer(serializers.ModelSerializer):
     def to_representation(self, data):
         response = super().to_representation(data)
 
+        request = self.context.get('request')
+        i_subcategory = data.i_subcategory
+        response['i_subcategory'] = SubCatListSerializer(i_subcategory, context={'request': request}, many=True).data
+
         name_list = []
         for name in response['i_subcategory']:
-            name_list.append(name['name'])
+            name_list.append(name['name'] if name['name'] is not None else "")
         response['i_sub_category'] = name_list
         del response['i_subcategory']
 

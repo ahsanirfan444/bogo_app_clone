@@ -11,7 +11,7 @@ from hubur_apis.serializers.search_serializer import (
 class ProductsAPIView(viewsets.ModelViewSet):
 
     serializer_class = GetProductsSerializer
-    queryset = models.Content.objects.filter(is_active=True)
+    queryset = models.Content.objects.filter(is_active=True, i_business__is_active=True, i_business__i_user__is_active=True, i_sub_category__is_active=True).exclude(i_brand__is_active=False)
     filter_backends = [filters.SearchFilter]
     search_fields = ['^name', '^i_sub_category__name']
 

@@ -3,9 +3,31 @@ from hubur_apis import models
 
 
 class GetAllCategoriesSerializer(serializers.ModelSerializer):
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.get('context')
+        super().__init__(*args, **kwargs)
+        
+        try:
+            request = self.context.get('request')
+            if request.user.is_authenticated:
+                if request.user.lang_code == 1:
+                    del self.fields['name_ar']
+                else:
+                    self.fields['name'] = self.fields['name_ar']
+
+            else:
+                if request.headers.get('Accept-Language') == str(1):
+                    del self.fields['name_ar']
+                else:
+                    self.fields['name'] = self.fields['name_ar']
+
+        except Exception as e:
+            # print(e)
+            pass
+
     class Meta:
         model = models.Category
-        fields = ('id','name','image',)
+        fields = ('id','name', 'name_ar', 'image',)
 
 class CreateUserInterestSerializer(serializers.ModelSerializer):
     class Meta:
@@ -38,8 +60,19 @@ class UpdateUserInterestSerializer(serializers.ModelSerializer):
         return super().validate(value)
 
 class GetUserInterestSerializer(serializers.ModelSerializer):
-    i_category = GetAllCategoriesSerializer(many=True)
+
     class Meta:
         model = models.UserInterest
         fields = ('id','i_category','i_user' )
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.get('context')
+        super().__init__(*args, **kwargs)
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        request = self.context.get('request')
+        i_category = instance.i_category
+        data['i_category'] = GetAllCategoriesSerializer(i_category, context={'request': request}, many=True).data
+        return data
     

@@ -1,3 +1,4 @@
+from global_methods import getCurrentLanguageContextForAppUsers, keyvalue
 from hubur_apis import models
 from rest_framework import serializers
 from datetime import datetime,timezone
@@ -22,7 +23,7 @@ class CreateBookingSerializer(serializers.ModelSerializer):
         business = data['i_business']
         booking_date = data['date']
         persons = data['persons']
-        business = models.Business.objects.get(id=business.id)
+        business = models.Business.objects.get(id=business.id, is_active=True, i_user__is_active=True)
         business_cat = business.i_category.name
         current_datetime = datetime.now(timezone.utc)
         if persons <= 0:
@@ -84,4 +85,7 @@ class GetAllBookingSerializer(serializers.ModelSerializer):
         return response
 
     def get_status(self,obj):
-        return obj.get_status_display()
+        request = self.context.get('request')
+        lang_obj = getCurrentLanguageContextForAppUsers(request)
+        name = keyvalue(lang_obj, obj.get_status_display())
+        return name

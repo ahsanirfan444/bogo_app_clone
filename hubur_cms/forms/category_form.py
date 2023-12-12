@@ -8,7 +8,7 @@ class EditCategoryForm(forms.ModelForm):
 
     class Meta:
         model = models.Category
-        fields = ("name", "image",)
+        fields = ("name", "name_ar", "image",)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

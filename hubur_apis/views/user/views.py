@@ -1,3 +1,4 @@
+from django.forms import ValidationError
 from rest_framework.response import Response
 from rest_framework import serializers
 from hubur_apis import models
@@ -18,6 +19,7 @@ from hubur_apis.serializers.user_serializer import (
     ForgotPasswordSerializer,
     GetUserProfileSerializer,
     EmailLoginSerializer,
+    NotificationSettingsSerializer,
     ResetPasswordSerializer,
     UserProfileSerializer,
     VerifyUserSerializer,
@@ -28,45 +30,60 @@ from hubur_apis.serializers.user_serializer import (
 
 class CustomAuthLogin(ObtainJSONWebToken):
     def post(self, request, *args, **kwargs):
+        lang_code = request.headers.get('Accept-Language')
         req = request.data
         response = super(CustomAuthLogin, self).post(request, *args, **kwargs)
         res = response.data
         token = res.get('token')
-        if 'password' and 'email' in req :
-            email_user_serializer = EmailLoginSerializer(data=request.data)
-            if email_user_serializer.is_valid():
-                del email_user_serializer.validated_data['password']
-                user = models.UserProfile.objects.get(**email_user_serializer.validated_data)
-                if token:
-                    valid_data = VerifyJSONWebTokenSerializer().validate(response.data)
-                    user = valid_data['user']
+        if 'password' in req:
+            if 'email'in req and 'type' in req :
+                email_user_serializer = EmailLoginSerializer(data=request.data)
+                if email_user_serializer.is_valid():
+                    del email_user_serializer.validated_data['password'], email_user_serializer.validated_data['type']
+                    user = models.UserProfile.objects.get(**email_user_serializer.validated_data)
+                    if user.role == 2 or user.role == 3 or user.role == 4:
+                        return Response({'error': ['Incorrect email or password'], 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+                    
+                    user.lang_code = lang_code
+                    user.save()
+                    if token:
+                        valid_data = VerifyJSONWebTokenSerializer().validate(response.data)
+                        user = valid_data['user']
+                    else:
+                        return Response({'error': ['Incorrect email or password'], 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
                 else:
-                    return Response({'error': ['Incorrect email or password'], 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
-            else:
-                error_list = []
-                for e in email_user_serializer.errors.values():
-                    error_list.append(e[0])
-                return Response({'error': error_list, 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+                    error_list = []
+                    for e in email_user_serializer.errors.values():
+                        error_list.append(e[0])
+                    return Response({'error': error_list, 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
 
-        elif 'password' and 'contact' and 'country_code' in req:
+            elif 'contact' in req  and 'country_code' in req and 'type' in req :
 
-            contact_user_serializer = ContactLoginSerializer(data=request.data)
-            if contact_user_serializer.is_valid():
-                del contact_user_serializer.validated_data['password']
-                user = models.UserProfile.objects.get(**contact_user_serializer.validated_data)
-                payload = jwt_payload_handler(user)
-                token = jwt_encode_handler(payload)
-                response.data['token'] = token
+                contact_user_serializer = ContactLoginSerializer(data=request.data)
+                if contact_user_serializer.is_valid():
+                    del contact_user_serializer.validated_data['password'], contact_user_serializer.validated_data['type']
+                    user = models.UserProfile.objects.get(**contact_user_serializer.validated_data)
+                    user.lang_code = lang_code
+                    user.save()
+                    payload = jwt_payload_handler(user)
+                    token = jwt_encode_handler(payload)
+                    response.data['token'] = token
+                else:
+                    error_list = []
+                    for e in contact_user_serializer.errors.values():
+                        error_list.append(e[0])
+                    return Response({'error': error_list, 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
             else:
-                error_list = []
-                for e in contact_user_serializer.errors.values():
-                    error_list.append(e[0])
-                return Response({'error': error_list, 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+                if 'type' not in req:
+                    return Response({'error':["type is missing"] , 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response({'error':["contact detail is missing"] , 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response({'error':["contact detail is missing"] , 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error':["password is missing"] , 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+        
         user_interest_list = models.UserInterest.objects.filter(i_user=user).values('id','i_category__name')
 
-        user_serializer = GetUserProfileSerializer(user)
+        user_serializer = GetUserProfileSerializer(user, context={"request": request})
         user_data = user_serializer.data
         user_data['interest'] = user_interest_list
         dict1 = dict(user_data)
@@ -90,6 +107,8 @@ class UserProfileViewSet(viewsets.ModelViewSet):
             validation = serializer.is_valid()
 
             if validation:
+                if 'apple' in serializer.validated_data:
+                    del serializer.validated_data['apple']
                 self.perform_create(serializer)
 
                 returnObj = serializer.data
@@ -98,6 +117,8 @@ class UserProfileViewSet(viewsets.ModelViewSet):
                     user_obj.is_active = True
                     user_obj.is_verified = True
                     user_obj.save()
+                    if 'apple' in request.data:
+                        models.AppleToken.objects.create(i_user=user_obj, token = request.data['apple'])
                     payload = jwt_payload_handler(user_obj)
                     token = jwt_encode_handler(payload)
                     returnObj['token'] = token
@@ -151,7 +172,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, pk=None):
         queryset = models.UserProfile.objects.filter(is_active=True)
         obj = get_object_or_404(queryset, pk=pk)
-        serializer = GetUserProfileSerializer(obj)
+        serializer = GetUserProfileSerializer(obj, context={"request": request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def partial_update(self, request, pk=None):
@@ -179,7 +200,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
             context = {"user": request.user}
             change_pass_serializer = ResetPasswordSerializer(data=request.data, context=context)
             if change_pass_serializer.is_valid():
-                serializer = GetUserProfileSerializer(data, data=request.data, partial=True)
+                serializer = GetUserProfileSerializer(data, context={"request": request}, data=request.data, partial=True)
                 if serializer.is_valid():
                     password = change_pass_serializer.validated_data['password']
                     data.set_password(password)
@@ -193,7 +214,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
                 for e in change_pass_serializer.errors.values():
                     error_list.append(e[0])
         else:
-            serializer = GetUserProfileSerializer(data, data=request.data, partial=True)
+            serializer = GetUserProfileSerializer(data, context={"request": request}, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data,  status=status.HTTP_200_OK)
@@ -213,13 +234,74 @@ class UserStatusAPIView(APIView):
             obj = get_object_or_404(queryset, pk=pk)
             if obj:
                 if request.user.is_authenticated:
-                    serializer = GetUserProfileSerializer(obj, context={"user_obj":request.user})
+                    serializer = GetUserProfileSerializer(obj, context={"user_obj":request.user, "request": request})
                 else:
-                    serializer = GetUserProfileSerializer(obj)
+                    serializer = GetUserProfileSerializer(obj, context={"request": request})
                 user_data = serializer.data
                 return Response({'error': [], 'error_code': '', 'data': [user_data], 'status': status.HTTP_200_OK}, status=status.HTTP_200_OK)
         
         return Response({'error': ['No user found'], 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class AppleLoginAPIView(APIView):
+    def post(self, request, *args, **kwargs):
+            
+        if 'token' in request.data:
+            token = request.data['token']
+            token_obj = models.AppleToken.objects.filter(token=token)
+            if token_obj.exists():
+                user_obj = token_obj[0].i_user
+                if user_obj.is_active == False and user_obj.is_verified:
+                    return Response({'error': ["You're temporary Blocked by Admin"], 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    payload = jwt_payload_handler(user_obj)
+                    token = jwt_encode_handler(payload)
+                    user_interest_list = models.UserInterest.objects.filter(i_user=user_obj).values('id','i_category__name')
+    
+
+                    user_serializer = GetUserProfileSerializer(user_obj, context={"request": request})
+                    user_data = user_serializer.data
+                    user_data['interest'] = user_interest_list
+                    dict1 = dict(user_data)
+                    dict2 = dict({'token':token})
+                    response_data = {**dict2, **dict1}
+
+                    return Response({'error': [], 'error_code': '', 'data': [response_data], 'status': status.HTTP_200_OK}, status=status.HTTP_200_OK)
+
+    
+        return Response({'error': ['No user found'], 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+
+class ChangeNotificationSettingAPIView(APIView):
+    def patch(self, request, format=None):
+        try:
+            instance = request.user
+            notification_settings = models.NotificationSettings.objects.get(i_user=instance)
+            serializer = NotificationSettingsSerializer(data=request.data)
+            # if 
+            if serializer.is_valid():
+                if request.data and list(request.data)[0] in serializer.data.keys():
+                    if request.data.get('all_notifications') == str(False):
+                        notification_settings.all_notifications = False
+                        notification_settings.new_offer = False
+                        notification_settings.offer_expire = False
+                        notification_settings.save()
+                    else:
+                        notification_settings.update_on_whatsapp = request.data.get('update_on_whatsapp', notification_settings.update_on_whatsapp)
+                        notification_settings.promotional_messages = request.data.get('promotional_messages', notification_settings.promotional_messages)
+                        notification_settings.promotional_email = request.data.get('promotional_email', notification_settings.promotional_email)
+                        notification_settings.all_notifications = request.data.get('all_notifications', notification_settings.all_notifications)
+                        notification_settings.new_offer = request.data.get('new_offer', notification_settings.new_offer)
+                        notification_settings.offer_expire   = request.data.get('offer_expire', notification_settings.offer_expire)
+                        notification_settings.save()
+                    return Response({'error': [], 'error_code': '', 'data': ['Notification Settings updated successfully'], 'status': status.HTTP_200_OK}, status=status.HTTP_200_OK)
+                else:
+                    return Response({'error': ['Nothing to update'], 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+                    
+            else:
+                return Response({'error': [], 'error_code': '', 'data': ['Notification Settings updated Failed'], 'status': status.HTTP_200_OK}, status=status.HTTP_200_OK)
+        except ValidationError:
+            return Response({'error': ['Value should be True or False'], 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+            
 
 class UserStatusTokenAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -230,7 +312,7 @@ class UserStatusTokenAPIView(APIView):
         except:
             return Response({'error': ['No user found'], 'error_code': '', 'data': [], 'status': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
         if obj:
-            serializer = GetUserProfileSerializer(obj, context={"user_obj":request.user})
+            serializer = GetUserProfileSerializer(obj, context={"user_obj":request.user, "request": request})
             
             user_data = serializer.data
             return Response({'error': [], 'error_code': '', 'data': [user_data], 'status': status.HTTP_200_OK}, status=status.HTTP_200_OK)
@@ -388,7 +470,7 @@ class GetAllCitiesViewSet(viewsets.ModelViewSet):
         if data:
             cities = models.City.objects.filter(i_country=pk)
         
-            serializer = CitySerializer(cities, many=True)
+            serializer = CitySerializer(cities, context={"request": request}, many=True)
             return Response({'error': [], 'error_code': '', 'data': serializer.data, 'status': status.HTTP_200_OK}, status=status.HTTP_200_OK)
         else:
             return Response({'error': [], 'error_code': '', 'data': ["No Country found"], 'status': status.HTTP_200_OK}, status=status.HTTP_200_OK)
@@ -396,7 +478,7 @@ class GetAllCitiesViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         queryset = models.Country.objects.filter(is_active=True)
-        serializer = CountrySerializer(queryset, many=True)
+        serializer = CountrySerializer(queryset, context={"request": request}, many=True)
 
         return Response({'error': [], 'error_code': '', 'data': serializer.data, 'status': status.HTTP_200_OK}, status=status.HTTP_200_OK)
 

@@ -3,9 +3,12 @@ from core.defaults import DefualtPaginationClass
 from hubur_apis import models
 from rest_framework import status
 from rest_framework import viewsets
+from django.db.models import Q
 from hubur_apis.serializers.review_serializer import (
     ReviewsSerializer,GetAllReviewsSerializer,
     )
+import notifications
+from django.urls import reverse_lazy
 
 class ReviewsView(viewsets.ModelViewSet):
 
@@ -22,6 +25,14 @@ class ReviewsView(viewsets.ModelViewSet):
                 serializer_class.save()
                 reviews_obj = serializer_class.instance
                 models.Reviews.objects.create(**reviews_obj)
+
+                business_id = serializer_class.instance['i_content'].i_business_id
+                business_name = serializer_class.instance['i_content'].i_business.name
+                content_id = serializer_class.instance['i_content'].id
+                msg = request.user.get_name() + " gave review on content "+serializer_class.instance['i_content'].name
+
+                notifications.sendNotificationToAdmin(msg,business_name+" Review",request.user.id,8,self.request.build_absolute_uri(reverse_lazy("business_reviews_by_admin", kwargs={"pk": int(business_id)})), content_id)
+
                 return Response({'error': [], 'error_code': '', 'data': ["Your review has been submitted"],'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
             else:
                 error_list = []
@@ -33,7 +44,7 @@ class ReviewsView(viewsets.ModelViewSet):
  
     def retrieve(self, request, pk=None):
         if pk:
-            review_obj = models.Reviews.objects.filter(i_content=pk)
+            review_obj = models.Reviews.objects.filter(i_content__id=pk, i_business__i_user__is_active=True, i_content__is_active=True, i_business__is_active=True).exclude( Q(i_content__i_brand__is_active=False) | Q(i_content__i_sub_category__is_active=False))
             review_obj = self.paginate_queryset(review_obj)
             review_serializer = GetAllReviewsSerializer(review_obj,many=True)
             if review_serializer:
@@ -75,9 +86,10 @@ class ReviewsView(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         user_obj = request.user.is_authenticated
         if user_obj:
-            all_reviews = models.Reviews.objects.filter(i_user=request.user)
+            all_reviews = models.Reviews.objects.filter(i_user=request.user, i_business__i_user__is_active=True, i_content__is_active=True, i_business__is_active=True).exclude( Q(i_content__i_brand__is_active=False) | Q(i_content__i_sub_category__is_active=False))
             review_serializer = GetAllReviewsSerializer(all_reviews,many=True)
-            return Response({'error': [], 'error_code': '', 'data': review_serializer.data,'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
+            review_list = self.paginate_queryset(review_serializer.data)
+            return Response({'error': [], 'error_code': '', 'data': review_list,'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
         else:
             return Response({"detail": "Authentication credentials were not provided."},status=status.HTTP_401_UNAUTHORIZED)
         
@@ -93,7 +105,8 @@ class BusinessReviewsView(viewsets.ModelViewSet):
 
     def retrieve(self, request, pk=None):
         if pk:
-            review_obj = models.Reviews.objects.filter(i_business=pk)
+            active_users = models.UserProfile.objects.filter(is_active=True)
+            review_obj = models.Reviews.objects.filter(i_business=pk, i_business__is_active=True).exclude(Q(i_content__i_sub_category__is_active=False))
             review_obj = self.paginate_queryset(review_obj)
             review_serializer = GetAllReviewsSerializer(review_obj,many=True)
             if review_serializer:

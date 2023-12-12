@@ -6,7 +6,7 @@
 <html lang="en">
 
 <head>
-    <title>Hubur | 500 Server-Error</title>
+    <title>Hubur | 500 {{ current_language.server_error }}</title>
     <meta charset="utf-8" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
@@ -37,8 +37,8 @@
                     <div class="mb-5">
                         <!--begin::Title-->
                         <div class="fw-bold text-gray-800 text-center mb-13">
-                            <span class="fs-2hx me-2">"Oops! Internal Server Error"</span>
-                            <p class="fs-2">The page has encountered an error. The mail has been sent to the developer.</p>
+                            <span class="fs-2hx me-2">"{{ current_language.oops }} {{ current_language.server_error }}"</span>
+                            <p class="fs-2">{{ current_language.server_error_msg }}</p>
                         </div>
                         <!--end::Title-->
                     </div>
@@ -51,7 +51,7 @@
                     <div class="mt-20">
                         <!--begin::Action-->
                         <div class="text-center">
-                            <a href="{% url 'home' %}" class="btn btn-primary fw-bold">Back To Home</a>
+                            <a href="{% url 'home' %}" class="btn btn-primary fw-bold">{{ current_language.back_to_home }}</a>
                         </div>
                         <!--begin::Action-->
                     </div>

@@ -34,7 +34,7 @@ class CheckInAPIView(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         user_obj = request.user
 
-        checkin_obj = models.Checkedin.objects.filter(i_user=user_obj, is_active=True).order_by("-updated_at")
+        checkin_obj = models.Checkedin.objects.filter(i_user=user_obj, is_active=True, i_business__is_active=True).exclude(i_business__i_user__is_active=False).order_by("-updated_at")
         checkin_obj = self.paginate_queryset(checkin_obj)
         checkin_serializer = GetCheckinListSerializer(checkin_obj,many=True)
         if checkin_serializer:

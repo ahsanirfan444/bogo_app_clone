@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load generic %}
+
+{% block extra_css %}
+
+<style>
+.dataTables_length{
+    display: none !important;
+}
+</style>
+
+{% endblock %}
+
+
+{% block page_content %}
+
+<div id="kt_app_content" class="app-content flex-column-fluid">
+    <!--begin::Content container-->
+    <div id="kt_app_content_container" class="app-container container-xxl">
+        <div class="card mt-10 mb-5 mb-xl-8">
+            <!--begin::Header-->
+            <div class="card-header border-0 pt-5">
+                <h3 class="card-title align-items-start flex-column">
+                    <span class="card-label fw-bold fs-3 mb-1">{{current_language|keyvalue:"Subscription Plans"}}</span>
+                    <span class="text-muted mt-1 fw-semibold fs-7">{{ current_language.subscription_tagline }}</span>
+                </h3>
+
+                <div class="card-title">
+                    <!--begin::Search-->
+                    <div class="d-flex align-items-center position-relative my-1">
+                        <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                        <span class="svg-icon svg-icon-1 position-absolute {% if request.user.lang_code == 1 %} ms-6 {% else %} me-6 {% endif %}">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor" />
+                                <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                        <input type="text" data-kt-user-table-filter="search" class="form-control form-control-solid w-250px {% if request.user.lang_code == 1 %} ps-14 {% else %} pe-14 {% endif %}" placeholder="{{ current_language.search_text }} {{current_language|keyvalue:'Subscription Plans'}}" />
+                    </div>
+                    <!--end::Search-->
+                </div>
+            </div>
+            <!--end::Header-->
+
+            <!--begin::Body-->
+            <div class="card-body py-3">
+                <!--begin::Table container-->
+                <div class="table-responsive">
+                    <!--begin::Table-->
+                    <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4" id="table1">
+                        {% if not subscriptions_list %}
+                            <p class="text-center">{{ current_language.no_subscription }}</p>
+                        {% else %}
+                            <!--begin::Table head-->
+                            <thead>
+                                <tr class="fw-bold text-muted">
+                                    <th class="min-w-50px">{{ current_language.serial_number }}</th>
+                                    <th class="min-w-100px">{{ current_language.name }}</th>
+                                    <th class="min-w-100px">{{ current_language.Description }}</th>
+                                    <th class="min-w-100px">{{ current_language.Price }}</th>
+                                    <th class="min-w-100px">{{ current_language.type }}</th>
+                                    <th class="min-w-100px">{{ current_language.status }}</th>
+                                    <th class="min-w-100px">{{ current_language.actions }}</th>
+                                </tr>
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody>
+                                {% for subscription in subscriptions_list %}
+                                    <tr>
+                                        <td>
+                                            <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
+                                            <span class="fw-semibold  d-block fs-7">{{ forloop.counter }}</span>
+                                        </td>
+
+                                        <td>
+                                            <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
+                                            <span class="fw-semibold  d-block fs-7">{% if request.user.lang_code == 1 %} {{ subscription.name }} {% else %} {{ subscription.name_ar }} {% endif %}</span>
+                                        </td>
+
+                                        <td>
+                                            <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
+                                            <span class="fw-semibold  d-block fs-7">{% if request.user.lang_code == 1 %} {{ subscription.description }} {% else %} {{ subscription.description_ar }} {% endif %}</span>
+                                        </td>
+
+                                        <td>
+                                            <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
+                                            <span class="fw-semibold  d-block fs-7">{{ subscription.price }}</span>
+                                        </td>
+
+                                        <td>
+                                            <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
+                                            <span class="fw-semibold  d-block fs-7">{{current_language|keyvalue:subscription.get_subscription_type_display}}</span>
+                                        </td>
+                                        
+                                        {% if subscription.is_active %}
+                                            <td>
+                                                <span class="fw-semibold  d-block fs-7" style="color:#50cd89">{{ current_language.active }}</span>
+                                            </td>
+                                        {% else %}
+                                            <td>
+                                                <span class="fw-semibold  d-block fs-7" style="color:#f1416c">{{ current_language.inactive }}</span>
+                                            </td>
+                                        {% endif %}
+                                        <td>
+                                            <div class="justify-content-between flex-shrink-0">
+                                                <a href="{{ subscription.get_add_feature_url }}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                                                    <i data-feather="plus-circle" data-toggle="tooltip" data-placement="top" title="{{ current_language.add_subscription_features }} {% if request.user.lang_code == 1 %} {{ subscription.name }} {% else %} {{ subscription.name_ar }} {% endif %}"></i>
+                                                </a>
+                                                <a href="{{ subscription.get_view_feature_url }}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                                                    <i data-feather="eye" data-toggle="tooltip" data-placement="top" title="{{ current_language.view_subscription_features }} {% if request.user.lang_code == 1 %} {{ subscription.name }} {% else %} {{ subscription.name_ar }} {% endif %}"></i>
+                                                </a>
+                                                <a href="{{ subscription.get_edit_url }}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                                                    <i data-feather="edit" data-toggle="tooltip" data-placement="top" title="{{ current_language.edit_text }} {% if request.user.lang_code == 1 %} {{ subscription.name }} {% else %} {{ subscription.name_ar }} {% endif %}"></i>
+                                                </a>
+                                                <a href="{{ subscription.get_delete_url }}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                                                    <i data-feather="trash" data-toggle="tooltip" data-placement="top" title="{{ current_language.delete_text }} {% if request.user.lang_code == 1 %} {{ subscription.name }} {% else %} {{ subscription.name_ar }} {% endif %}"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                            <!--end::Table body-->
+                        {% endif %}
+                    </table>
+                    <!--end::Table-->
+                </div>
+                <!--end::Table container-->
+            </div>
+            <!--begin::Body-->
+        </div>
+    </div>
+    <!--end::Content container-->
+</div>
+
+
+{% endblock %}
+
+{% block extra_script %}
+
+<script src="{% static 'assets/js/custom/apps/user-management/users/list/table.js' %}"></script>
+
+{% endblock %}

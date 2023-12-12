@@ -15,7 +15,7 @@ class OfferAPIView(viewsets.ModelViewSet):
 
     def retrieve(self, request, pk=None):
         if pk:
-            offers = models.Offers.objects.filter(id=pk, is_active=True, is_expiry=False).first()
+            offers = models.Offers.objects.filter(id=pk, is_active=True, is_expiry=False, i_business__is_active=True, i_business__i_user__is_active=True).first()
             if offers:
                 serializer = self.get_serializer(offers)
                 if serializer:
@@ -56,7 +56,7 @@ class GetBusinessOfferAPIView(viewsets.ModelViewSet):
             return Response({'error': 'Invalid type', 'error_code': '', 'data': [],'status':status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
 
         if pk and type_param:
-            business_obj = models.Business.objects.filter(id=pk, is_active=True).first()
+            business_obj = models.Business.objects.filter(id=pk, is_active=True).exclude(i_user__is_active=False).first()
             if business_obj:
                 offers = models.Offers.objects.filter(i_business=business_obj,type=type_param, is_active=True, is_expiry=False)
                 

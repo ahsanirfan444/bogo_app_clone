@@ -14,5 +14,6 @@ urlpatterns = [
     path("delete-business-catalogue/<pk>/", views.DeleteBusinessCatalogue.as_view(), name="delete_business_catalogue"),
     path("settings/", views.ProfileSettings.as_view(), name="profile_settings"),
     path("edit-contact-settings/", views.EditProfileContactSettings.as_view(), name="edit_profile_contact_settings"),
-    path("change-password/", views.ChangePassword.as_view(), name="change_password")
+    path("change-password/", views.ChangePassword.as_view(), name="change_password"),
+    path("subscription-plans/", views.SubscriptionPlans.as_view(), name="subscription_plans")
 ]

@@ -33,7 +33,7 @@ class CreateUserInterestAPIView(APIView):
         user_obj = models.UserInterest.objects.filter(i_user=request.user).order_by("-created_at")
         if user_obj:
             user_obj = user_obj.first()
-            serializer = GetUserInterestSerializer(user_obj)
+            serializer = GetUserInterestSerializer(user_obj, context={'request': request})
         
             if serializer.data:
                 return Response({'error': [], 'error_code': '', 'data': [serializer.data],'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
@@ -73,7 +73,7 @@ class GetCatagoriesListAPIView(APIView):
 
     def get(self, request):
         categories_query = models.Category.objects.filter(is_active=True)
-        categories_serializer = GetAllCategoriesSerializer(categories_query, many=True)
+        categories_serializer = GetAllCategoriesSerializer(categories_query, context={'request': request}, many=True)
         if categories_serializer.data:
             return Response({'error': [], 'error_code': '', 'data': categories_serializer.data,'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
         else:

@@ -14,7 +14,7 @@ class GetNotificationAPIView(APIView, DefualtPaginationClass):
 
         notification_obj = models.Notification.objects.filter(user=request.user).exclude(notification_type=3)
         notification_obj = self.paginate_queryset(notification_obj, self.request)
-        serializer = NotificationSerializer(notification_obj, many=True)
+        serializer = NotificationSerializer(notification_obj, context={"request": request}, many=True)
         if serializer.is_valid:
             return Response({'error': [], 'error_code': '', 'data': serializer.data,'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
         else:
@@ -28,8 +28,18 @@ class ReadNotificationAPIView(APIView):
     permission_classes = (IsAuthenticated, )
 
     def post(self, request, *args, **kwargs):
-        instance = models.Notification.objects.filter(user=request.user, id=request.data.get('id'))
-        instance.update(reviewed=True)
+        if request.data.get('review') == str(True):
+            instance = models.Notification.objects.filter(user=request.user, id=request.data.get('id'), notification_type=1)
+            if instance.exists():
+                instance.update(reviewed=True)
+            else:
+                cust_resp = {
+            'detail': 'Not valid id for reviews',
+            'status': status.HTTP_400_BAD_REQUEST}
+                return Response(cust_resp, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            instance = models.Notification.objects.filter(user=request.user, id=request.data.get('id'))
+            instance.update(is_read=True)
         cust_resp = {
             'detail': 'This notification read successfully',
             'status': status.HTTP_200_OK

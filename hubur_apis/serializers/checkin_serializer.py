@@ -21,6 +21,9 @@ class CheckinSerializer(serializers.ModelSerializer):
         is_claimed = data['i_business'].is_claimed
         if is_claimed == 1:
             raise serializers.ValidationError("This business is not claimed by anyone")
+        is_active = data['i_business'].is_active
+        if is_active == False:
+            raise serializers.ValidationError("This business is not active")
         
         checkin_exist = models.Checkedin.objects.filter(i_user=user_obj,i_business=data['i_business'])
         if checkin_exist:

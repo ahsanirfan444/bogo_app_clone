@@ -15,7 +15,7 @@ from django.views.generic import DeleteView
 class AdminSubCategoriesList(AuthBaseViews):
     TEMPLATE_NAME = "sub_categories/list_all_sub_categories.html"
     CREATE_URL = reverse_lazy('create_sub_category')
-    CREATE_URL_TITLE = "Create Sub-Category"
+    CREATE_URL_TITLE = "Create Sub Category"
 
     def get(self, request, *args, **kwargs):
         sub_categories_list = models.SubCategories.objects.all()
@@ -30,24 +30,24 @@ class AdminCreateSubCategoriesView(AuthBaseViews):
     TEMPLATE_NAME = "sub_categories/create_sub_categories.html"
 
     def get(self, request, *args, **kwargs):
-        form = CreateSubCategoryForm()
+        form = CreateSubCategoryForm(request, self.getCurrentLanguage())
 
         return self.render({"form": form})
     
     def post(self, request, *args, **kwargs):
+        form = CreateSubCategoryForm(request, self.getCurrentLanguage(), request.POST, request.FILES)
         try:
-            form = CreateSubCategoryForm(request.POST, request.FILES)
             if form.is_valid():
                 form.save()
-                messages.success(request, "Sub-Category Added Successfully")
+                messages.success(request, self.getCurrentLanguage()['add_subcategory'])
                 return self.redirect(reverse_lazy("list_sub_categories"))
             
             else:
-                messages.error(request, "Please correct the errors below")
+                messages.error(request, self.getCurrentLanguage()['correct_errors'])
                 return self.render({"form": form})
             
         except Exception:
-            messages.error(request, "Something Went Wrong! Unable to Save Sub-Category.")
+            messages.error(request, self.getCurrentLanguage()['something_went_wrong'])
             return self.render({"form": form})
     
 
@@ -57,24 +57,24 @@ class AdminEditSubCategoriesView(AuthBaseViews):
 
     def get(self, request, sub_cat_id, *args, **kwargs):
         inst = models.SubCategories.objects.get(id=sub_cat_id)
-        form = EditSubCategoryForm(instance=inst)
+        form = EditSubCategoryForm(request, self.getCurrentLanguage(), instance=inst)
         return self.render({"form": form})
     
     def post(self, request, sub_cat_id, *args, **kwargs):
         try:
             inst = models.SubCategories.objects.get(id=sub_cat_id)
-            form = EditSubCategoryForm(request.POST, request.FILES, instance=inst)
+            form = EditSubCategoryForm(request, self.getCurrentLanguage(), request.POST, request.FILES, instance=inst)
             if form.is_valid():
                 form.save()
-                messages.success(request, "Sub-Category Edited Successfully")
+                messages.success(request, self.getCurrentLanguage()['update_subcategory'])
                 return self.redirect(reverse_lazy("list_sub_categories"))
             
             else:
-                messages.error(request, "Please correct the errors below")
+                messages.error(request, self.getCurrentLanguage()['correct_errors'])
                 return self.render({"form": form})
             
         except Exception:
-            messages.error(request, "Something Went Wrong! Unable to Save Sub-Category.")
+            messages.error(request, self.getCurrentLanguage()['something_went_wrong'])
             return self.render({"form": form})
     
 
@@ -93,8 +93,8 @@ class AdminDeleteSubCategoriesView(DeleteView, AuthBaseViews):
     
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
-        name = self.object.name
+        name = self.object.name if request.user.lang_code == 1 else self.object.name_ar
         success_url = self.get_success_url()
         self.object.delete()
-        messages.success(request, f"'{name}' deleted successfully")
+        messages.success(request, f"'{name}' {self.getCurrentLanguage()['delete_success']}")
         return HttpResponseRedirect(success_url)

@@ -21,6 +21,42 @@
 
 <script>
 	$("#id_images_multiple").parent().parent().parent().children().eq(0).append('<label style="color: red;">*</label>')
+
+	$(".searchable-select").select2({
+		tags: true,
+		placeholder: "Create Tags Here",
+		createTag: function (params) {
+			var term = $.trim(params.term);
+
+			if (term === '') {return null;}
+
+			return {
+				id: term,
+				text: term,
+				newTag: true
+			}
+		}
+	});
+
+	var remove_tag_url = "{% url 'remove_tag' %}";
+
+	$('.searchable-select').on("select2:unselect", function(e) { 
+		$.ajax({
+			url: remove_tag_url,
+			type: 'POST',
+			data: {
+				"tag_id": e.params.data.id,
+				"csrfmiddlewaretoken": csrf_token
+			},
+			success: function(response) {
+				console.log(response);
+			},
+			catch: function(error){
+				console.log(error.text);
+			}
+		});
+	});
+
 </script>
 
 {% endblock %}

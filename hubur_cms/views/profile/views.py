@@ -50,7 +50,7 @@ class EditProfileDetails(AuthBaseViews):
             return self.redirect(reverse_lazy('profile_overview'))
 
         else:
-            messages.error(request, "Please correct the errors below")
+            messages.error(request, self.getCurrentLanguage()['correct_errors'])
             return self.render({"form": form})
         
 
@@ -71,7 +71,13 @@ class EditBusinessDetails(AuthBaseViews):
 
     def get(self, request, *args, **kwargs):
         instance = self.get_vendor_business()
-        form = BusinessDetailsForm(instance=instance, category=instance.i_category)
+        category = instance.i_category
+        i_subcategory = list(instance.i_subcategory.all().values_list('id', flat=True))
+        i_attributes = list(instance.i_attributes.all().values_list('id', flat=True))
+        tags = list(models.Tags.objects.filter(business=instance).values_list('id', flat=True))
+        instance.__dict__.update({'i_subcategory': i_subcategory, 'i_attributes': i_attributes, 'tags': tags,})
+        
+        form = BusinessDetailsForm(data=instance.__dict__, instance=instance, category=category)
 
         return self.render({
             'form': form
@@ -96,7 +102,7 @@ class EditBusinessDetails(AuthBaseViews):
             return self.redirect(reverse_lazy('business_details'))
 
         else:
-            messages.error(request, "Please correct the errors below")
+            messages.error(request, self.getCurrentLanguage()['correct_errors'])
             return self.render({"form": form})
     
     
@@ -241,7 +247,7 @@ class CreateBusinessCatalogue(AuthBaseViews):
                 return self.redirect(reverse_lazy('business_catalogue'))
 
             else:
-                messages.error(request, "Please correct the errors below")
+                messages.error(request, self.getCurrentLanguage()['correct_errors'])
                 return self.render({"form": form})
             
         else:
@@ -272,7 +278,7 @@ class EditBusinessCatalogue(AuthBaseViews):
             return self.redirect(reverse_lazy('business_catalogue'))
 
         else:
-            messages.error(request, "Please correct the errors below")
+            messages.error(request, self.getCurrentLanguage()['correct_errors'])
             return self.render({"form": form})
         
 
@@ -337,7 +343,7 @@ class EditProfileContactSettings(AuthBaseViews):
             return self.redirect(reverse_lazy('profile_settings'))
 
         else:
-            messages.error(request, "Please correct the errors below")
+            messages.error(request, self.getCurrentLanguage()['correct_errors'])
             return self.render({"form": form})
         
 
@@ -373,4 +379,23 @@ class ChangePassword(AuthBaseViews):
         return self.render({
             'form': PasswordChangeForm(user=request.user),
             'nav': 'change_password'
+        })
+    
+
+@method_decorator([vendor_required], name="dispatch")
+class SubscriptionPlans(AuthBaseViews):
+    TEMPLATE_NAME = "profile/subscription_plans.html"
+
+    def get(self, request, *args, **kwargs):
+        all_features = []
+        subscription_plans = models.Subscription.objects.filter(is_active=True)
+        for plan in subscription_plans:
+            feature = models.SubscriptionFeature.objects.filter(subscription=plan)
+
+            all_features.append(feature)
+
+        all_data = zip(subscription_plans, all_features)
+
+        return self.render({
+            'subscription_plans': all_data
         })

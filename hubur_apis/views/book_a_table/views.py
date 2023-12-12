@@ -31,8 +31,8 @@ class BookATableView(viewsets.ModelViewSet):
             return Response({'error': error_list, 'error_code': 'HD404', 'data': [],'status':status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
         
     def list(self, request, *args, **kwargs):
-        all_booking = models.Booking.objects.filter(i_user=request.user)
+        all_booking = models.Booking.objects.filter(i_user=request.user,i_business__is_active=True).exclude(i_business__i_user__is_active=False)
         all_booking = self.paginate_queryset(all_booking)
-        serializer = GetAllBookingSerializer(all_booking, many=True)
+        serializer = GetAllBookingSerializer(all_booking,context={"request": request}, many=True)
         
         return Response({'error': [], 'error_code': '', 'data': serializer.data,'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)

@@ -16,7 +16,7 @@ from hubur_cms.forms.offers_form import CreateOfferForm, EditOfferForm
 class VendorOffersList(AuthBaseViews):
     TEMPLATE_NAME = "offers/list_all_offers.html"
     CREATE_URL = reverse_lazy('create_offer')
-    CREATE_URL_TITLE = "Create an Offer"
+    CREATE_URL_TITLE = "Create Offer"
 
     def get(self, request, *args, **kwargs):
         offers = models.Offers.objects.filter(i_user=request.user, i_business=self.get_vendor_business())
@@ -92,7 +92,7 @@ class VendorCreateOffer(AuthBaseViews):
                 return self.redirect(reverse_lazy("list_vendor_offers"))
             
             else:
-                messages.error(request, "Please correct the errors below")
+                messages.error(request, self.getCurrentLanguage()['correct_errors'])
                 return self.render({"form": form})
             
         except Exception:
@@ -165,7 +165,7 @@ class VendorEditOffer(AuthBaseViews):
                 return self.redirect(reverse_lazy("list_vendor_offers"))
             
             else:
-                messages.error(request, "Please correct the errors below")
+                messages.error(request, self.getCurrentLanguage()['correct_errors'])
                 return self.render({"form": form})
             
         except Exception:

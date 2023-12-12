@@ -1,6 +1,8 @@
+from global_methods import getCurrentLanguageContextForAppUsers, keyvalue
 from hubur_apis import models
 from rest_framework import serializers
 from datetime import datetime, timezone
+from django.db.models import Q
 
 from hubur_apis.serializers.content_serializer import (
     ContentDetailSerializer,
@@ -12,12 +14,17 @@ class OfferDetailSerializer(serializers.ModelSerializer):
         fields = ('name','type')
     
     def get_type(self,obj):
-        return obj.get_type_display()
+        request = self.context.get('request')
+        lang_obj = getCurrentLanguageContextForAppUsers(request)
+        name = keyvalue(lang_obj, obj.get_type_display())
+        return name
     
     def to_representation(self, instance):
         response = super().to_representation(instance)
+        request = self.context.get('request')
         i_content = instance.i_content
-        content = ContentDetailSerializer(i_content, many=True).data
+        i_content = i_content.filter(i_sub_category__is_active=True, is_active=True, i_business__is_active=True).exclude(Q(i_brand__is_active=False) | Q(i_business__i_user__is_active=False))
+        content = ContentDetailSerializer(i_content, context={"request": request}, many=True).data
         response['result'] = content
         del response['name']
         return response
@@ -29,15 +36,40 @@ class BusinessOffersDetailSerializer(serializers.ModelSerializer):
     offer_type_name = serializers.SerializerMethodField("get_type")
     offer_type = serializers.IntegerField(source="type")
 
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.get('context')
+        super().__init__(*args, **kwargs)
+        
+        try:
+            request = self.context.get('request')
+            if request.user.is_authenticated:
+                if request.user.lang_code == 1:
+                    del self.fields['name_ar']
+                else:
+                    self.fields['name'] = self.fields['name_ar']
+
+            else:
+                if request.headers.get('Accept-Language') == str(1):
+                    del self.fields['name_ar']
+                else:
+                    self.fields['name'] = self.fields['name_ar']
+
+        except Exception as e:
+            # print(e)
+            pass
+
     class Meta:
         model = models.Offers
-        fields = ('id','name', 'image', 'discount_type','discount_price','end','business_id','business_name','offer_type_name','offer_type',)
+        fields = ('id','name', 'name_ar', 'image', 'discount_type','discount_price','end','business_id','business_name','offer_type_name','offer_type',)
 
     def get_discount_type(self,obj):
         return obj.get_discount_type_display()
     
     def get_type(self,obj):
-        return obj.get_type_display()
+        request = self.context.get('request')
+        lang_obj = getCurrentLanguageContextForAppUsers(request)
+        name = keyvalue(lang_obj, obj.get_type_display())
+        return name
 
     
 class OffersListSerializer(serializers.ModelSerializer):
@@ -51,23 +83,27 @@ class OffersListSerializer(serializers.ModelSerializer):
         fields = ("hot_offers","daily_offers","weekly_offers","monthly_offers",)
 
     def get_hot_offers(self, obj):
+        request = self.context.get('request')
         hot_offers = obj.filter(type=4)
-        hot_offers = BusinessOffersDetailSerializer(hot_offers, many=True).data[:4]
+        hot_offers = BusinessOffersDetailSerializer(hot_offers, context={"request": request}, many=True).data[:4]
         return hot_offers
     
     def get_daily_offers(self, obj):
+        request = self.context.get('request')
         daily_offers = obj.filter(type=1)
-        daily_offers = BusinessOffersDetailSerializer(daily_offers, many=True).data[:4]
+        daily_offers = BusinessOffersDetailSerializer(daily_offers, context={"request": request}, many=True).data[:4]
         return daily_offers
 
     def get_weekly_offers(self, obj):
+        request = self.context.get('request')
         weekly_offers = obj.filter(type=2)
-        weekly_offers = BusinessOffersDetailSerializer(weekly_offers, many=True).data[:4]
+        weekly_offers = BusinessOffersDetailSerializer(weekly_offers, context={"request": request}, many=True).data[:4]
         return weekly_offers
 
     def get_monthly_offers(self, obj):
+        request = self.context.get('request')
         monthly_offers = obj.filter(type=3)
-        monthly_offers = BusinessOffersDetailSerializer(monthly_offers, many=True).data[:4]
+        monthly_offers = BusinessOffersDetailSerializer(monthly_offers, context={"request": request}, many=True).data[:4]
         return monthly_offers
 
 

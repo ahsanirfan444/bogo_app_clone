@@ -6,6 +6,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from hubur_apis import models
 
+ACTIVE_CHOICES = ((True, 'Yes'), (False, 'No'))
+
 class VendorProfileForm(UserCreationForm):
     username = forms.CharField(widget=forms.HiddenInput(), required=False)
     role = forms.IntegerField(widget=forms.HiddenInput(), required=False)
@@ -45,7 +47,7 @@ class VendorProfileForm(UserCreationForm):
     
     class Meta:
         model = models.UserProfile
-        exclude = ('is_active', 'is_staff', 'is_type', 'is_verified', 'is_superuser', 'lat', 'long', 'password', 'groups', 'last_login', 'user_permissions', 'address', 'terms_conditions', 'i_country', 'i_city', 'bg_image',)
+        exclude = ('is_active', 'is_staff', 'is_type', 'is_verified', 'is_superuser', 'lat', 'long', 'password', 'groups', 'last_login', 'user_permissions', 'address', 'terms_conditions', 'i_country', 'i_city', 'bg_image', 'lang_code',)
         labels = {
             "dob": ('Date of Birth'),
         }
@@ -96,5 +98,6 @@ class VendorBusinessRegistrationForm(forms.ModelForm):
             'i_category': forms.Select(attrs={'class':'form-control'}),
             'website': forms.TextInput(attrs={'class':'form-control'}),
             'description': forms.Textarea(attrs={"rows":3}),
-            'i_attributes': forms.CheckboxSelectMultiple()
+            'i_attributes': forms.CheckboxSelectMultiple(),
+            'is_featured': forms.Select(attrs={"class": "form-control"}, choices=ACTIVE_CHOICES)
         }

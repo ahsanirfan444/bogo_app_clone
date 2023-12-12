@@ -21,6 +21,8 @@ class CreateFriendSerializer(serializers.ModelSerializer):
         if attrs['friends']:
             if attrs['friends'] == user_obj:
                 raise serializers.ValidationError("This user can not become your friend")
+            if attrs['friends'].is_active == False:
+                raise serializers.ValidationError("This user is temporary Blocked by Admin")
         
         my_friend = models.FriendList.objects.filter(i_user=user_obj, friends=attrs['friends'])
         if my_friend:

@@ -131,6 +131,9 @@ var KTCustomersList = function() {
             }
             )),
             (t = $(n).DataTable({
+                language : {
+                    "zeroRecords": " "             
+                },
                 info: 1,
                 order: [],
                 iDisplayLength: 20,

@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load generic %}
+
+{% block extra_css %}
+
+<style>
+.rating-stars{
+    color:#cecece !important;
+}
+
+.rating-stars .checked {
+        color: #ffd700;
+    }
+.fa-trash{
+    color:black;
+}
+</style>
+
+{% endblock %}
+
+{% block page_content %}
+<!-- <meta http-equiv="refresh" content="60"> -->
+
+<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+	<!--begin::Toolbar container-->
+	<div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
+		<!--begin::Page title-->
+		<div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+			<!--begin::Title-->
+			<h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Business Reviews</h1>
+			<!--end::Title-->
+		</div>
+		<!--end::Page title-->
+	</div>
+	<!--end::Toolbar container-->
+</div>
+
+<div id="kt_app_content" class="app-content flex-column-fluid">
+	<!--begin::Content container-->
+	<div id="kt_app_content_container" class="app-container container-xxl">
+		<!--begin::Navbar-->
+			{% include "businesses/business_profile.html" %}
+		<!--end::Navbar-->
+		<!--begin::details View-->
+		<div id="kt_app_content_container" class="app-container container-xxl">
+            <div class="card mb-5 mb-xl-10">
+                <!--begin::Header-->
+                <div class="card-header cursor-pointer">
+                    <!--begin::Card title-->
+                    <div class="card-title m-0">
+                        <h3 class="fw-bold m-0">Business Reviews</h3>
+                    </div>
+                    <!--end::Card title-->
+                    
+                </div>
+                <!--end::Header-->
+                <!--begin::Body-->
+                <div class="card-body py-3">
+                    <div class="flex-lg-row-fluid">
+                        <!--begin:::Tab content-->
+                        <div class="tab-content" id="myTabContent">
+                            <!--begin:::Tab pane-->
+                            <div class="tab-pane fade show active" role="tabpanel">
+                                {% if reviews_list %}
+                                <div class="card mb-5 mb-xxl-8">
+                                    <!--begin::Body-->
+                                    {% for review in reviews_list %}
+                                    
+                                        <div class="card-body pb-0 border-bottom border-3">
+                                            {% if review.display_name %}
+                                                <!--begin::Header-->
+                                                    <div class="d-flex align-items-center mb-5">
+                                                        <!--begin::User-->
+                                                        <div class="d-flex align-items-center flex-grow-1">
+                                                            <!--begin::Avatar-->
+                                                            <div class="symbol symbol-45px me-5">
+                                                                <img src="{% if review.display_image %}{{ review.display_image }}{% else %}{% static 'assets/media/misc/image.png' %}{% endif %}" alt="" />
+                                                            </div>
+                                                            <!--end::Avatar-->
+                                                            <!--begin::Info-->
+                                                            
+                                                                        <div class="d-flex flex-column">
+                                                                            <div class="d-flex align-items-center mb-2">
+                                                                                <a href="#" class="text-gray-900 text-hover-primary fs-6 fw-bold">{{ review.display_name }}</a>
+                                                                                <div class="rating-stars ms-5" data-rating="{{ review.rate }}"></div>
+                                                                            </div>
+                                                                            <div class="text-gray-600 text-primary fs-7">{{ review.review }}</div>
+                                                                        </div>
+                                                                        <!--end::Info-->
+                                                                    
+                                                                        {% comment %} <a onclick="location.assign('/businesses/delete-rating-by-admin/{{ review.id }}/{{ business.id }}/')" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                                                                            <i data-feather="trash" data-toggle="tooltip" data-placement="top" title="{{ current_language.delete_text }}"></i>
+                                                                        </a> {% endcomment %}
+                                                                    
+                                                        </div>
+                                                        <!--end::User-->
+                                                    </div>
+                                                    <!--end::Header-->
+                                            
+                                            {% else %}
+                                                <!--begin::Header-->
+                                                <div class="d-flex align-items-center mb-5">
+                                                    <!--begin::User-->
+                                                    <div class="d-flex align-items-center flex-grow-1">
+                                                        <!--begin::Avatar-->
+                                                        <div class="symbol symbol-45px me-5">
+                                                            <img src="{% if review.i_user.profile_picture %}{{ review.i_user.profile_picture.url }}{% else %}{% static 'assets/media/misc/image.png' %}{% endif %}" alt="" />
+                                                        </div>
+                                                        <!--end::Avatar-->
+                                                        <!--begin::Info-->
+                                                        <div class="d-flex flex-column">
+                                                                <div class="d-flex align-items-center mb-2">
+                                                                    <a href="#" class="text-gray-900 text-hover-primary fs-6 fw-bold">{{ review.i_user.get_name }}</a>
+                                                                    <div class="rating-stars ms-5" data-rating="{{ review.rate }}"></div>
+                                                                </div>
+                                                                <div class="text-gray-600 text-primary fs-7">{{ review.review }}</div>  
+                                                            </div>
+                                                            <a onclick="location.assign('/businesses/delete-rating-by-admin/{{ review.id }}/{{ business.id }}/')" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                                                                <i data-feather="trash" data-toggle="tooltip" data-placement="top" title="{{ current_language.delete_text }}"></i>
+                                                            </a>
+                                                            
+                                                        <!--end::Info-->
+                                                    </div>
+                                                    
+                                                    <!--end::User-->
+                                                </div>
+                                                <!--end::Header-->
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                    <!--end::Body-->
+                                </div>
+                                {% else %}
+                                <span class="fs-5 text-center d-block mt-5 mb-5">No Review Found</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <!--end:::Tab content-->
+                    </div>
+
+                    <div class="col-xl-12">
+                        <nav>
+                        {% if pagination.has_other_pages %}
+                        <ul class="pagination justify-content-end pagination-primary">
+                            {% if pagination.has_previous %}
+                            <li class="page-item"><a class="page-link" href="{% if search %}?page={{ pagination.previous_page_number }}&search={{ search }}{% else %}?page={{ pagination.previous_page_number }}{% endif %}" tabindex="-1"><i class="previous"></i></a></li>
+                            {% else %}
+                            <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"><i class="previous"></i></a></li>
+                            {% endif %}
+                            {% for i in pagination.paginator.page_range %}
+                            {% if pagination.number == i %}
+                                <li class="page-item active"><a class="page-link">{{ i }}<span class="sr-only">(current)</span></a></li>
+                            {% elif i > pagination.number|add:'-3' and i < pagination.number|add:'3' %}
+                                <li class="page-item"><a class="page-link" href="{% if search %}?page={{ i }}&search={{ search }}{% else %}?page={{ i }}{% endif %}">{{ i }}</a></li>
+                            {% endif %}
+                            {% endfor %}
+                            {% if pagination.has_next %}
+                            <li class="page-item"><a class="page-link" href="{% if search %}?page={{ pagination.next_page_number }}&search={{ search }}{% else %}?page={{ pagination.next_page_number }}{% endif %}" tabindex="-1"><i class="next"></i></a></li>
+                            {% else %}
+                            <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"><i class="next"></i></a></li>
+                            {% endif %}
+                        </ul>
+                        {% endif %}
+                        </nav>
+                    </div>
+                </div>
+                <!--begin::Body-->
+            </div>
+
+        </div>
+		<!--end::details View-->
+	</div>
+	<!--end::Content container-->
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script>
+$(document).ready(function () {
+
+
+    var ratingContainers = document.querySelectorAll(".rating-stars");
+
+    ratingContainers.forEach(function(container) {
+        var rating = container.getAttribute("data-rating");
+
+        rating = Math.round(rating);
+
+
+        var starsDiv = document.createElement("div");
+        starsDiv.className = "stars";
+
+        remaining_stars = 5-rating
+
+        for (var i = 0; i < rating; i++) {
+            var starIcon = document.createElement("span");
+            starIcon.className = "fa fa-star checked";
+            starsDiv.appendChild(starIcon);
+        }
+
+        for (var i = 0; i < remaining_stars; i++) {
+            var starIcon = document.createElement("span");
+            starIcon.className = "fa fa-star";
+            starsDiv.appendChild(starIcon);
+        }
+
+        container.appendChild(starsDiv);
+    });
+});
+
+</script>
+{% endblock %}

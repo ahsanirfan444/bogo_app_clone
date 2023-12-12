@@ -49,15 +49,24 @@ ALLOWED_HOSTS = ['*']
 # }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.getenv("LOCAL_DB_NAME"),
-        'USER': os.getenv("LOCAL_DB_USER"),
-        'PASSWORD': os.getenv("LOCAL_DB_PASSWORD"),
-        'HOST': os.getenv("LOCAL_DB_HOST"),
-        'PORT': os.getenv("LOCAL_DB_PORT")
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'hubur_db_local',
+        'USER': 'postgres',
+        'PASSWORD': 'admin',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
-
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': os.getenv("DEV_DB_NAME"),
+#         'USER': os.getenv("DEV_DB_USER"),
+#         'PASSWORD': os.getenv("DEV_DB_PASSWORD"),
+#         'HOST': os.getenv("DEV_DB_HOST"),
+#         'PORT': os.getenv("DEV_DB_PORT")
+#     }
+# }
 #==================================================Static Files directory==================================================
 
 STATICFILES_DIRS = [
@@ -80,4 +89,3 @@ DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
 #==================================================Internationalization==================================================
 LANGUAGE_CODE = os.getenv("LANGUAGE_CODE")
 TIME_ZONE = os.getenv("TIME_ZONE")
-

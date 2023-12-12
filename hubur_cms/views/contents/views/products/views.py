@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 from core.base import AuthBaseViews
-from global_methods import create_content_images, delete_content_images
+from global_methods import create_content_images, create_tags, delete_content_images
 from hubur_apis import models
 from django.conf import settings
 from django.utils.decorators import method_decorator
@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 class VendorProductsList(AuthBaseViews):
     TEMPLATE_NAME = "contents/products/list_all_products.html"
     CREATE_URL = reverse_lazy('create_products')
-    CREATE_URL_TITLE = "Create Products"
+    CREATE_URL_TITLE = "Create Product"
 
     def get(self, request, *args, **kwargs):
         products = models.Content.objects.filter(content_type=1, i_user=request.user, i_business=self.get_vendor_business())
@@ -62,17 +62,18 @@ class VendorCreateProducts(AuthBaseViews):
                     product_instance.i_user = request.user
                     product_instance.save()
 
+                    create_tags(form.cleaned_data['tags'], product_instance)
                     image_instance = create_content_images(request.FILES.getlist('images'), request.user, 2, self.get_vendor_business(), product_instance)
                     if image_instance:
                         messages.success(request, "Product Added Successfully")
                         return self.redirect(reverse_lazy("list_vendor_products"))
 
                 else:
-                    messages.error(request, "Please correct the errors below")
+                    messages.error(request, self.getCurrentLanguage()['correct_errors'])
                     return self.render({"form": form})
             
             else:
-                messages.error(request, "Please correct the errors below")
+                messages.error(request, self.getCurrentLanguage()['correct_errors'])
                 return self.render({"form": form})
             
         except Exception:
@@ -88,8 +89,9 @@ class VendorEditProducts(AuthBaseViews):
         inst = models.Content.objects.get(id=content_id, content_type=1)
         product_images = models.Images.objects.filter(i_content_id=content_id)
         images_list = list(product_images.values_list('image', flat=True))
+        tags = list(models.Tags.objects.filter(content=inst).values_list('id', flat=True))
         
-        inst.__dict__.update({'i_brand': inst.i_brand.id, 'i_sub_category': inst.i_sub_category.id})
+        inst.__dict__.update({'i_brand': inst.i_brand.id, 'i_sub_category': inst.i_sub_category.id, 'tags': tags})
         form = EditProductForm(data=inst.__dict__, category=list(self.get_vendor_business().i_subcategory.values_list('id', flat=True)), content_id=content_id)
         
         try:
@@ -122,11 +124,11 @@ class VendorEditProducts(AuthBaseViews):
                         return self.redirect(reverse_lazy("list_vendor_products"))
 
                 else:
-                    messages.error(request, "Please correct the errors below")
+                    messages.error(request, self.getCurrentLanguage()['correct_errors'])
                     return self.render({"form": form})
             
             else:
-                messages.error(request, "Please correct the errors below")
+                messages.error(request, self.getCurrentLanguage()['correct_errors'])
                 return self.render({"form": form})
             
         except Exception:

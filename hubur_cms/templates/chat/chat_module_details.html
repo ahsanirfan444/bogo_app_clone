@@ -1,0 +1,404 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load generic %}
+
+{% block extra_css %}
+
+<meta http-equiv="refresh" content="60">
+
+<style>
+    #kt_chat_messenger_body{
+        height: calc(100vh - 30rem) !important;
+    }
+
+    .chat-left-msg{
+        background-color: #fff !important;
+        box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15)!important;
+        border-radius: 25px 25px 25px 0px;
+    }
+
+    .chat-left-msg a{
+        text-decoration: underline !important;
+    }
+
+    .chat-right-msg{
+        background: linear-gradient(90deg, rgba(106,174,255,1) 1%, rgba(127,155,254,1) 30%, rgba(166,122,253,1) 70%) !important;
+        color: #fff !important;
+        box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15)!important;
+        border-radius: 25px 25px 0px 25px;
+    }
+
+    .chat-right-msg a{
+        text-decoration: underline !important;
+    }
+
+    .active_channel{
+        border: 1px dashed #e2d5d5;
+    }
+
+    .slide-right {
+        animation: 2s slide-right;
+        animation-delay: 2s;
+        display: block !important;
+    }
+
+    @keyframes slide-right {
+        from {
+            margin-left: -40%;
+        }
+        to {
+            margin-left: 0;
+        };
+    }
+
+</style>
+
+{% endblock %}
+
+{% block page_content %}
+
+<div id="kt_app_content" class="app-content flex-column-fluid">
+    <!--begin::Content container-->
+    <div id="kt_app_content_container" class="app-container container-xxl">
+        <!--begin::Layout-->
+            <div class="d-flex flex-column flex-lg-row mt-5">
+                <!--begin::Sidebar-->
+                <div class="flex-column flex-lg-row-auto w-100 w-lg-500px w-xl-500px mb-10 mb-lg-0">
+                    <!--begin::Contacts-->
+                    <div class="card card-flush">
+                        <!--begin::Card header-->
+                        <div class="card-header pt-7" id="kt_chat_contacts_header">
+                            <!--begin::Form-->
+                            <form class="w-100 position-relative" autocomplete="off" onsubmit="return false;">
+                                <!--begin::Icon-->
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                <span class="svg-icon svg-icon-2 svg-icon-lg-1 svg-icon-gray-500 position-absolute top-50 ms-5 translate-middle-y">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor" />
+                                        <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor" />
+                                    </svg>
+                                </span>
+                                <!--end::Svg Icon-->
+                                <!--end::Icon-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid px-15" name="search" oninput="searchResult(this.value)" placeholder="Search by name" />
+                                <!--end::Input-->
+                            </form>
+                            <!--end::Form-->
+                        </div>
+                        <!--end::Card header-->
+                        <!--begin::Card body-->
+                        <div class="card-body pt-5" id="kt_chat_contacts_body">
+                            <!--begin::List-->
+                            <div class="scroll-y me-n5 pe-5 h-200px h-lg-auto" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_header, #kt_app_header, #kt_toolbar, #kt_app_toolbar, #kt_footer, #kt_app_footer, #kt_chat_contacts_header" data-kt-scroll-wrappers="#kt_content, #kt_app_content, #kt_chat_contacts_body" data-kt-scroll-offset="5px">
+                                {% for obj in channels %}
+                                    <!--begin::User-->
+                                    <div class="d-flex flex-stack py-4 px-5 {% if user_id|parseInt == obj.user.id %} active_channel {% endif %}" data-role="users">
+                                        <!--begin::Details-->
+                                        <div class="d-flex align-items-center">
+                                            <!--begin::Avatar-->
+                                                <div class="symbol symbol-45px symbol-circle">
+                                                    <img class="h-60px w-60px" alt="Pic" src="{% if obj.user.profile_picture %}{{ obj.user.profile_picture }}{% else %}{% static 'assets/media/misc/image.png' %}{% endif %}" />
+                                                </div>
+                                            <!--end::Avatar-->
+                                            <!--begin::Details-->
+                                            <div class="ms-5">
+                                                <a href="{% url 'chat_detail' user_id=obj.user.id %}" class="fs-5 fw-bold text-gray-1000 text-primary mb-2">{{ obj.user.name }}</a>
+                                                {% if obj.is_read %}
+                                                    <div class="fw-semibold text-muted last_msg">{% if obj.last_message|length > 30 %}{{obj.last_message|slice:30}} ... {% else %}{{obj.last_message}}{% endif %}</div>
+                                                {% else %}
+                                                    <div class="fw-semibold text-dark last_msg">{% if obj.last_message|length > 30 %}{{obj.last_message|slice:30}} ... {% else %}{{obj.last_message}}{% endif %}</div>
+                                                {% endif %}
+                                            </div>
+                                            <!--end::Details-->
+                                        </div>
+                                        <!--end::Details-->
+                                        {% if obj.count > 0 %}
+                                            <!--begin::Lat seen-->
+                                            <div class="d-flex flex-column align-items-end ms-2">
+                                                <span class="text-muted fs-7 mb-1">{{ obj.last_msg_send|time_since }}</span>
+                                                <span class="badge badge-sm badge-circle badge-light-success">{{obj.count}}</span>
+                                            </div>
+                                            <!--end::Lat seen-->
+                                        {% else %}
+                                            <!--begin::Lat seen-->
+                                            <div class="d-flex flex-column align-items-end ms-2">
+                                                <span class="text-muted fs-7 mb-1">{{ obj.last_msg_send|time_since }}</span>
+                                            </div>
+                                            <!--end::Lat seen-->
+                                        {% endif %}
+                                    </div>
+                                    <!--end::User-->
+                                    <!--begin::Separator-->
+                                    <div class="separator separator-dashed"></div>
+                                    <!--end::Separator-->
+                                {% endfor %}
+                            </div>
+                            <!--end::List-->
+                        </div>
+                        <!--end::Card body-->
+                    </div>
+                    <!--end::Contacts-->
+                </div>
+                <!--end::Sidebar-->
+                <!--begin::Content-->
+                <div class="flex-lg-row-fluid ms-lg-7 ms-xl-10">
+                    <!--begin::Messenger-->
+                    <div class="card" id="kt_chat_messenger">
+                        <!--begin::Card header-->
+                        <div class="card-header" id="kt_chat_messenger_header">
+                            <!--begin::Title-->
+                            <div class="card-title">
+                                <!--begin::User-->
+                                <!--begin::Avatar-->
+                                <div class="symbol symbol-45px symbol-circle me-5">
+                                    <img alt="Pic" src="{% if channel.user.profile_picture %}{{ channel.user.profile_picture }}{% else %}{% static 'assets/media/misc/image.png' %}{% endif %}" />
+                                </div>
+                                <!--end::Avatar-->
+                                <div class="d-flex justify-content-center flex-column me-3">
+                                    <a href="#" class="fs-4 fw-bold text-gray-900 text-hover-primary me-1 mb-2 lh-1">{{ channel.user.name }}</a>
+                                    <!--begin::Info-->
+                                    <div class="mb-0 lh-1">
+                                        {% if online_status %}
+                                            <span class="badge badge-success badge-circle w-10px h-10px me-1"></span>
+                                            <span class="fs-7 fw-semibold text-muted">Online</span>
+                                        {% else %}
+                                            <span class="fs-7 fw-semibold text-muted slide-right d-none">Last seen {{ last_seen|time_since }} ago </span>
+                                        {% endif %}
+                                    </div>
+                                    <!--end::Info-->
+                                </div>
+                                <!--end::User-->
+                            </div>
+                            <!--end::Title-->
+                            
+                        </div>
+                        <!--end::Card header-->
+                        <!--begin::Card body-->
+                        <div class="card-body" id="kt_chat_messenger_body">
+                            <!--begin::Messages-->
+                            <div class="scroll-y me-n5 pe-5 h-300px h-lg-auto" id="chat" data-kt-element="messages" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_header, #kt_app_header, #kt_app_toolbar, #kt_toolbar, #kt_footer, #kt_app_footer, #kt_chat_messenger_header, #kt_chat_messenger_footer" data-kt-scroll-wrappers="#kt_content, #kt_app_content, #kt_chat_messenger_body" data-kt-scroll-offset="5px">
+                                {% for msg in messages_list %}
+                                    {% if msg.sender.id != request.user.id %}
+                                        <!--begin::Message-->
+                                        <div class="d-flex justify-content-start mb-10 chat-left">
+                                            <!--begin::Wrapper-->
+                                            <div class="d-flex flex-column align-items-start">
+                                                <!--begin::Text-->
+                                                <div class="p-5 ms-1 text-dark fw-semibold mw-lg-400px text-start chat-left-msg" data-kt-element="message-text">{{ msg.content }}</div>
+                                                <span class="text-muted fs-7 mt-1 mb-1 ms-2">{{ msg.created_at|time_since }}</span>
+                                                <!--end::Text-->
+                                            </div>
+                                            <!--end::Wrapper-->
+                                        </div>
+                                        <!--end::Message-->
+                                    {% else %}
+                                        <!--begin::Message-->
+                                        <div class="d-flex justify-content-end mb-10 chat-right">
+                                            <!--begin::Wrapper-->
+                                            <div class="d-flex flex-column align-items-end">
+                                                <!--begin::Text-->
+                                                <div class="p-5 text-dark fw-semibold mw-lg-400px text-end chat-right-msg" data-kt-element="message-text">{{ msg.content }}</div>
+                                                <span class="text-muted fs-7 mt-1 mb-1">{{ msg.created_at|time_since }}</span>
+                                                <!--end::Text-->
+                                            </div>
+                                            <!--end::Wrapper-->
+                                        </div>
+                                        <!--end::Message-->
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <!--end::Messages-->
+                        </div>
+                        <!--end::Card body-->
+                        <!--begin::Card footer-->
+                        <div class="card-footer pt-4" id="kt_chat_messenger_footer">
+                            {% if channel.user.is_active  %}
+                            <form id="message-form">
+                                <!--begin::Input-->
+                                <textarea class="form-control form-control-flush" data-kt-element="input" placeholder="Type a message" id="message-input" maxlength="450"></textarea>
+                                <!--end::Input-->
+                                <!--begin:Toolbar-->
+                                <div class="d-flex flex-stack mt-5">
+                                    <!--begin::Actions-->
+                                    <div class="d-flex align-items-center me-2">
+                                        <div class="text-inverse-light fw-semibold mw-lg-400px text-start" data-kt-element="message-text">Max 500 Characters are allowed.</div>
+                                    </div>
+                                    <!--end::Actions-->
+                                    <!--begin::Send-->
+                                    <button class="btn btn-primary" type="submit" disabled>Send</button>
+                                    <!--end::Send-->
+                                </div>
+                                <!--end::Toolbar-->
+                            </form>
+                            {% else %}
+                            <div class="d-flex align-items-center me-2">
+                                <div class="mx-auto d-block text-inverse-light fw-semibold mw-lg-400px text-center">This user isn't available at the moment.</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <!--end::Card footer-->
+                    </div>
+                    <!--end::Messenger-->
+                </div>
+                <!--end::Content-->
+            </div>
+        <!--end::Layout-->
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block extra_script %}
+
+<script>
+
+    $(function () {
+        let webSocket;
+        let y = $('#chat')[0].scrollHeight;
+
+        // Initialize Web socket Connection
+        webSocket = new WebSocket(socket_host+"ws/chat_socket/{{ channel.channel_id }}");
+
+        // Listen for new messages sent to the channel
+        webSocket.onmessage = (message) => {
+            let chat = JSON.parse(message.data)
+            chat['created_at'] = Date.now()
+            renderMessage(chat);
+            $('#chat').scrollTop(y + 1850);
+        };
+
+        // Add newly sent messages to the channel
+        let $form = $("#message-form");
+        let $input = $("#message-input");
+        $form.on("submit", function (e) {
+            e.preventDefault();
+            if (webSocket && $input.val().trim().length > 0) {
+                sendMessage($input.val())
+                $input.val("");
+            }
+        });
+
+        $("#message-input").on('keyup', function (e) {
+            if ((e.key === 'Enter' || e.keyCode === 13) && (!e.shiftKey)) {
+                e.preventDefault();
+                return false;
+                $('button[type="submit"]').click();
+            }
+
+            if ($("#message-input").val() != null) {
+                $('button[type="submit"]').removeAttr('disabled');
+            } 
+
+            if ($("#message-input").val() == '') {
+                $('button[type="submit"]').attr('disabled', true);
+            }
+        });
+
+        $("#chat div").html(function(i, html){
+            return html.replace(/((http(s)?(\:\/\/))?(www\.)?([\a-zA-Z0-9-_\.\/])*(\.[a-zA-Z]{2,3}\/?))([\a-zA-Z0-9-_\/?=&#])*(?!(.*a>)|(\'|\"))/g, "<a href='http://$1' target='_blank'>$1</a>");
+        });
+        
+        $('#chat').scrollTop(y + 1850);
+
+        // function to render chat message to the chat window
+        function renderMessage(obj) {
+            let timestamp = new Date(obj.created_at)
+            let fromUserId = parseInt(obj.sender_id)
+            let currentUserId = parseInt('{{ request.user.id }}')
+            let message = obj
+            
+
+            if (fromUserId !== currentUserId) {
+                    var chatId = document.getElementById('chat')
+                    var chatDiv =  `<div class="d-flex justify-content-start mb-10 chat-left">
+                                        <div class="d-flex flex-column align-items-start">
+                                            <div class="p-5 ms-1 text-dark fw-semibold mw-lg-400px text-start chat-left-msg" data-kt-element="message-text">${message.content}</div>
+                                            <span class="text-muted fs-7 mt-1 mb-1 ms-2">${timeSince(timestamp)}</span>
+                                        </div>
+                                    </div>`;
+                    chatId.innerHTML += chatDiv;
+            }
+            else{
+                var chatId = document.getElementById('chat')
+                var chatDiv =  `<div class="d-flex justify-content-end mb-10 chat-right">
+                                    <div class="d-flex flex-column align-items-end">
+                                        <div class="p-5 text-dark fw-semibold mw-lg-400px text-end chat-right-msg" data-kt-element="message-text">${message.content}</div>
+                                        <span class="text-muted fs-7 mt-1 mb-1">${timeSince(timestamp)}</span>
+                                    </div>
+                                </div>`;
+                chatId.innerHTML += chatDiv;
+            }
+            
+            $("#chat div").html(function(i, html){
+                return html.replace(/((http(s)?(\:\/\/))?(www\.)?([\a-zA-Z0-9-_\.\/])*(\.[a-zA-Z]{2,3}\/?))([\a-zA-Z0-9-_\/?=&#])*(?!(.*a>)|(\'|\"))/g, "<a href='http://$1' target='_blank'>$1</a>");
+            });
+
+            if(message.content.length > 30) {
+                $(".active_channel .last_msg").html(`${message.content.slice(0,30)} ...`)
+            }
+            else{
+                $(".active_channel .last_msg").html(`${message.content}`)
+            }
+            
+            console.clear();
+        }
+
+        // Send text message to user through the server
+        function sendMessage(text_msg) {
+        
+            let obj = {
+                "content": text_msg,
+                "msg_type": 1,
+                "channel_id": "{{ channel.channel_id }}",
+                "sender_id": parseInt("{{ request.user.id }}"),
+                "receiver_id": parseInt("{{ user_id }}"),
+                "base_url": location.origin+"/",
+                "token": "{{ token }}",
+                "share_data": null,
+                "attachment": null,
+            };
+
+            // Send the msg object as a JSON-formatted string.
+            webSocket.send(JSON.stringify(obj));
+        }
+
+        function timeSince(date) {
+            var seconds = Math.floor((new Date() - date) / 1000);
+
+            var interval = seconds / 31536000;
+
+            if (interval > 1) {
+            return Math.floor(interval) + " years";
+            }
+            interval = seconds / 2592000;
+            if (interval > 1) {
+            return Math.floor(interval) + " months";
+            }
+            interval = seconds / 86400;
+            if (interval > 1) {
+            return Math.floor(interval) + " days";
+            }
+            interval = seconds / 3600;
+            if (interval > 1) {
+            return Math.floor(interval) + " hours";
+            }
+            interval = seconds / 60;
+            if (interval > 1) {
+            return Math.floor(interval) + " minutes";
+            }
+            return "now";
+        }
+
+        function searchResult(query) {
+            $("div[data-role='users']").filter(function () {
+                var Result = $(this).find('a').val().toLowerCase().indexOf(query.toLowerCase()) > -1;
+                $(this).toggle(Result);
+            });
+        }
+
+    });
+</script>
+
+{% endblock %}

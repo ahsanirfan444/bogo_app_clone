@@ -22,8 +22,8 @@ class MyVisitedView(viewsets.ModelViewSet):
             all_business_dict = {id_val: pos for pos, id_val in enumerate(all_business_list)}
             whens = [When(id=id_val, then=pos) for id_val, pos in all_business_dict.items()]
             order_by = Case(*whens)
-            all_business = models.Business.objects.filter(id__in=all_business_list).order_by(order_by)
-            context = {'user_obj': request.user}
+            all_business = models.Business.objects.filter(id__in=all_business_list, is_active=True).exclude(i_user__is_active=False).order_by(order_by)
+            context = {'user_obj': request.user, "request": request}
 
             my_favourite_obj = self.paginate_queryset(all_business)
             my_favourite_serializer = VisitedBusinessSerializer(my_favourite_obj, context= context ,many=True)

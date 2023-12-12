@@ -32,10 +32,10 @@ class GetAllBususiness(viewsets.ModelViewSet):
     pagination_class = DefualtPaginationClass
     
     def list(self,request):
-        all_business_query = models.Business.objects.filter(is_active=True, i_category__is_active=True)
+        all_business_query = models.Business.objects.filter(is_active=True, i_category__is_active=True).exclude(i_user__is_active=False)
         if all_business_query:
             all_business_query = self.paginate_queryset(all_business_query)
-            serializer = BusinessListSerializer(all_business_query, many=True)
+            serializer = BusinessListSerializer(all_business_query, context={"request": request}, many=True)
             if serializer:
                 return Response({'error': [], 'error_code': '', 'data': serializer.data,'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
             

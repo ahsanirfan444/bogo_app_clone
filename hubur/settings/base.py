@@ -64,9 +64,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
-    # "django.middleware.cache.UpdateCacheMiddleware",
-    # "django.middleware.cache.FetchFromCacheMiddleware",
+    "corsheaders.middleware.CorsMiddleware"
 ]
 
 # ==================================================Base Url configuration==================================================
@@ -196,3 +194,9 @@ PUSH_NOTIFICATIONS_SETTINGS = {
 TWILLIO_ACCOUNT_SID = os.getenv("TWILLIO_ACCOUNT_SID")
 TWILLIO_AUTH_TOKEN = os.getenv("TWILLIO_AUTH_TOKEN")
 TWILLIO_NUMBER = os.getenv("TWILLIO_NUMBER")
+
+#==================================================Web Push Settings=================================================
+SERVER_KEY = os.getenv("SERVER_KEY")
+
+#==================================================Socket Host=================================================
+SOCKET_HOST = os.getenv("SOCKET_HOST")

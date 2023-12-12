@@ -19,17 +19,17 @@ class BusinessSubCategoryAdmin(admin.ModelAdmin):
     search_fields = ('name', 'i_category__name',)
 
 class BusinessAdmin(admin.ModelAdmin):
-    list_filter = ('is_claimed', 'i_category', 'i_subcategory',)
+    list_filter = ('is_claimed', 'is_featured', 'i_category', 'i_subcategory',)
     search_fields = ('name', 'place_id',)
 
 class BusinessScheduleAdmin(admin.ModelAdmin):
-    form = BusinessAdminForm
+    #form = BusinessAdminForm
     list_filter = ('is_active', 'i_day__name',)
     search_fields = ('i_business__name', 'i_business__place_id',)
 
 
 class ImagesAdmin(admin.ModelAdmin):
-    form = BusinessAdminForm
+    #form = BusinessAdminForm
     list_filter = ('is_active', 'type',)
     search_fields = ('i_business__name', 'i_business__place_id', 'i_user__first_name', 'i_user__last_name',)
 
@@ -48,12 +48,12 @@ class BrandsAdmin(admin.ModelAdmin):
     search_fields = ('name', 'website',)
 
 class CheckInAdmin(admin.ModelAdmin):
-    form = BusinessAdminForm
+    #form = BusinessAdminForm
     list_filter = ('i_story__is_active',)
     search_fields = ('i_business__name', 'i_business__place_id', 'i_user__first_name', 'i_user__last_name', 'i_story__caption', 'other',)
 
 class ContentAdmin(admin.ModelAdmin):
-    form = BusinessAdminForm
+    #form = BusinessAdminForm
     list_filter = ('is_active', 'content_type',)
     search_fields = ('name', 'i_business__name', 'i_business__place_id', 'i_user__first_name', 'i_user__last_name', 'i_sub_category__name',)
 
@@ -65,7 +65,7 @@ class OtpAdmin(admin.ModelAdmin):
     search_fields = ('i_user__first_name', 'i_user__last_name', 'code',)  
 
 class PopularSearchAdmin(admin.ModelAdmin):
-    form = BusinessAdminForm
+    #form = BusinessAdminForm
     list_filter = ('is_active',)
     search_fields = ('^i_business__name', 'i_brand__name','type',)
 
@@ -74,12 +74,12 @@ class RedemptionAdmin(admin.ModelAdmin):
     search_fields = ('code', 'i_content__name', 'i_user__first_name', 'i_user__last_name',)
 
 class StoryAdmin(admin.ModelAdmin):
-    form = BusinessAdminForm
+    #form = BusinessAdminForm
     list_filter = ('is_active',)
     search_fields = ('caption', 'i_business__name', 'i_business__place_id', 'i_user__first_name', 'i_user__last_name',)
 
 class TrendingDiscountAdmin(admin.ModelAdmin):
-    form = BusinessAdminForm
+    #form = BusinessAdminForm
     list_filter = ('is_active',)
     search_fields = ('name', 'i_business__name', 'i_business__place_id',)
 
@@ -87,22 +87,22 @@ class UserInterestAdmin(admin.ModelAdmin):
     search_fields = ('i_category__name', 'i_user__first_name', 'i_user__last_name',)
 
 class VotingAdmin(admin.ModelAdmin):
-    form = BusinessAdminForm
+    #form = BusinessAdminForm
     search_fields = ( 'i_business__name', 'vote','i_user__first_name', 'i_user__last_name',)
 
 class FavAdmin(admin.ModelAdmin):
-    form = BusinessAdminForm
+    #form = BusinessAdminForm
     search_fields = ( 'i_business__name','i_user__first_name', 'i_user__last_name',)
 
 class VistedAdmin(admin.ModelAdmin):
-    form = BusinessAdminForm
+    #form = BusinessAdminForm
     search_fields = ( 'i_business__name','i_user__first_name', 'i_user__last_name',)
 
 class FAQAdmin(admin.ModelAdmin):
     search_fields = ( 'question','answer',)
 
 class BookingAdmin(admin.ModelAdmin):
-    form = BusinessAdminForm
+    #form = BusinessAdminForm
     list_filter = ('status',)
     search_fields = ( 'i_business__name','i_user__first_name', 'i_user__last_name',)
 
@@ -115,12 +115,12 @@ class CityAdmin(admin.ModelAdmin):
     search_fields = ( 'name', 'i_country__name',)
 
 class MyBookmarkAdmin(admin.ModelAdmin):
-    form = BusinessAdminForm
+    #form = BusinessAdminForm
     search_fields = ( 'i_business__name', 'vote','i_user__first_name', 'i_user__last_name',)
 
 class OffersAdmin(admin.ModelAdmin):
-    form = BusinessAdminForm
-    list_filter = ('is_expiry', 'is_active', 'type', 'discount_type', ('start', DateFieldListFilter), ('end', DateFieldListFilter),)
+    #form = BusinessAdminForm
+    list_filter = ('is_expiry', 'is_active', 'type', 'is_featured', 'discount_type', ('start', DateFieldListFilter), ('end', DateFieldListFilter),)
     search_fields = ( 'i_business__name','i_user__first_name', 'i_user__last_name', 'name',)
 
 class AttributesAdmin(admin.ModelAdmin):
@@ -128,7 +128,7 @@ class AttributesAdmin(admin.ModelAdmin):
     search_fields = ( 'name', 'value',)
 
 class ReviewsAdmin(admin.ModelAdmin):
-    form = BusinessAdminForm
+    #form = BusinessAdminForm
     search_fields = ( 'review', 'i_business__name','i_content__name')
 
 class NotificationAdmin(admin.ModelAdmin):
@@ -136,7 +136,7 @@ class NotificationAdmin(admin.ModelAdmin):
     search_fields = ('sender__first_name', 'user__last_name', 'title',)
 
 class SavedOffersAdmin(admin.ModelAdmin):
-    form = BusinessAdminForm
+    #form = BusinessAdminForm
     search_fields = ( 'i_content__name', 'i_business__name','i_user__first_name', 'i_user__last_name')
 
 class FriendListAdmin(admin.ModelAdmin):
@@ -146,7 +146,7 @@ class RewardPointsAdmin(admin.ModelAdmin):
     search_fields = ('type', 'points',)
 
 class UserRewardAdmin(admin.ModelAdmin):
-    form = BusinessAdminForm
+    #form = BusinessAdminForm
     search_fields = ('i_user__first_name', 'i_user__last_name','i_business__name')
 
 class MessageAdmin(admin.ModelAdmin):
@@ -160,6 +160,32 @@ class LevelAdmin(admin.ModelAdmin):
 
 class UserOnlineStatusAdmin(admin.ModelAdmin):
     search_fields = ('i_user__first_name', 'i_user__last_name','is_online',)
+
+class AppleTokenAdmin(admin.ModelAdmin):
+    search_fields = ('i_user__first_name', 'i_user__last_name','token',)
+
+class NotificationSettingsAdmin(admin.ModelAdmin):
+    search_fields = ('i_user__first_name', 'i_user__last_name',)
+
+class BusinessSubscriptionAdmin(admin.ModelAdmin):
+    list_filter = ('subscription_type', 'is_active',)
+    search_fields = ( 'name', 'description',)
+
+class SubscriptionFeatureAdmin(admin.ModelAdmin):
+    list_filter = ('is_enabled',)
+    search_fields = ( 'subscription__name', 'feature_name',)
+
+class UserSubscriptionAdmin(admin.ModelAdmin):
+    list_filter = ('is_active',)
+    search_fields = ( 'subscription__name', 'user__name',)
+
+class TagsAdmin(admin.ModelAdmin):
+    list_filter = ('is_active',)
+    search_fields = ( 'name',)
+
+class CampaignAdmin(admin.ModelAdmin):
+    list_filter = ('is_active',)
+    search_fields = ( 'title','i_business__name')
 
 admin.site.site_header = 'Hubur Database Administration'
 
@@ -203,3 +229,10 @@ admin.site.register(models.Level, LevelAdmin)
 admin.site.register(models.Message, MessageAdmin)
 admin.site.register(models.Chat, ChatAdmin)
 admin.site.register(models.UserOnlineStatus, UserOnlineStatusAdmin)
+admin.site.register(models.AppleToken, AppleTokenAdmin)
+admin.site.register(models.NotificationSettings, NotificationSettingsAdmin)
+admin.site.register(models.Subscription, BusinessSubscriptionAdmin)
+admin.site.register(models.SubscriptionFeature, SubscriptionFeatureAdmin)
+admin.site.register(models.UserSubscription, UserSubscriptionAdmin)
+admin.site.register(models.Tags, TagsAdmin)
+admin.site.register(models.Campaign, CampaignAdmin)

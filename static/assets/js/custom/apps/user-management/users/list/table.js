@@ -146,6 +146,9 @@ var Table1 = function() {
             }
             )),
             (e = $(o).DataTable({
+                language : {
+                    "zeroRecords": " "             
+                },
                 info: 1,
                 order: [],
                 iDisplayLength: 10,
@@ -344,6 +347,9 @@ var Table2 = function() {
             }
             )),
             (e = $(o).DataTable({
+                language : {
+                    "zeroRecords": " "             
+                },
                 info: 1,
                 order: [],
                 iDisplayLength: 10,
@@ -542,6 +548,9 @@ var Table3 = function() {
             }
             )),
             (e = $(o).DataTable({
+                language : {
+                    "zeroRecords": " "             
+                },
                 info: 1,
                 order: [],
                 iDisplayLength: 10,
@@ -740,6 +749,9 @@ var Table4 = function() {
             }
             )),
             (e = $(o).DataTable({
+                language : {
+                    "zeroRecords": " "             
+                },
                 info: 1,
                 order: [],
                 iDisplayLength: 10,

@@ -22,8 +22,30 @@ class BannerListSerializer(serializers.ModelSerializer):
 
 
 class SubCatListSerializer(serializers.ModelSerializer):
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.get('context')
+        super().__init__(*args, **kwargs)
+        
+        try:
+            request = self.context.get('request')
+            if request.user.is_authenticated:
+                if request.user.lang_code == 1:
+                    del self.fields['name_ar']
+                else:
+                    self.fields['name'] = self.fields['name_ar']
+
+            else:
+                if request.headers.get('Accept-Language') == str(1):
+                    del self.fields['name_ar']
+                else:
+                    self.fields['name'] = self.fields['name_ar']
+
+        except Exception as e:
+            # print(e)
+            pass
+
     class Meta:
         model= models.SubCategories
-        fields = ("id","name",)
+        fields = ("id","name", "name_ar",)
 
 

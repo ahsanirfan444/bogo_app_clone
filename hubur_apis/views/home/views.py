@@ -1,12 +1,13 @@
 from rest_framework.response import Response
 from core.defaults import DefualtPaginationClass
-from global_methods import distance
+from global_methods import distance, format_number, localized_subcategory_name
 from hubur_apis import models
 from rest_framework import status
 from rest_framework import viewsets
 from datetime import timedelta, datetime
 from django.utils import timezone
 from django.db.models import Q,When,Case
+from rest_framework.views import APIView
 from hubur_apis.serializers.content_serializer import (
     ContentDetailSerializer,
     )
@@ -51,7 +52,7 @@ class HomeAPIView(viewsets.ModelViewSet):
         time_now = datetime.now()
        
         trending_discount_list = models.TrendingDiscount.objects.filter(is_active=True).order_by("-created_at")[:12]
-        trending_discount_serializer = TrendingDiscountSerializer(trending_discount_list, many=True)
+        trending_discount_serializer = TrendingDiscountSerializer(trending_discount_list, context={'request': request}, many=True)
         if trending_discount_serializer:
             all_data_dict['trending_discount'] = trending_discount_serializer.data
         else:
@@ -59,26 +60,30 @@ class HomeAPIView(viewsets.ModelViewSet):
 
         time_then = datetime.now()
         milliseconds = (time_then-time_now).microseconds/1000
-        print(milliseconds,"trending_discount................")
+        # print(milliseconds,"trending_discount................")
 
 
         time_now = datetime.now()
         if request.user.username:
             user_cat_list = list(models.UserInterest.objects.filter(i_user=request.user).values_list('i_category__id',flat=True))
-            query2 = models.PopularSearch.objects.filter(is_active=True, i_business__i_category__in=user_cat_list)
-            query1 = models.PopularSearch.objects.filter(is_active=True).exclude(type="Business")
+            popular_search_query = models.PopularSearch.objects
+            query2 = popular_search_query.filter(is_active=True, i_business__i_category__in=user_cat_list).exclude(Q(i_business__i_user__is_active=False) | Q(i_business__is_active=False) | Q(i_content__is_active=False) | Q(i_content__i_brand__is_active=False) | Q(i_content__i_business__is_active=False) | Q(i_content__i_business__i_user__is_active=False) | Q(type="Brand"))
+            query1 = popular_search_query.filter(is_active=True).exclude(Q(type="Business") | Q(type="Content") | Q(i_brand__is_active=False))
             query = (query1 | query2)[:5]
 
         else:
-            query = self.get_queryset()
+            popular_search_query = models.PopularSearch.objects.filter(is_active=True)
+            query2 = popular_search_query.exclude(Q(i_business__i_user__is_active=False) | Q(i_business__is_active=False) | Q(i_content__is_active=False) | Q(i_content__i_brand__is_active=False) | Q(i_content__i_business__is_active=False) | Q(i_content__i_business__i_user__is_active=False) | Q(type="Brand"))
+            query1 = popular_search_query.exclude(Q(type="Business") | Q(type="Content") | Q(i_brand__is_active=False))
+            query = (query1 | query2)[:5]
         filter_queryset = self.filter_queryset(query)
-        popular_search_serializer = PopularSearchListSerializer(filter_queryset, many=True)
+        popular_search_serializer = PopularSearchListSerializer(filter_queryset, context={"request": request}, many=True)
         popular_search = popular_search_serializer.data
         all_data_dict['popular_search'] = popular_search
 
         time_then = datetime.now()
         milliseconds = (time_then-time_now).microseconds/1000
-        print(milliseconds,"popular_search................")
+        # print(milliseconds,"popular_search................")
         time_now = datetime.now()
 
         brands_obj = models.Brand.objects.filter(is_active=True).order_by('-created_at')[:10]
@@ -88,25 +93,26 @@ class HomeAPIView(viewsets.ModelViewSet):
 
         time_then = datetime.now()
         milliseconds = (time_then-time_now).microseconds/1000
-        print(milliseconds,"brands................")
+        # print(milliseconds,"brands................")
         time_now = datetime.now()
 
 
         banner_obj = models.Banner.objects.filter(is_active=True).exclude(position=5)
+        banner_obj = banner_obj.filter(language=request.user.lang_code) if request.user.is_authenticated else banner_obj.filter(language=request.headers.get('Accept-Language'))
         context = {'request': request}
         banner_serializer = BannerListSerializer(banner_obj, context= context,many=True)
         all_data_dict['banner'] = banner_serializer.data
 
         time_then = datetime.now()
         milliseconds = (time_then-time_now).microseconds/1000
-        print(milliseconds,"banner................")
+        # print(milliseconds,"banner................")
         time_now = datetime.now()
         
         
         
         if request.user.username:
             catagories_obj = list(models.UserInterest.objects.filter(i_user=request.user).values_list('i_category',flat=True))
-            business_obj = models.Business.objects.filter(is_active=True, i_category__in=catagories_obj).order_by('-created_at')
+            business_obj = models.Business.objects.filter(is_active=True, i_category__in=catagories_obj).exclude(i_user__is_active=False).order_by('-is_featured')
             user_long = request.user.long
             user_lat = request.user.lat
             if 'long' and 'lat' in request.data:
@@ -121,7 +127,7 @@ class HomeAPIView(viewsets.ModelViewSet):
 
             if user_long and user_lat:
                 business_obj_list = []
-                context = {'user_long': user_long,'user_lat':user_lat}
+                context = {'user_long': user_long,'user_lat':user_lat, "request": request}
                 for business in business_obj:
                     total_distance = distance(user_long,user_lat,business.long,business.lat)
                     if float(total_distance) <= 10:
@@ -146,7 +152,7 @@ class HomeAPIView(viewsets.ModelViewSet):
                     user_lat = location_serializer.validated_data['lat']
                     user_long = location_serializer.validated_data['long']
                     
-                    business_obj = models.Business.objects.filter(is_active=True).order_by('-created_at')
+                    business_obj = models.Business.objects.filter(is_active=True).exclude(i_user__is_active=False).order_by('-is_featured')
                     for business in business_obj:
                         total_distance = distance(user_long,user_lat,business.long,business.lat)
                         if float(total_distance) <= 10:
@@ -171,23 +177,23 @@ class HomeAPIView(viewsets.ModelViewSet):
             
         time_then = datetime.now()
         milliseconds = (time_then-time_now).microseconds/1000
-        print(milliseconds,"near_by_deals................")
+        # print(milliseconds,"near_by_deals................")
         time_now = datetime.now()
 
 
-        query_sub_category = models.Banner.objects.filter(is_active=True, position=3).exclude(i_subcatagory=None)
+        query_sub_category = models.Banner.objects.filter(is_active=True, position=3, i_subcatagory__is_active=True).exclude(i_subcatagory=None)
         if query_sub_category:
             query_sub_category = query_sub_category.first()
             
             if request.user.username:
                 catagories_obj = list(models.UserInterest.objects.filter(i_user=request.user).values_list('i_category',flat=True))
-                business_obj = models.Business.objects.filter(i_subcategory=query_sub_category.i_subcatagory, i_category__in=catagories_obj).order_by('-created_at')[:4]
+                business_obj = models.Business.objects.filter(is_active=True, i_subcategory=query_sub_category.i_subcatagory, i_category__in=catagories_obj).exclude(i_user__is_active=False).order_by('-is_featured')[:4]
             else:
-                business_obj = models.Business.objects.filter(i_subcategory=query_sub_category.i_subcatagory).order_by('-created_at')[:4]
+                business_obj = models.Business.objects.filter(is_active=True, i_subcategory=query_sub_category.i_subcatagory).exclude(i_user__is_active=False).order_by('-is_featured')[:4]
             
             after_have_you_been_serializer = HomeBusinessWithAddressSerializer(business_obj, context= context,many=True)
             if after_have_you_been_serializer:
-                all_data_dict['after_have_you_been_sub_cat'] = query_sub_category.i_subcatagory.name
+                all_data_dict['after_have_you_been_sub_cat'] = localized_subcategory_name(request, query_sub_category)
                 all_data_dict['after_have_you_been'] = after_have_you_been_serializer.data
             else:
                 all_data_dict['after_have_you_been_sub_cat'] = ""
@@ -198,22 +204,22 @@ class HomeAPIView(viewsets.ModelViewSet):
 
         time_then = datetime.now()
         milliseconds = (time_then-time_now).microseconds/1000
-        print(milliseconds,"after_have_you_been................")
+        # print(milliseconds,"after_have_you_been................")
         time_now = datetime.now()
 
-        query_image = models.Banner.objects.filter(is_active=True, position=4).exclude(i_subcatagory=None)
+        query_image = models.Banner.objects.filter(is_active=True, position=4, i_subcatagory__is_active=True).exclude(i_subcatagory=None)
         if query_image:
             query_image = query_image.first()
 
             if request.user.username:
                 catagories_obj = list(models.UserInterest.objects.filter(i_user=request.user).values_list('i_category',flat=True))
-                business_obj = models.Business.objects.filter(i_subcategory=query_image.i_subcatagory, i_category__in=catagories_obj).order_by('-created_at')[:4]
+                business_obj = models.Business.objects.filter(is_active=True,  i_subcategory=query_image.i_subcatagory, i_category__in=catagories_obj).exclude(i_user__is_active=False).order_by('-is_featured')[:4]
             else:
-                business_obj = models.Business.objects.filter(i_subcategory=query_image.i_subcatagory).order_by('-created_at')[:4]
+                business_obj = models.Business.objects.filter(is_active=True, i_subcategory=query_image.i_subcatagory).exclude(i_user__is_active=False).order_by('-is_featured')[:4]
             
             before_my_favorites_serializer = HomeBusinessSerializer(business_obj, context= context,many=True)
             if before_my_favorites_serializer:
-                all_data_dict['before_my_favorites_sub_cat'] = query_image.i_subcatagory.name
+                all_data_dict['before_my_favorites_sub_cat'] = localized_subcategory_name(request, query_image)
                 all_data_dict['before_my_favorites'] = before_my_favorites_serializer.data
             else:
                 all_data_dict['before_my_favorites_sub_cat'] = ""
@@ -224,7 +230,7 @@ class HomeAPIView(viewsets.ModelViewSet):
         
         time_then = datetime.now()
         milliseconds = (time_then-time_now).microseconds/1000
-        print(milliseconds,"before_my_favorites................")
+        # print(milliseconds,"before_my_favorites................")
         time_now = datetime.now()
         
         if request.user.username:
@@ -233,7 +239,7 @@ class HomeAPIView(viewsets.ModelViewSet):
             whens = [When(id=id_val, then=pos) for id_val, pos in all_business_dict.items()]
             order_by = Case(*whens)
 
-            all_business = models.Business.objects.filter(id__in=all_business_list).order_by(order_by)
+            all_business = models.Business.objects.filter(id__in=all_business_list, is_active=True).exclude(i_user__is_active=False).order_by(order_by)
             context = {'request': request}
             my_favourite_serializer = HomeBusinessWithAddressSerializer(all_business, context= context ,many=True)
             if my_favourite_serializer:
@@ -245,7 +251,7 @@ class HomeAPIView(viewsets.ModelViewSet):
         
         time_then = datetime.now()
         milliseconds = (time_then-time_now).microseconds/1000
-        print(milliseconds,"my_favorites................")
+        # print(milliseconds,"my_favorites................")
         time_now = datetime.now()
 
         
@@ -257,8 +263,7 @@ class HomeAPIView(viewsets.ModelViewSet):
                 last_check_in_long = last_check_in.i_business.long
                 last_check_in_lat = last_check_in.i_business.lat
                 user_cat_list = list(models.UserInterest.objects.filter(i_user=request.user).values_list('i_category',flat=True))
-                business_list = list(models.Business.objects.filter(is_active=True, i_category_id__in=user_cat_list).order_by('-created_at'))
-
+                business_list = list(models.Business.objects.filter(is_active=True, i_category_id__in=user_cat_list).exclude(i_user__is_active=False).order_by('-is_featured'))
 
                 all_business_data = []
 
@@ -271,7 +276,7 @@ class HomeAPIView(viewsets.ModelViewSet):
                         if len(all_business_data) == 4:
                             break
 
-                serializer = HomeBusinessSerializer(all_business_data, many=True)
+                serializer = HomeBusinessSerializer(all_business_data, context={"request": request}, many=True)
                 serializer_data = serializer.data
                 serializer_data = filter(None, serializer_data)
                 if serializer_data:
@@ -281,8 +286,8 @@ class HomeAPIView(viewsets.ModelViewSet):
             else:
                 all_data_dict['have_you_been_there'] = []
         else:
-            business_list = list(models.Business.objects.filter(is_active=True).order_by('-created_at')[:4])
-            serializer = HomeBusinessSerializer(business_list, many=True)
+            business_list = list(models.Business.objects.filter(is_active=True).exclude(i_user__is_active=False).order_by('-is_featured')[:4])
+            serializer = HomeBusinessSerializer(business_list, context={"request": request}, many=True)
             serializer_data = serializer.data
             serializer_data = filter(None, serializer_data)
             if serializer_data:
@@ -290,25 +295,22 @@ class HomeAPIView(viewsets.ModelViewSet):
             
         time_then = datetime.now()
         milliseconds = (time_then-time_now).microseconds/1000
-        print(milliseconds,"have_you_been_there................")
+        # print(milliseconds,"have_you_been_there................")
         time_now = datetime.now()
 
         if request.user.username:
             catagories_obj = list(models.UserInterest.objects.filter(i_user=request.user).values_list('i_category',flat=True))
-            business_ids = list(models.Business.objects.filter(i_category__in=catagories_obj, is_claimed=2, is_active=True).values_list('id',flat=True))
+            business_ids = list(models.Business.objects.filter(i_category__in=catagories_obj, is_claimed=2, is_active=True).exclude(i_user__is_active=False).values_list('id',flat=True))
         else:
-            business_ids = list(models.Business.objects.filter(is_claimed=2, is_active=True).values_list('id',flat=True))
+            business_ids = list(models.Business.objects.filter(is_claimed=2, is_active=True).exclude(i_user__is_active=False).values_list('id',flat=True))
         
         
         hot_offers_time_now = datetime.now()
 
-        
-
-        all_offers = models.Offers.objects.filter(is_active=True, is_expiry=False, i_business__in=business_ids)
+        all_offers = models.Offers.objects.filter(is_active=True, is_expiry=False, i_business__in=business_ids).order_by('-is_featured')
         hot_offer_list = list(all_offers.filter(type=4)[:6].values_list("i_content",flat=True))
-
-        hot_content_list = models.Content.objects.filter(id__in=hot_offer_list, is_active=True)
-
+        
+        hot_content_list = models.Content.objects.filter(id__in=hot_offer_list, is_active=True, i_sub_category__is_active=True, i_business__is_active=True).exclude(Q(i_brand__is_active=False) | Q(i_business__i_user__is_active=False))[:6]
         def hot_serializer(hot):
             return hot
         
@@ -320,12 +322,13 @@ class HomeAPIView(viewsets.ModelViewSet):
         else:
             user_obj = None
 
-        hot_offer_content = ContentDetailSerializer(hot_content_list, context={'user_obj':user_obj}, many=True)
+        hot_offer_content = ContentDetailSerializer(hot_content_list, context={'user_obj':user_obj, "request": request}, many=True)
         hot_offers = hot_offer_content.data
+        hot_offers.sort(key=lambda item: item["is_featured"], reverse=True)
 
         hot_offers_time_then = datetime.now()
         milliseconds = (hot_offers_time_then-hot_offers_time_now).microseconds/1000
-        print(milliseconds,"hot_offers_time_now................")
+        # print(milliseconds,"hot_offers_time_now................")
         daily_offers_time_now = datetime.now()
 
 
@@ -336,7 +339,7 @@ class HomeAPIView(viewsets.ModelViewSet):
         daily_offer_list = list(all_offers.filter(type=1)[:6].values_list("i_content",flat=True))
         
 
-        daily_content_list = models.Content.objects.filter(id__in=daily_offer_list, is_active=True)[:6]
+        daily_content_list = models.Content.objects.filter(id__in=daily_offer_list, is_active=True, i_business__is_active=True, i_sub_category__is_active=True).exclude(Q(i_brand__is_active=False) | Q(i_business__i_user__is_active=False))[:6]
         
 
         def daily_serializer(daily):
@@ -345,18 +348,19 @@ class HomeAPIView(viewsets.ModelViewSet):
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             executor.map(daily_serializer, daily_content_list)
             
-        daily_offer_content = ContentDetailSerializer(daily_content_list, context={'user_obj':user_obj}, many=True)
+        daily_offer_content = ContentDetailSerializer(daily_content_list, context={'user_obj':user_obj, "request": request}, many=True)
         daily_offers = daily_offer_content.data
+        daily_offers.sort(key=lambda item: item["is_featured"], reverse=True)
 
         daily_offers_time_then = datetime.now()
         milliseconds = (daily_offers_time_then-daily_offers_time_now).microseconds/1000
-        print(milliseconds,"daily_offers_time_then................")
+        # print(milliseconds,"daily_offers_time_then................")
         weekly_offers_time_now = datetime.now()
        
 
         weekly_offer_list = list(all_offers.filter(type=2)[:6].values_list("i_content",flat=True))
 
-        weekly_content_list = models.Content.objects.filter(id__in=weekly_offer_list, is_active=True)
+        weekly_content_list = models.Content.objects.filter(id__in=weekly_offer_list, is_active=True, i_sub_category__is_active=True, i_business__is_active=True).exclude(Q(i_brand__is_active=False) | Q(i_business__i_user__is_active=False))[:6]
         
         def weekly_serializer(weekly):
             return weekly
@@ -364,17 +368,18 @@ class HomeAPIView(viewsets.ModelViewSet):
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             executor.map(weekly_serializer, weekly_content_list)
         
-        weekly_offer_content = ContentDetailSerializer(weekly_content_list, context={'user_obj':user_obj}, many=True)
+        weekly_offer_content = ContentDetailSerializer(weekly_content_list, context={'user_obj':user_obj, "request": request}, many=True)
         weekly_offers = weekly_offer_content.data
+        weekly_offers.sort(key=lambda item: item["is_featured"], reverse=True)
 
         weekly_offers_time_then = datetime.now()
         milliseconds = (weekly_offers_time_then-weekly_offers_time_now).microseconds/1000
-        print(milliseconds,"weekly_offers_time_now................")
+        # print(milliseconds,"weekly_offers_time_now................")
         monthly_offers_time_now = datetime.now()
 
         monthly_offer_list = list(all_offers.filter(type=3)[:6].values_list("i_content",flat=True))
 
-        monthly_content_list = models.Content.objects.filter(id__in=monthly_offer_list, is_active=True)
+        monthly_content_list = models.Content.objects.filter(id__in=monthly_offer_list, is_active=True, i_sub_category__is_active=True, i_business__is_active=True).exclude(Q(i_brand__is_active=False) | Q(i_business__i_user__is_active=False))
         
         def monthly_serializer(monthly):
             return monthly
@@ -382,12 +387,13 @@ class HomeAPIView(viewsets.ModelViewSet):
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             executor.map(monthly_serializer, monthly_content_list)
 
-        monthly_offer_content = ContentDetailSerializer(monthly_content_list, context={'user_obj':user_obj}, many=True)
+        monthly_offer_content = ContentDetailSerializer(monthly_content_list, context={'user_obj':user_obj, "request": request}, many=True)
         monthly_offers = monthly_offer_content.data
+        monthly_offers.sort(key=lambda item: item["is_featured"], reverse=True)
 
         monthly_offers_time_then = datetime.now()
         milliseconds = (monthly_offers_time_then-monthly_offers_time_now).microseconds/1000
-        print(milliseconds,"monthly_offers_time_then................")
+        # print(milliseconds,"monthly_offers_time_then................")
 
 
 
@@ -396,13 +402,13 @@ class HomeAPIView(viewsets.ModelViewSet):
 
         time_then = datetime.now()
         milliseconds = (time_then-time_now).microseconds/1000
-        print(milliseconds,"offers................")
+        # print(milliseconds,"offers................")
         time_now = datetime.now()
 
 
         sub_catagories_query = models.SubCategories.objects.filter(is_active=True ,i_category__is_active=True)
         if sub_catagories_query:
-            serializer = GetSubCategorySerializer(sub_catagories_query, many=True)
+            serializer = GetSubCategorySerializer(sub_catagories_query, context={"request": request}, many=True)
             all_data_dict['all_sub_catagories'] = serializer.data
         else:
             all_data_dict['all_sub_catagories'] = []
@@ -410,12 +416,14 @@ class HomeAPIView(viewsets.ModelViewSet):
             channel_ids = list(set(models.Message.objects.filter(receiver=request.user).values_list("channel_id",flat=True)))
 
             all_data_dict['message_count'] = models.Chat.objects.filter(channel_id__in=channel_ids, is_read=False, count__gt=0).count()
+            all_data_dict['notification_count'] = models.Notification.objects.filter(user=request.user,is_read=False).exclude(notification_type=3).count()
         else:    
             all_data_dict['message_count'] = 0
+            all_data_dict['notification_count'] = 0
 
         time_then = datetime.now()
         milliseconds = (time_then-time_now).microseconds/1000
-        print(milliseconds,"message_count................")
+        # print(milliseconds,"message_count................")
         time_now = datetime.now()
 
         if request.user.is_authenticated:
@@ -429,12 +437,12 @@ class HomeAPIView(viewsets.ModelViewSet):
         
         time_then = datetime.now()
         milliseconds = (time_then-time_now).microseconds/1000
-        print(milliseconds,"GCMDevice................")
+        # print(milliseconds,"GCMDevice................")
 
 
         total_time_then = datetime.now()
         milliseconds = (total_time_then-total_time_now).microseconds/1000
-        print(milliseconds,"Total................")
+        # print(milliseconds,"Total................")
         
         if all_data_dict:
             return Response({'error': [], 'error_code': '', 'data': [all_data_dict],'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
@@ -460,7 +468,7 @@ class AfterHaveYouBeenListAPIView(viewsets.ModelViewSet):
 
     serializer_class = HomeBusinessWithAddressSerializer
     pagination_class = DefualtPaginationClass
-    queryset = models.Business.objects.filter(is_active=True).order_by('-created_at')
+    queryset = models.Business.objects.filter(is_active=True).exclude(i_user__is_active=False).order_by('-created_at')
 
     def list(self,request):
         query_sub_category = models.Banner.objects.filter(is_active=True, position=3).exclude(i_subcatagory=None)
@@ -469,9 +477,9 @@ class AfterHaveYouBeenListAPIView(viewsets.ModelViewSet):
         
             if request.user.username:
                 catagories_obj = list(models.UserInterest.objects.filter(i_user=request.user).values_list('i_category',flat=True))
-                business_obj = models.Business.objects.filter(is_active=True, i_subcategory=query_sub_category.i_subcatagory, i_category__in=catagories_obj).order_by('-created_at')
+                business_obj = models.Business.objects.filter(is_active=True, i_subcategory=query_sub_category.i_subcatagory, i_category__in=catagories_obj).exclude(i_user__is_active=False).order_by('-is_featured')
             else:
-                business_obj = models.Business.objects.filter(is_active=True, i_subcategory=query_sub_category.i_subcatagory).order_by('-created_at')
+                business_obj = models.Business.objects.filter(is_active=True, i_subcategory=query_sub_category.i_subcatagory).exclude(i_user__is_active=False).order_by('-is_featured')
 
             context = {'request': request}
 
@@ -505,7 +513,7 @@ class BeforeMyFavListAPIView(viewsets.ModelViewSet):
     serializer_class = HomeBusinessWithAddressSerializer
     pagination_class = DefualtPaginationClass
 
-    queryset = models.Business.objects.filter(is_active=True).order_by('-created_at')
+    queryset = models.Business.objects.filter(is_active=True).exclude(i_user__is_active=False).order_by('-created_at')
 
     def list(self,request):
         query_image = models.Banner.objects.filter(is_active=True, position=4).exclude(i_subcatagory=None)
@@ -514,9 +522,9 @@ class BeforeMyFavListAPIView(viewsets.ModelViewSet):
 
             if request.user.username:
                 catagories_obj = list(models.UserInterest.objects.filter(i_user=request.user).values_list('i_category',flat=True))
-                business_obj = models.Business.objects.filter(i_subcategory=query_image.i_subcatagory, i_category__in=catagories_obj).order_by('-created_at')
+                business_obj = models.Business.objects.filter(is_active=True, i_subcategory=query_image.i_subcatagory, i_category__in=catagories_obj).exclude(i_user__is_active=False).order_by('-is_featured')
             else:
-                business_obj = models.Business.objects.filter(i_subcategory=query_image.i_subcatagory).order_by('-created_at')
+                business_obj = models.Business.objects.filter(is_active=True, i_subcategory=query_image.i_subcatagory).exclude(i_user__is_active=False).order_by('-is_featured')
             
             context = {'request': request}
 
@@ -551,7 +559,7 @@ class HaveYouBeenThereListAPIView(viewsets.ModelViewSet):
 
     serializer_class = HomeBusinessSerializer
     pagination_class = DefualtPaginationClass
-    queryset = models.Business.objects.filter(is_active=True).order_by('-created_at')
+    queryset = models.Business.objects.filter(is_active=True).exclude(i_user__is_active=False).order_by('-created_at')
 
     def list(self,request): 
         if request.user.username:
@@ -561,7 +569,7 @@ class HaveYouBeenThereListAPIView(viewsets.ModelViewSet):
                 last_check_in_long = last_check_in.i_business.long
                 last_check_in_lat = last_check_in.i_business.lat
                 user_cat_list = list(models.UserInterest.objects.filter(i_user=request.user).values_list('i_category',flat=True))
-                business_list = list(models.Business.objects.filter(is_active=True, i_category_id__in=user_cat_list).order_by('-created_at'))
+                business_list = list(models.Business.objects.filter(is_active=True, i_category_id__in=user_cat_list).exclude(i_user__is_active=False).order_by('-is_featured'))
 
 
                 all_business_data = []
@@ -574,14 +582,14 @@ class HaveYouBeenThereListAPIView(viewsets.ModelViewSet):
                         all_business_data.append(business)
 
                 business_list = self.paginate_queryset(all_business_data)
-                serializer = HomeBusinessSerializer(business_list, many=True)
+                serializer = HomeBusinessSerializer(business_list, context={"request": request}, many=True)
                 
             else:
                 return Response({'error': ['No Data Found'], 'error_code': '', 'data': [],'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
         else:
-            business_list = list(models.Business.objects.filter(is_active=True).order_by('-created_at'))
+            business_list = list(models.Business.objects.filter(is_active=True).exclude(i_user__is_active=False).order_by('-is_featured'))
             business_list = self.paginate_queryset(business_list)
-            serializer = HomeBusinessSerializer(business_list, many=True)
+            serializer = HomeBusinessSerializer(business_list, context={"request": request}, many=True)
         
         
         serializer_data = serializer.data
@@ -612,7 +620,7 @@ class DiscoverBrandListAPIView(viewsets.ModelViewSet):
 
     pagination_class = DefualtPaginationClass
     serializer_class = HomeBusinessSerializer
-    queryset = models.Business.objects.filter(is_active=True).order_by('-created_at')
+    queryset = models.Business.objects.filter(is_active=True).exclude(i_user__is_active=False).order_by('-created_at')
 
     def list(self,request):
         brands_obj = models.Brand.objects.filter(is_active=True).order_by('-created_at')
@@ -644,7 +652,7 @@ class NearByDealsListAPIView(viewsets.ModelViewSet):
 
     pagination_class = DefualtPaginationClass
     serializer_class = HomeBusinessWithAddressSerializer
-    queryset = models.Business.objects.filter(is_active=True).order_by('-created_at')
+    queryset = models.Business.objects.filter(is_active=True, i_user__is_active=True).order_by('-created_at')
 
     def list(self,request):
         if request.user.username:
@@ -654,14 +662,14 @@ class NearByDealsListAPIView(viewsets.ModelViewSet):
             if user_long and user_lat:
                 all_business_data = []
 
-                business_objs = models.Business.objects.filter(is_active=True, i_category__in=catagories_obj).order_by('-created_at')
+                business_objs = models.Business.objects.filter(is_active=True, i_category__in=catagories_obj).exclude(i_user__is_active=False).order_by('-is_featured')
                 for business in business_objs:
                     total_distance = distance(user_long,user_lat,business.long,business.lat)
                     if float(total_distance) <= 10:
                         all_business_data.append(business)
 
                 business_obj = self.paginate_queryset(all_business_data)
-                context = {'user_long': user_long,'user_lat':user_lat}
+                context = {'user_long': user_long,'user_lat':user_lat, "request": request}
             else:
                 return Response({'error': ["No result found, please enable your location"], 'error_code': '', 'data': [],'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
         else:
@@ -674,14 +682,14 @@ class NearByDealsListAPIView(viewsets.ModelViewSet):
 
                 all_business_data = []
 
-                business_objs = models.Business.objects.filter(is_active=True).order_by('-created_at')
+                business_objs = models.Business.objects.filter(is_active=True).exclude(i_user__is_active=False).order_by('-is_featured')
                 for business in business_objs:
                     total_distance = distance(user_long,user_lat,business.long,business.lat)
                     if float(total_distance) <= 10:
                         all_business_data.append(business)
 
                 business_obj = self.paginate_queryset(all_business_data)
-                context = {'user_long': user_long,'user_lat':user_lat}
+                context = {'user_long': user_long,'user_lat':user_lat, "request": request}
             else:
                 error_list = []
                 for error in location_serializer.errors.values():
@@ -721,24 +729,24 @@ class AllProductsInOfferAPIView(viewsets.ModelViewSet):
             type_param = ""
         if request.user.username:
             catagories_obj = list(models.UserInterest.objects.filter(i_user=request.user).values_list('i_category',flat=True))
-            business_ids = list(models.Business.objects.filter(i_category__in=catagories_obj, is_claimed=2).values_list('id',flat=True))
+            business_ids = list(models.Business.objects.filter(i_category__in=catagories_obj, is_claimed=2).exclude(i_user__is_active=False).values_list('id',flat=True))
             query = Q(i_business__in=business_ids, is_active=True, is_expiry=False)
         else:
             query = Q(is_active=True, is_expiry=False)
         
         if type_param:
-            offers = models.Offers.objects.filter(query,type=type_param)
+            content_list = models.Content.objects.filter(is_active=True).exclude(Q(i_brand__is_active=False) | Q(i_business__i_user__is_active=False) | Q(i_sub_category__is_active=False) | Q(i_business__is_active=False)).values_list("id",flat=True)
+            offers = models.Offers.objects.filter(query,type=type_param, i_content__in=content_list).order_by('-is_featured').distinct()
         else:
             return Response({'error': 'Invalid type', 'error_code': '', 'data': [],'status':status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
             
         if offers:
-            offer_serializer = OfferDetailSerializer(offers, many=True)
+            offer_serializer = OfferDetailSerializer(offers, context={"request": request}, many=True)
             offer_serializer = offer_serializer.data
             if offer_serializer:
                 offer_list = []
                 for offer in offer_serializer:
                     offer_list.extend(offer['result'])
-                offer_serializer = offer_serializer
 
             serializer = self.paginate_queryset(offer_list)
             return Response({'error': '', 'error_code': '', 'data': serializer,'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
@@ -754,5 +762,96 @@ class AllProductsInOfferAPIView(viewsets.ModelViewSet):
     def perform_update(self, serializer):
        return Response({'error': ['Method is not allowed'], 'error_code': '', 'data': [],'status':status.HTTP_405_METHOD_NOT_ALLOWED}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
     
+    def partial_update(self, request, pk=None):
+        return Response({'error': ['Method is not allowed'], 'error_code': '', 'data': [],'status':status.HTTP_405_METHOD_NOT_ALLOWED}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+class AllProductsInOfferV2APIView(APIView, DefualtPaginationClass):
+
+    def get(self, request, *args, **kwargs):
+        today = self.request.query_params.get('today')
+        yesterday = self.request.query_params.get('yesterday')
+        custom_date = self.request.query_params.get('date')
+
+        if request.user.is_authenticated:
+            catagories_obj = list(models.UserInterest.objects.filter(i_user=request.user).values_list('i_category',flat=True))
+            business_ids = list(models.Business.objects.filter(i_category__in=catagories_obj, is_claimed=2).exclude(i_user__is_active=False).values_list('id',flat=True))
+            interest_query = Q(i_business__in=business_ids, is_active=True, is_expiry=False)
+            banner_query = models.Banner.objects.filter(Q(is_active=True, position=7, language=request.user.lang_code) | Q(is_active=True, position=8, language=request.user.lang_code))
+        else:
+            interest_query = Q(is_active=True, is_expiry=False)
+            if request.headers.get('Accept-Language') == str(1):
+                banner_query = models.Banner.objects.filter(Q(is_active=True, position=7, language=1) | Q(is_active=True, position=8, language=1))
+            else:
+                banner_query = models.Banner.objects.filter(Q(is_active=True, position=7, language=2) | Q(is_active=True, position=8, language=2))
+
+        banner_serializer = BannerListSerializer(banner_query, many=True)
+
+        content_list = models.Content.objects.filter(is_active=True).exclude(Q(i_brand__is_active=False) | Q(i_business__i_user__is_active=False) | Q(i_sub_category__is_active=False) | Q(i_business__is_active=False)).values_list("id",flat=True)
+        query = Q(interest_query, type=4, i_content__in=content_list)
+
+        offer_main_query = models.Offers.objects
+        today_date = datetime.now().date()
+        yesterday_date = today_date - timedelta(days=1)
+        if today or yesterday:
+            date_query = Q(query, start__date=today) | Q(query, start__date=yesterday)
+        elif custom_date:
+            date_query = Q(query, start__date__lte=custom_date)
+        else:
+            date_query = query
+
+        today_count = format_number(len(offer_main_query.filter(query, start__date=today_date, i_content__in=content_list).values_list('i_content',flat=True)))
+        yesterday_count = format_number(len(offer_main_query.filter(query, start__date=yesterday_date, i_content__in=content_list).values_list('i_content',flat=True)))
+
+        if custom_date:
+            custom_date_count = format_number(len(offer_main_query.filter(query, start__date__lte=custom_date, i_content__in=content_list).values_list('i_content',flat=True)))
+        else:
+            custom_date_count = str(0)
+        offers = offer_main_query.filter(date_query).order_by('-start__date').distinct()
+        if offers:
+            offer_serializer = OfferDetailSerializer(offers, context={"request": request}, many=True)
+            offer_serializer = offer_serializer.data
+            if offer_serializer:
+                offer_list = []
+                for offer in offer_serializer:
+                    offer_list.extend(offer['result'])
+
+            serializer = self.paginate_queryset(offer_list, self.request)
+
+            return Response({'error': '', 'error_code': '',"today_count":today_count, "yesterday_count":yesterday_count, "custom_date_count":custom_date_count, "banner":banner_serializer.data , 'data': serializer,'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'No Offer found', 'error_code': '', "today_count":today_count, "yesterday_count":yesterday_count, "custom_date_count":custom_date_count, "banner":banner_serializer.data, 'data': [],'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
+ 
+class AllFeaturedBusinessAPIView(viewsets.ModelViewSet):
+
+    serializer_class = HomeBusinessWithAddressSerializer
+    pagination_class = DefualtPaginationClass
+    queryset = models.Business.objects.filter(is_active=True, is_featured=True).exclude(i_user__is_active=False).order_by('-updated_at')
+
+    def list(self,request):     
+
+        business_obj = models.Business.objects.filter(is_active=True, is_featured=True).exclude(i_user__is_active=False).order_by('-updated_at')
+
+        context = {'request': request}
+
+        business_obj = self.paginate_queryset(business_obj)
+
+        all_featured_business_serializer = HomeBusinessWithAddressSerializer(business_obj, context= context,many=True)
+        if all_featured_business_serializer:
+            return Response({'error': [], 'error_code': '', 'data': all_featured_business_serializer.data,'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': ['No Data Found'], 'error_code': '', 'data': [],'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
+
+    def create(self, request, *args, **kwargs):
+        return Response({'error': ['Method is not allowed'], 'error_code': '', 'data': [],'status':status.HTTP_405_METHOD_NOT_ALLOWED}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def update(self, request, pk, *args, **kwargs):
+        return Response({'error': ['Method is not allowed'], 'error_code': '', 'data': [],'status':status.HTTP_405_METHOD_NOT_ALLOWED}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def perform_update(self, serializer):
+       return Response({'error': ['Method is not allowed'], 'error_code': '', 'data': [],'status':status.HTTP_405_METHOD_NOT_ALLOWED}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def retrieve(self, request, pk=None):
+        return Response({'error': ['Method is not allowed'], 'error_code': '', 'data': [],'status':status.HTTP_405_METHOD_NOT_ALLOWED}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
     def partial_update(self, request, pk=None):
         return Response({'error': ['Method is not allowed'], 'error_code': '', 'data': [],'status':status.HTTP_405_METHOD_NOT_ALLOWED}, status=status.HTTP_405_METHOD_NOT_ALLOWED)

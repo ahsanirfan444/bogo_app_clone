@@ -149,7 +149,7 @@
   <div class="card-header cursor-pointer">
     <!--begin::Card title-->
     <div class="card-title m-0">
-      <h3 class="fw-bold m-0">{{ form_heading }}</h3>
+      <h3 class="fw-bold m-0">{{current_language|keyvalue:form_heading}}</h3>
     </div>
     <!--end::Card title-->
   </div>
@@ -165,7 +165,7 @@
 
         <div class="col-sm-6 col-md-6">
           <div class="form-group mb-3">
-            <label class="form-label">{{ field.label }}</label>
+            <label class="form-label">{{current_language|keyvalue:field.label}}</label>
             {% if field.field.required == True%}<label style="color: red;">*</label>
             {% endif %}
             {% if field.field.widget.input_type == 'select' %}
@@ -177,7 +177,7 @@
                   <span class="dragBox">
                       <img id="image" src="{% if f.data.value  %}{{ f.data.value.url }}{% else %}{% static 'assets/media/images/image.png' %}{% endif %}" {% if f.data.value  %}style="width:100px;height:100px"{% endif %} {% if f.data.value %}value="{{ f.data.value }}"{% endif %}>
                       <input type="hidden" id="image_value" {% if f.data.value %}value="{{ f.data.value }}"{% endif %} >
-                      <h1>Select or Drop your image here</h1>
+                      <h1>{{ current_language.select_image }}</h1>
                       <input type="file" onchange="dragNdrop(event)" ondragover="drag('id_{{ field.name }}')" ondrop="drop('id_{{ field.name }}')" name="{{ field.name }}" id="id_{{ field.name }}" {% if field.field.widget.attrs.accept %}accept="{{field.field.widget.attrs.accept}}"{% endif %} {% if field.value %}value="{{ field.value }}"{% endif %} />
                     </span>
                 </div>
@@ -191,7 +191,7 @@
                   <span class="dragBox">
                       <img src="{% if f.data.value  %}{{ f.data.value.url }}{% else %}{% static 'assets/media/images/image.png' %}{% endif %}" {% if f.data.value  %}style="width:100px;height:100px"{% endif %} {% if f.data.value %}value="{{ f.data.value }}"{% endif %}>
                       <input type="hidden" id="image_value" {% if f.data.value %}value="{{ f.data.value }}"{% endif %} >
-                      <h1>Select or Drop your image here</h1>
+                      <h1>{{ current_language.select_image }}</h1>
                       <input type="file" onchange="dragNdrop(event)" ondragover="drag('id_{{ field.name }}_multiple')" ondrop="drop('id_{{ field.name }}_multiple')" name="{{ field.name }}" id="id_{{ field.name }}_multiple" {% if field.field.widget.attrs.accept %}accept="{{field.field.widget.attrs.accept}}"{% endif %} {% if field.value %}value="{{ field.value }}"{% endif %} {% if field.field.widget.attrs.multiple %} multi="{{field.field.widget.attrs.multiple}}" {% endif %} />
                     </span>
                 </div>
@@ -232,7 +232,7 @@
 
             {% elif field.field.widget.input_type == 'password' %}
 
-            <input type="{{ field.field.widget.input_type }}" placeholder="Enter {{ field.label }} here"
+            <input type="{{ field.field.widget.input_type }}" placeholder="{{ current_language.enter_text }} {{current_language|keyvalue:field.label}} {{ current_language.here_text }}"
               class="form-control form-control-user" id="id_{{ field.name }}" name="{{ field.name }}"
               value="{% if field.value and field.field.widget.input_type != 'date' %}{{ field.value }}{% elif field.field.widget.input_type == 'date' and field.value %}{#{{ field.value|date:'Y-m-d' }}#}{{field.value|format_date}}{% endif %}"
               autocomplete="new-password" {% if field.field.required %} required {% endif %} {% if field.field.disabled %}
@@ -242,7 +242,7 @@
 
             {% elif field.field.widget.input_type == "text" or field.field.widget.input_type == "email" or field.field.widget.input_type == "date" or field.field.widget.input_type == "number" %}
 
-            <input type="{{ field.field.widget.input_type }}" placeholder="Enter {{ field.label }} here"
+            <input type="{{ field.field.widget.input_type }}" placeholder="{{ current_language.enter_text }} {{current_language|keyvalue:field.label}} {{ current_language.here_text }}"
               class="form-control form-control-user" id="id_{{ field.name }}" name="{{ field.name }}"
               value="{% if field.value and field.field.widget.input_type != 'date' %}{{ field.value }}{% elif field.field.widget.input_type == 'date' and field.value %}{#{{ field.value|date:'Y-m-d' }}#}{{field.value|format_date}}{% endif %}"
               autocomplete="new-password" {% if field.field.required %} required {% endif %} {% if field.field.disabled %}
@@ -250,7 +250,7 @@
 
             {% elif field.field.widget.input_type == "color" %}
 
-              <input type="{{ field.field.widget.input_type }}" placeholder="Enter {{ field.label }} here"
+              <input type="{{ field.field.widget.input_type }}" placeholder="{{ current_language.enter_text }} {{current_language|keyvalue:field.label}} {{ current_language.here_text }}"
                 class="form-control" id="id_{{ field.name }}" name="{{ field.name }}"
                 value="{% if field.value and field.field.widget.input_type != 'date' %}{{ field.value }}{% elif field.field.widget.input_type == 'date' and field.value %}{#{{ field.value|date:'Y-m-d' }}#}{{field.value|format_date}}{% endif %}"
                 autocomplete="new-password" {% if field.field.required %} required {% endif %} {% if field.field.disabled %}
@@ -258,7 +258,7 @@
 
             {% else %}
             <textarea
-              placeholder="{% if field.field.widget.attrs.placeholder %}{{ field.field.widget.attrs.placeholder }}{% else %}Enter {{ field.label }} here{% endif %}"
+              placeholder="{{ current_language.enter_text }} {{current_language|keyvalue:field.label}} {{ current_language.here_text }}"
               class="form-control" id="id_{{ field.name }}" cols="{{field.field.widget.attrs.cols}}"
               rows="3" name="{{ field.name }}" {% if field.field.required %}
               required {% endif %} {% if field.field.disabled %} readonly {% endif %}
@@ -297,7 +297,7 @@
       <div class="d-grid mt-10 mb-10">
           <button type="submit" class="btn btn-primary">
               <!--begin::Indicator label-->
-              <span class="indicator-label">{{ button_text }}</span>
+              <span class="indicator-label">{{current_language|keyvalue:button_text}}</span>
               <!--end::Indicator label-->
               <!--begin::Indicator progress-->
               <span class="indicator-progress">Please wait...
@@ -390,8 +390,8 @@
           var fileInput = document.getElementById(event.target.id);
 
           // Create a new File object
-          var myFile = new File([blob], 'image.jpg', {
-              type: 'image/jpeg',
+          var myFile = new File([blob], 'image.png', {
+              type: 'image/png',
               lastModified: new Date(),
           });
 

@@ -53,9 +53,12 @@ class ImageSerializer(serializers.ModelSerializer):
 
 
     def validate_i_business(self,value):
-        business_obj = models.Business.objects.filter(id=value.id, is_active=True).exists()
-        if business_obj:
-            return value
+        business_obj = models.Business.objects.filter(id=value.id, is_active=True)
+        if business_obj.exists():
+            if business_obj[0]:
+                return value 
+            else:
+                raise serializers.ValidationError("This Business is not active")
         else:
             raise serializers.ValidationError("No Business Found")
 
@@ -84,7 +87,7 @@ class UserPicSerializer(serializers.ModelSerializer):
 class BusinessLogoSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Business
-        fields = ('logo_pic',)
+        fields = ('logo_pic',"is_featured",)
 
 
 class StoriesSerializer(serializers.ModelSerializer):
@@ -130,7 +133,7 @@ class StoryListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Business
-        fields = ("id","name","address","long","lat","category",)
+        fields = ("id","name","address","long","lat","category","is_featured",)
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.get('context')
@@ -155,7 +158,7 @@ class BusinessStoryListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Business
-        fields = ("id","name","address",)
+        fields = ("id","name","address","is_featured",)
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.get('context')

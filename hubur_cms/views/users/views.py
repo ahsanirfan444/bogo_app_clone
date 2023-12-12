@@ -53,8 +53,8 @@ class AdminUsersList(AuthBaseViews):
         models.UserProfile.objects.filter(id=user_id).update(is_active=status)
 
         if status:
-            messages.success(request, "Activated Successfully")
+            messages.success(request, self.getCurrentLanguage()['activated_success'])
             return self.redirect(reverse_lazy("list_users"))
         else:
-            messages.success(request, "De-activated Successfully")
+            messages.success(request, self.getCurrentLanguage()['deactivated_success'])
             return self.redirect(reverse_lazy("list_users"))

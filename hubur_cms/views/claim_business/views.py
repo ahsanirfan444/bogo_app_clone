@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 import notifications
 from django.template.loader import render_to_string
+from django.db.models import Q
 
 @method_decorator([admin_required], name="dispatch")
 class AdminClaimBusinessesList(AuthBaseViews):
@@ -29,18 +30,20 @@ class AdminClaimBusinessesApprove(AuthBaseViews):
             instance.approve = True
             instance.save()
 
+            models.ClaimBusiness.objects.filter(i_business=instance.i_business).exclude(id=claim_id).delete()
+
             link = request.build_absolute_uri(reverse_lazy('submit_vendor_profile_details'))+'?place_id='+instance.i_business.place_id
 
             html_content = render_to_string('includes/emails/approved_claim_business.html', {'business': instance, 'link': link})
        
             notifications.sendEmailToSingleUser(html_content, instance.business_email, 'Your request has approved successfully')
 
-            messages.success(request, "Approved successfully!")
+            messages.success(request, self.getCurrentLanguage()['approved_success'])
 
             return self.redirect(reverse_lazy('list_claim_business'))
         
         except Exception:
-            messages.error(request, "Something went wrong!")
+            messages.error(request, self.getCurrentLanguage()['something_went_wrong'])
             return self.redirect(reverse_lazy('list_claim_business'))
         
 
@@ -56,10 +59,10 @@ class AdminClaimBusinessesReject(AuthBaseViews):
        
             notifications.sendEmailToSingleUser(html_content, instance.business_email, 'Your request has been rejected')
 
-            messages.success(request, "Rejected successfully!")
+            messages.success(request, self.getCurrentLanguage()['rejected_success'])
 
             return self.redirect(reverse_lazy('list_claim_business'))
         
         except Exception:
-            messages.error(request, "Something went wrong!")
+            messages.error(request, self.getCurrentLanguage()['something_went_wrong'])
             return self.redirect(reverse_lazy('list_claim_business'))

@@ -36,7 +36,7 @@ class VotingView(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         user_obj = request.user
 
-        voting_obj = models.Voting.objects.filter(i_user=user_obj)
+        voting_obj = models.Voting.objects.filter(i_user=user_obj, i_business__is_active=True).exclude(i_business__i_user__is_active=False)
         voting_obj = self.paginate_queryset(voting_obj)
         vote_serializer = GetAllVotingSerializer(voting_obj,many=True)
         if vote_serializer:

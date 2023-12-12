@@ -116,7 +116,7 @@
 					<!--end::Label-->
 					<!--begin::Col-->
 					<div class="col-lg-8">
-						<a href="{% if vendor_business.website %}{{ vendor_business.website }}{% else %}#{% endif %}" target="_blank" class="fw-semibold fs-6 text-gray-800 text-hover-primary">{% if vendor_business.website %}{{ vendor_business.website }}{% else %}None{% endif %}</a>
+						<a href="{% if vendor_business.website %}{{ vendor_business.website }}{% else %}#{% endif %}" target="_blank" class="fw-semibold fs-6 text-gray-800 text-hover-primary">{% if vendor_business.website %}{{ vendor_business.website }}{% else %}---{% endif %}</a>
 					</div>
 					<!--end::Col-->
 				</div>
@@ -188,6 +188,93 @@
 						</div>
 						<!--end::Input group-->
 					{% endif %}
+
+				<!--begin::Input group-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-semibold text-muted">Member Since</label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-8">
+						<span class="fw-bold fs-6 text-gray-800">{% if request.user.subscription %}{{ request.user.subscription.start_date }} {% else %} --- {% endif %}</span>
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Input group-->
+
+				<!--begin::Input group-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-semibold text-muted">Membership Status</label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-8 d-flex align-items-center">
+						{% if request.user.subscription.is_active %}
+							<span class="badge badge-success">Active</span>
+						{% else %}
+							<span class="badge badge-danger">In-Active</span>
+						{% endif %}
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Input group-->
+
+				<!--begin::Input group-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-semibold text-muted">Membership Renewal</label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-8">
+						<span class="fw-bold fs-6 text-gray-800">{% if request.user.subscription %}{{ request.user.subscription.end_date }}{% else %} --- {% endif %}</span>
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Input group-->
+
+				<!--begin::Input group-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-semibold text-muted">Amount Received</label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-8">
+						<span class="fw-bold fs-6 text-gray-800">AED {% if request.user.subscription %}{{ request.user.subscription.subscription.price }}{% else %} 0.0 {% endif %} </span>
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Input group-->
+
+				<!--begin::Input group-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-semibold text-muted">Billing Cycle</label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-8">
+						<span class="fw-bold fs-6 text-gray-800">{% if request.user.subscription %}{{ request.user.subscription.subscription.get_subscription_type_display }}{% else %} --- {% endif %}</span>
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Input group-->
+
+				<!--begin::Input group-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-semibold text-muted">Plan</label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-6">
+						<span class="fw-bold fs-6 text-gray-800">{% if request.user.subscription %}{% if request.user.lang_code == 1 %} {{ request.user.subscription.subscription.name }} {% else %} {{ request.user.subscription.subscription.name_ar }} {% endif %} {% else %} --- {% endif %}</span>
+					</div>
+					<!--end::Col-->
+					<!--begin::Col-->
+					<div class="col-lg-2">
+						<span class="fw-bold fs-6 text-gray-800"><a href="{% url 'subscription_plans' %}" style="text-decoration: underline;">Change</a></span>
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Input group-->
 
 				{% else %}
 

@@ -22,7 +22,7 @@
 <script src="{% static 'assets/js/select2.full.min.js' %}"></script>
 <script>
 	$(".searchable-select").select2({
-		placeholder: "Select Businesses"
+		placeholder: "{{current_language|keyvalue:'Select Businesses'}}"
 	});
 </script>
 {% endblock %}

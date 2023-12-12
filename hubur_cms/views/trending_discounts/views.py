@@ -30,24 +30,24 @@ class AdminCreateTrendingDiscountsView(AuthBaseViews):
     TEMPLATE_NAME = "trending_discounts/create_trending_discounts.html"
 
     def get(self, request, *args, **kwargs):
-        form = CreateTrendingDiscountForm()
+        form = CreateTrendingDiscountForm(request, self.getCurrentLanguage())
 
         return self.render({"form": form})
     
     def post(self, request, *args, **kwargs):
         try:
-            form = CreateTrendingDiscountForm(request.POST, request.FILES)
+            form = CreateTrendingDiscountForm(request, self.getCurrentLanguage(), request.POST, request.FILES)
             if form.is_valid():
                 form.save()
-                messages.success(request, "Trending Discount Created Successfully")
+                messages.success(request, self.getCurrentLanguage()['add_trending_discount'])
                 return self.redirect(reverse_lazy("list_trending_discounts"))
             
             else:
-                messages.error(request, "Please correct the errors below")
+                messages.error(request, self.getCurrentLanguage()['correct_errors'])
                 return self.render({"form": form})
             
         except Exception:
-            messages.error(request, "Something Went Wrong! Unable to Save Trending Discount.")
+            messages.error(request, self.getCurrentLanguage()['something_went_wrong'])
             return self.render({"form": form})
     
 
@@ -57,24 +57,24 @@ class AdminEditTrendingDiscountsView(AuthBaseViews):
 
     def get(self, request, discount_id, *args, **kwargs):
         inst = models.TrendingDiscount.objects.get(id=discount_id)
-        form = EditTrendingDiscountForm(instance=inst)
+        form = EditTrendingDiscountForm(request, self.getCurrentLanguage(), instance=inst)
         return self.render({"form": form})
     
     def post(self, request, discount_id, *args, **kwargs):
         try:
             inst = models.TrendingDiscount.objects.get(id=discount_id)
-            form = EditTrendingDiscountForm(request.POST, request.FILES, instance=inst)
+            form = EditTrendingDiscountForm(request, self.getCurrentLanguage(), request.POST, request.FILES, instance=inst)
             if form.is_valid():
                 form.save()
-                messages.success(request, "Trending Discount Edited Successfully")
+                messages.success(request, self.getCurrentLanguage()['update_trending_discount'])
                 return self.redirect(reverse_lazy("list_trending_discounts"))
             
             else:
-                messages.error(request, "Please correct the errors below")
+                messages.error(request, self.getCurrentLanguage()['correct_errors'])
                 return self.render({"form": form})
             
         except Exception:
-            messages.error(request, "Something Went Wrong! Unable to Save Trending Discount.")
+            messages.error(request, self.getCurrentLanguage()['something_went_wrong'])
             return self.render({"form": form})
     
 
@@ -93,8 +93,8 @@ class AdminDeleteTrendingDiscountsView(DeleteView, AuthBaseViews):
     
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
-        name = self.object.name
+        name = self.object.name if request.user.lang_code == 1 else self.object.name_ar
         success_url = self.get_success_url()
         self.object.delete()
-        messages.success(request, f"'{name}' deleted successfully")
+        messages.success(request, f"'{name}' {self.getCurrentLanguage()['delete_success']}")
         return HttpResponseRedirect(success_url)

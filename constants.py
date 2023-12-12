@@ -144,6 +144,17 @@ SITE_TABS = [
         'type': 'feather'
     },
     {
+        'display_name': 'Reviews',
+        'icon': 'star',
+        'id': 'reviews',
+        'link_url': reverse_lazy('vendor_reviews'),
+        'visible': ['vendor'],
+        'visible_categories': get_categories_list(),
+        'active': True,
+        'actions': [],
+        'type': 'feather'
+    },
+    {
         'display_name': 'Check-In',
         'icon': 'map-pin',
         'id': 'check_in',
@@ -155,7 +166,7 @@ SITE_TABS = [
         'type': 'feather'
     },
     {
-        'display_name': 'voting',
+        'display_name': 'Voting',
         'icon': 'thumbs-up',
         'id': 'votes',
         'link_url': reverse_lazy('vendor_votes'),
@@ -166,7 +177,7 @@ SITE_TABS = [
         'type': 'feather'
     },
     {
-        'display_name': 'visitors',
+        'display_name': 'Visitors',
         'icon': 'users',
         'id': 'visitors',
         'link_url': reverse_lazy('vendor_visitors_list'),
@@ -175,6 +186,28 @@ SITE_TABS = [
         'active': True,
         'actions': [],
         'type': 'feather'
+    },
+    {
+        'display_name': 'Subscription Plans',
+        'icon': 'rocket',
+        'id': 'plans',
+        'link_url': reverse_lazy('list_subscriptions'),
+        'visible': ['admin'],
+        'visible_categories': get_categories_list(),
+        'active': True,
+        'actions': [],
+        'type': 'fontawesome'
+    },
+    {
+        'display_name': 'Promotions',
+        'icon': 'rectangle-ad',
+        'id': 'promotions',
+        'link_url': reverse_lazy('list_promotions'),
+        'visible': ['admin'],
+        'visible_categories': get_categories_list(),
+        'active': True,
+        'actions': [],
+        'type': 'fontawesome'
     },
     {
         'display_name': 'Others',
@@ -193,14 +226,14 @@ SITE_TABS = [
                 'visible_categories': get_categories_list(),
                 'active': False
             },
-            {
-                'display_name': 'FAQs',
-                'id': 'faqs',
-                'link_url': reverse_lazy('others_faq'),
-                'visible': ['admin'],
-                'visible_categories': get_categories_list(),
-                'active': False
-            },
+            # {
+            #     'display_name': 'FAQs',
+            #     'id': 'faqs',
+            #     'link_url': reverse_lazy('others_faq'),
+            #     'visible': ['admin'],
+            #     'visible_categories': get_categories_list(),
+            #     'active': False
+            # },
             {
                 'display_name': 'Terms & Condition',
                 'id': 'others_terms_and_condition',
@@ -288,6 +321,17 @@ SITE_TABS = [
         'icon': 'percent',
         'id': 'offers',
         'link_url': reverse_lazy('list_vendor_offers'),
+        'visible': ['vendor'],
+        'visible_categories' : get_categories_list(),
+        'active': True,
+        'actions': [],
+        'type': 'feather'
+    },
+    {
+        'display_name': 'Chat',
+        'icon': 'message-square',
+        'id': 'chat',
+        'link_url': reverse_lazy('chat'),
         'visible': ['vendor'],
         'visible_categories' : get_categories_list(),
         'active': True,

@@ -6,7 +6,7 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     # Auth Views
     path('auth/login/', auth_views.LoginView.as_view(template_name='login.html', extra_context={'hide_title': True}), name='login_url'),
-    path('auth/logout/', auth_views.LogoutView.as_view(template_name='logout.html', extra_context={'hide_title': True}), name='logout_url'),
+    path('auth/logout/', home.LogoutView.as_view(), name='logout_url'),
 
     # Home View
     path("", home.Home.as_view(), name="home"),
@@ -52,6 +52,9 @@ urlpatterns = [
 
     # stories
     path("stories/", include("hubur_cms.views.stories.urls")),
+    
+    # reviews
+    path("reviews/", include("hubur_cms.views.reviews.urls")),
 
     # checkin
     path("check-in/", include("hubur_cms.views.check_in.urls")),
@@ -74,6 +77,28 @@ urlpatterns = [
     # Offers
     path("offers/", include("hubur_cms.views.offers.urls")),
 
+    # Chat URLS
+    path("chat/", include("hubur_cms.views.chat.urls")),
+
+    # Read notifications
+    path("read_notification/", home.ReadNotification.as_view(), name="read_notification"),
+
+    # Subscription
+    path("subscription/", include("hubur_cms.views.subscriptions.urls")),
+
+    # Subscription Features
+    path("subscription-feature/", include("hubur_cms.views.subscriptions_feature.urls")),
+
+    # Promotions Urls
+    path("promotions/", include("hubur_cms.views.promotions.urls")),
+
+    # Web device registation
+    path("device/", include("hubur_cms.views.web_device_registration.urls")),
+
+    # Switch Language
+    path("switch_language/", home.SwitchLanguage.as_view(), name="switch_language"),
+
     # ajax urls
     path("remove_image/", home.RemoveImage.as_view(), name="remove_image"),
+    path("remove_tag/", home.RemoveTag.as_view(), name="remove_tag")
 ]

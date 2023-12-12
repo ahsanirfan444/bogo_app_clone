@@ -3,6 +3,7 @@ from hubur_apis import models
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
+import notifications
 from hubur_apis.serializers.redemption_serializer import (
     RedemptionSerializer, RedemptionCodeSerializer
     )
@@ -33,6 +34,15 @@ class RedemptionAPIView(APIView):
             response = serializer_class.validated_data
             response['i_user'] = user_obj
             models.Redemption.objects.create(**response)
+
+            title = "Redemption Alert"
+            msg ="Code for "+ str(response['i_content'].name) +" is " +str(response['code'])
+            title_ar = "تنبيه الاسترداد"
+            msg_ar ="رمز ل"+ str(response['i_content'].name_ar) +" يكون " +str(response['code'])
+
+            kwargs = {'i_content':str(response['i_content'].id), 'content_name':str(response['i_content'].name), 'avail_code':str(response['code']),'actions':'avail_offer'}
+            notifications.sendNotificationToSingleUser(user_obj.id, msg, msg_ar, title, title_ar, 2, response['i_content'].id, "avail_offer",notification_type=7, activityAndroid="FLUTTER_NOTIFICATION_CLICK", activityIOS="FLUTTER_NOTIFICATION_CLICK",code=str(response['code']) ,**kwargs)
+            
             return Response({'error': [], 'error_code': '', 'data': ["Redemption Done"],'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
         else:
             error_list = []

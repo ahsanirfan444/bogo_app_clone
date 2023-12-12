@@ -9,14 +9,17 @@ from hubur_apis.serializers.search_serializer import SubCatagoriesListSerializer
 from global_methods import format_number
 from datetime import datetime
 now = datetime.now()
+from django.db.models import Q
 
-class CheckinStoryListSerializer(serializers.ModelSerializer):
-    checkin_story_image = serializers.ImageField(source="i_story.image")
-    checkin_story_video = serializers.ImageField(source="i_story.video")
+class StoryListSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Checkedin
-        fields = ('checkin_story_image','checkin_story_video')
-   
+        model = models.Story
+        fields = ('image','video',)
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        return_data = {key: value for key, value in data.items() if value is not None}
+        return list(return_data.values())[0]
 
 class GalleryImagesListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -31,10 +34,11 @@ class BusinessListSerializer(serializers.ModelSerializer):
     attributes = serializers.SerializerMethodField("get_i_attributes")
     class Meta:
         model = models.Business
-        fields = ("id","vendor_id","name","country_code","about","attributes","contact","address","long","lat","website","logo_pic","i_category","i_subcategory","is_claimed","place_id","business_time",)
+        fields = ("id","vendor_id","name","country_code","about","attributes","contact","address","long","lat","website","logo_pic","i_category","i_subcategory","is_claimed","place_id","business_time", "is_featured")
 
     def get_business_time(self,obj):
-        status = (BusinessSerializerForTimeOnly(obj)).data
+        request = self.context.get('request')
+        status = (BusinessSerializerForTimeOnly(obj, context={"request": request})).data
         return status
     
     def get_i_attributes(self,obj):
@@ -45,7 +49,7 @@ class BusinessListSerializer(serializers.ModelSerializer):
             return []
     
     def to_representation(self, data):
-
+        request = self.context.get('request')
         business_long= data.long
         business_lat= data.lat
 
@@ -59,12 +63,11 @@ class BusinessListSerializer(serializers.ModelSerializer):
             response['total_distance'] = total_distance
             response['is_redeemed'] = False
         else:
-            request = self.context.get('request')
             if request:
                 user_id = request.user.id
                 response = super().to_representation(data)
         
-            all_products = models.Content.objects.filter(i_business=data, is_active=True)[:8]
+            all_products = models.Content.objects.filter(i_business=data, is_active=True, i_sub_category__is_active=True).exclude(i_brand__is_active=False)[:8]
 
             if user_id != None:
                 user_long = request.user.long
@@ -91,7 +94,7 @@ class BusinessListSerializer(serializers.ModelSerializer):
                     response['my_bookmark'] = False
                 
                 
-                context = {"user_obj":request.user}
+                context = {"user_obj":request.user, "request": request}
                 response['products'] = (ContentDetailSerializer(all_products, context=context, many=True)).data
 
 
@@ -107,7 +110,8 @@ class BusinessListSerializer(serializers.ModelSerializer):
                     response['total_distance'] = ""
                     response['is_redeemed'] = False
             else:
-                response['products'] = (ContentDetailSerializer(all_products, many=True)).data
+                context = {"request": request}
+                response['products'] = (ContentDetailSerializer(all_products, context=context, many=True)).data
                 response['total_distance'] = ""
                 response['is_redeemed'] = False
 
@@ -129,18 +133,9 @@ class BusinessListSerializer(serializers.ModelSerializer):
         response = {**dict2, **dict1}
         del response['business_time']
         
-        checkin_storys_obj = models.Checkedin.objects.filter(i_business_id=data.id, i_story__is_active = True).exclude(i_story__video = None)
-        checkin_storys_serializer = CheckinStoryListSerializer(checkin_storys_obj,many=True)
-        if checkin_storys_serializer:
-            checkin_storys_list = []
-            for i in checkin_storys_serializer.data:
-                if i['checkin_story_image'] is not None:
-                    checkin_storys_list.append(i['checkin_story_image'])
-                else:
-                    checkin_storys_list.append(i['checkin_story_video'])
-            response['checkin_storys'] = checkin_storys_list
-        else:
-            response['checkin_storys'] = []
+        stories_objs = models.Story.objects.filter(is_active=True, i_user__is_active=True, i_business_id=data.id).order_by('-created_at')[:10]
+        story_serializer = StoryListSerializer(stories_objs, many=True)
+        response['checkin_storys'] = story_serializer.data
 
         gallery_images_list = []
         gallery_images = models.Images.objects.filter(i_business=data, is_active=True, type=1)
@@ -158,7 +153,7 @@ class BusinessListSerializer(serializers.ModelSerializer):
         response['reviews'] = GetAllReviewsSerializer(all_reviews, many=True).data
 
 
-        total_checkins = models.Checkedin.objects.filter(i_business=data).count()
+        total_checkins = models.Checkedin.objects.filter(i_business=data).exclude(i_user__is_active=False).count()
         total_checkins = format_number(total_checkins)
         response['checkins'] = total_checkins
 
@@ -166,10 +161,10 @@ class BusinessListSerializer(serializers.ModelSerializer):
         response['place_id'] = 'https://www.google.com/maps/place/?q=place_id:'+response['place_id']
 
         offers = models.Offers.objects.filter(i_business=data.id, is_active=True, is_expiry=False)
-        hot_offers = OffersListSerializer(offers).data['hot_offers']
-        daily_offers = OffersListSerializer(offers).data['daily_offers']
-        weekly_offers = list(OffersListSerializer(offers).data['weekly_offers'])
-        monthly_offers = list(OffersListSerializer(offers).data['monthly_offers'])
+        hot_offers = OffersListSerializer(offers, context={"request": request}).data['hot_offers']
+        daily_offers = OffersListSerializer(offers, context={"request": request}).data['daily_offers']
+        weekly_offers = list(OffersListSerializer(offers, context={"request": request}).data['weekly_offers'])
+        monthly_offers = list(OffersListSerializer(offers, context={"request": request}).data['monthly_offers'])
         response['offers'] = [hot_offers,daily_offers, weekly_offers, monthly_offers]
         
         return response

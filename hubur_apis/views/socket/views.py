@@ -1,4 +1,5 @@
 from math import ceil
+from django.urls import reverse_lazy
 from rest_framework.response import Response
 from core.defaults import DefualtPaginationClass
 from global_methods import distance
@@ -18,7 +19,7 @@ from hubur_apis.views.web_socket.connection import connect
 class SocketData(viewsets.ModelViewSet):
 
     serializer_class = SocketSerializer
-    queryset = models.Business.objects.filter(is_active=True).order_by('-created_at')
+    queryset = models.Business.objects.filter(is_active=True).exclude(i_user__is_active=False).order_by('-created_at')
 
     def create(self,request):
             socket_serializer = SocketSerializer(data=request.data)
@@ -28,10 +29,10 @@ class SocketData(viewsets.ModelViewSet):
                 all_businesses_objs = []
                 if 'i_subcategory' in socket_serializer.validated_data and socket_serializer.validated_data['i_subcategory'] != None:
                     i_subcategory = socket_serializer.validated_data['i_subcategory']
-                    business_obj = models.Business.objects.filter(is_active=True,i_subcategory=i_subcategory).prefetch_related('i_category', 'i_user')
+                    business_obj = models.Business.objects.filter(is_active=True,i_subcategory=i_subcategory).exclude(i_user__is_active=False).prefetch_related('i_category', 'i_user')
                     
                 else:
-                    business_obj = models.Business.objects.filter(is_active=True).prefetch_related('i_category', 'i_user')
+                    business_obj = models.Business.objects.filter(is_active=True).exclude(i_user__is_active=False).prefetch_related('i_category', 'i_user')
                 for bus in business_obj:
                     dis = distance(user_lat,user_long,bus.lat,bus.long)
                     if float(dis) <= 10:
@@ -81,7 +82,7 @@ class SocketData(viewsets.ModelViewSet):
 class SearchForMapAPIView(viewsets.ModelViewSet):
 
     serializer_class = GetBusinessSerializer
-    queryset = models.Business.objects.filter(is_active=True)
+    queryset = models.Business.objects.filter(is_active=True).exclude(i_user__is_active=False)
     filter_backends = [filters.SearchFilter]
     pagination_class = DefualtPaginationClass
     search_fields = ['^name','name','^i_subcategory__name']
@@ -112,13 +113,13 @@ class SearchForMapAPIView(viewsets.ModelViewSet):
             sub_catagories_list = list(models.SubCategories.objects.filter(is_active=True).values_list('id',flat=True))
             sub_id = request.GET['sub_id']
             if int(sub_id) in sub_catagories_list:
-                business_query_filtered = models.Business.objects.filter(is_active=True, i_subcategory__id=sub_id)
+                business_query_filtered = models.Business.objects.filter(is_active=True, i_subcategory__id=sub_id).exclude(i_user__is_active=False)
             else:
                 return Response({'error': ["No Result Found"], 'error_code': '', 'data': [],'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
         elif 'search_key' in request.GET:
             if request.GET['search_key'] == "Trending":
                 business_id_list = list(models.PopularSearch.objects.filter(is_active=True, type="Business").exclude(Q(i_brand__isnull=False) | Q(i_content__isnull=False)).values_list('i_business',flat=True).order_by("-count"))
-                business_query_filtered = models.Business.objects.filter(is_active=True, id__in=business_id_list)
+                business_query_filtered = models.Business.objects.filter(is_active=True, id__in=business_id_list).exclude(i_user__is_active=False)
 
                 if business_query_filtered:
                     id_dict = {id_val: pos for pos, id_val in enumerate(business_id_list)}
@@ -129,7 +130,7 @@ class SearchForMapAPIView(viewsets.ModelViewSet):
             elif request.GET['search_key'] == "Visited":
                 if request.user.username:
                     business_id_list = list(models.Visited.objects.filter(i_user=request.user).values_list('i_business_id',flat=True).order_by("-created_at"))
-                    business_query_filtered = models.Business.objects.filter(is_active=True, id__in=business_id_list)
+                    business_query_filtered = models.Business.objects.filter(is_active=True, id__in=business_id_list).exclude(i_user__is_active=False)
                     if business_query_filtered:
                         id_dict = {id_val: pos for pos, id_val in enumerate(business_id_list)}
                         whens = [When(id=id_val, then=pos) for id_val, pos in id_dict.items()]
@@ -141,7 +142,7 @@ class SearchForMapAPIView(viewsets.ModelViewSet):
             elif request.GET['search_key'] == "Saved":
                 if request.user.username:
                     business_id_list = list(models.MyBookmark.objects.filter(i_user=request.user).values_list('i_business_id',flat=True).order_by("-created_at"))
-                    business_query_filtered = models.Business.objects.filter(is_active=True, id__in=business_id_list)
+                    business_query_filtered = models.Business.objects.filter(is_active=True, id__in=business_id_list).exclude(i_user__is_active=False)
                     if business_query_filtered:
                         id_dict = {id_val: pos for pos, id_val in enumerate(business_id_list)}
                         whens = [When(id=id_val, then=pos) for id_val, pos in id_dict.items()]
@@ -154,7 +155,7 @@ class SearchForMapAPIView(viewsets.ModelViewSet):
                 return Response({'error': ["No search_key Found"], 'error_code': '', 'data': [],'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
 
         else:
-            business_query_filtered = models.Business.objects.filter(is_active=True).prefetch_related('i_category', 'i_user')
+            business_query_filtered = models.Business.objects.filter(is_active=True).exclude(i_user__is_active=False).prefetch_related('i_category', 'i_user')
 
         business_query = business_query_filtered
         business_query = self.filter_queryset(business_query)
@@ -251,22 +252,24 @@ class CreateMessagesUsingSocket(views.APIView):
                 business_id = ""
 
             sender_type = request.user.get_role_display()
+            receiver_type = models.UserProfile.objects.get(id=data['user_1_id']).role
             sender_user_id = str(request.user.id)
             channel_id = data['channel_id']
 
+            if receiver_type == 2:
+                notifications.sendNotificationToVendor(data['user_1_id'], msg, title, request.user.id, 3, self.request.build_absolute_uri(reverse_lazy("chat_detail", kwargs={"user_id": int(request.user.id)})))
+            else:
 
-
-            notifications.sendNotificationToSingleUser(data['user_1_id'], msg, title, request.user.id, None, None,notification_type=3, activityAndroid="FLUTTER_NOTIFICATION_CLICK", activityIOS="FLUTTER_NOTIFICATION_CLICK",sender_name=sender_name, 
+                notifications.sendNotificationToSingleUser(data['user_1_id'], msg, None, title, None, request.user.id, None, None,notification_type=3, activityAndroid="FLUTTER_NOTIFICATION_CLICK", activityIOS="FLUTTER_NOTIFICATION_CLICK",code=None ,sender_name=sender_name, 
                                                        business_id=business_id,sender_type=sender_type,sender_pic=sender_pic,channel_id=channel_id,type="Chat",sender_user_id=sender_user_id)
 
+            
             return Response({'error': [], 'error_code': '', 'data': "saved message",'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
         else:
             error_list = []
             for e in serializer.errors.values():
                 error_list.append(e[0])
             return Response({'error': error_list, 'error_code': '', 'data': "",'status':status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
-
-
 
 
 class HitSocketForSharing(views.APIView):

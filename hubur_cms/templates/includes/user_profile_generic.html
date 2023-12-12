@@ -6,7 +6,7 @@
     <!--begin::Details-->
     <div class="d-flex flex-wrap flex-sm-nowrap mb-3">
       <!--begin: Pic-->
-      <div class="me-7 mb-4">
+      <div class="{% if request.user.lang_code == 1 %} me-7 {% else %} ms-7 {% endif %} mb-4">
         <div class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
           <img src="{% if request.user.profile_picture %}{{ request.user.profile_picture.url }}{% else %}{% static 'assets/media/misc/image.png' %}{% endif %}" alt="image" />
           <!-- <div class="position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-body h-20px w-20px"></div> -->
@@ -32,7 +32,7 @@
                 </span>
                 <!--end::Svg Icon-->
               </a>
-              <a href="#" class="btn btn-sm btn-light-success fw-bold ms-2 fs-8 py-1 px-3" data-bs-toggle="modal" data-bs-target="#kt_modal_upgrade_plan">{{request.user.get_role_display}}</a>
+              <a href="#" class="btn btn-sm btn-light-success fw-bold ms-2 fs-8 py-1 px-3" data-bs-toggle="modal" data-bs-target="#kt_modal_upgrade_plan">{{current_language|keyvalue:request.user.get_role_display}}</a>
             </div>
             <!--end::Name-->
           </div>
@@ -54,7 +54,7 @@
                   </div>
                   <!--end::Number-->
                   <!--begin::Label-->
-                  <div class="fw-semibold fs-6 text-gray-400">Check-Ins</div>
+                  <div class="fw-semibold fs-6 text-gray-400">{{ current_language.checkins }}</div>
                   <!--end::Label-->
                 </div>
                 <!--end::Stat-->
@@ -62,11 +62,11 @@
                 <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
                   <!--begin::Number-->
                   <div class="d-flex align-items-center">
-                    <div class="fs-2 fw-bold" data-kt-countup="true" data-kt-countup-value="0">0</div>
+                    <div class="fs-2 fw-bold" data-kt-countup="true" data-kt-countup-value="{{ total_reviews }}">0</div>
                   </div>
                   <!--end::Number-->
                   <!--begin::Label-->
-                  <div class="fw-semibold fs-6 text-gray-400">Reviews</div>
+                  <div class="fw-semibold fs-6 text-gray-400">{{ current_language.reviews }}</div>
                   <!--end::Label-->
                 </div>
                 <!--end::Stat-->
@@ -74,11 +74,11 @@
                 <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
                   <!--begin::Number-->
                   <div class="d-flex align-items-center">
-                    <div class="fs-2 fw-bold" data-kt-countup="true" data-kt-countup-value="0">0</div>
+                    <div class="fs-2 fw-bold" data-kt-countup="true" data-kt-countup-value="{{total_redemptions}}">0</div>
                   </div>
                   <!--end::Number-->
                   <!--begin::Label-->
-                  <div class="fw-semibold fs-6 text-gray-400">Redemptions</div>
+                  <div class="fw-semibold fs-6 text-gray-400">{{ current_language.redemptions }}</div>
                   <!--end::Label-->
                 </div>
                 <!--end::Stat-->
@@ -99,7 +99,7 @@
                   </div>
                   <!--end::Number-->
                   <!--begin::Label-->
-                  <div class="fw-semibold fs-6 text-gray-400">Sessions</div>
+                  <div class="fw-semibold fs-6 text-gray-400">{{ current_language.sessions }}</div>
                   <!--end::Label-->
                 </div>
                 <!--end::Stat-->
@@ -111,7 +111,7 @@
                   </div>
                   <!--end::Number-->
                   <!--begin::Label-->
-                  <div class="fw-semibold fs-6 text-gray-400">Bounce Rate</div>
+                  <div class="fw-semibold fs-6 text-gray-400">{{ current_language.bounce_rate }}</div>
                   <!--end::Label-->
                 </div>
                 <!--end::Stat-->
@@ -123,7 +123,7 @@
                   </div>
                   <!--end::Number-->
                   <!--begin::Label-->
-                  <div class="fw-semibold fs-6 text-gray-400">Session duration</div>
+                  <div class="fw-semibold fs-6 text-gray-400">{{ current_language.session_duration }}</div>
                   <!--end::Label-->
                 </div>
                 <!--end::Stat-->
@@ -135,7 +135,7 @@
           <!--begin::Progress-->
           <div class="d-flex align-items-center w-200px w-sm-300px flex-column mt-3">
             <div class="d-flex justify-content-between w-100 mt-auto mb-2">
-              <span class="fw-semibold fs-6 text-gray-400">Profile Completion</span>
+              <span class="fw-semibold fs-6 text-gray-400">{{ current_language.profile_completion }}</span>
               <span class="fw-bold fs-6">{{ request.user.get_profile_percentage }}%</span>
             </div>
             <div class="h-5px mx-3 w-100 bg-light mb-3">
@@ -153,13 +153,13 @@
     <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bold">
       <!--begin::Nav item-->
       <li class="nav-item mt-2">
-        <a class="nav-link text-active-primary ms-0 me-10 py-5 {% if nav == 'overview' %} active {% endif %}" href="{% url 'profile_overview' %}">Overview</a>
+        <a class="nav-link text-active-primary ms-0 me-10 py-5 {% if nav == 'overview' %} active {% endif %}" href="{% url 'profile_overview' %}">{{ current_language.overview }}</a>
       </li>
       <!--end::Nav item-->
       {% if request.user.is_admin %}
       <!--begin::Nav item-->
       <li class="nav-item mt-2">
-        <a class="nav-link text-active-primary ms-0 me-10 py-5 {% if nav == 'settings' %} active {% endif %}" href="{% url 'profile_settings' %}">Settings</a>
+        <a class="nav-link text-active-primary ms-0 me-10 py-5 {% if nav == 'settings' %} active {% endif %}" href="{% url 'profile_settings' %}">{{ current_language.settings }}</a>
       </li>
       <!--end::Nav item-->
       {% endif %}
@@ -168,22 +168,22 @@
       {% if request.user.is_vendor %}
       <!--begin::Nav item-->
       <li class="nav-item mt-2">
-        <a class="nav-link text-active-primary ms-0 me-10 py-5 {% if nav == 'business_details' %} active {% endif %}" href="{% url 'business_details' %}">Business Details</a>
+        <a class="nav-link text-active-primary ms-0 me-10 py-5 {% if nav == 'business_details' %} active {% endif %}" href="{% url 'business_details' %}">{{ current_language.business_details }}</a>
       </li>
       <!--end::Nav item-->
       <!--begin::Nav item-->
       <li class="nav-item mt-2">
-        <a class="nav-link text-active-primary ms-0 me-10 py-5 {% if nav == 'business_schedule' %} active {% endif %}" href="{% url 'business_schedule' %}">Business Schedule</a>
+        <a class="nav-link text-active-primary ms-0 me-10 py-5 {% if nav == 'business_schedule' %} active {% endif %}" href="{% url 'business_schedule' %}">{{ current_language.business_schedule }}</a>
       </li>
       <!--end::Nav item-->
       <!--begin::Nav item-->
       <li class="nav-item mt-2">
-        <a class="nav-link text-active-primary ms-0 me-10 py-5 {% if nav == 'business_catalogue' %} active {% endif %}" href="{% url 'business_catalogue' %}">Business Catalogue</a>
+        <a class="nav-link text-active-primary ms-0 me-10 py-5 {% if nav == 'business_catalogue' %} active {% endif %}" href="{% url 'business_catalogue' %}">{{ current_language.business_catalogue }}</a>
       </li>
       <!--end::Nav item-->
       {% endif %}
       <li class="nav-item mt-2">
-        <a class="nav-link text-active-primary ms-0 me-10 py-5 {% if nav == 'change_password' %} active {% endif %}" href="{% url 'change_password' %}">Change Password</a>
+        <a class="nav-link text-active-primary ms-0 me-10 py-5 {% if nav == 'change_password' %} active {% endif %}" href="{% url 'change_password' %}">{{ current_language.change_password }}</a>
       </li>
     </ul>
     <!--begin::Navs-->

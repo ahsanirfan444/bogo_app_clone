@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 from core.base import AuthBaseViews
-from global_methods import create_content_images, delete_content_images
+from global_methods import create_content_images, create_tags, delete_content_images
 from hubur_apis import models
 from django.conf import settings
 from django.utils.decorators import method_decorator
@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 class VendorServicesList(AuthBaseViews):
     TEMPLATE_NAME = "contents/services/list_all_services.html"
     CREATE_URL = reverse_lazy('create_services')
-    CREATE_URL_TITLE = "Create Services"
+    CREATE_URL_TITLE = "Create Service"
 
     def get(self, request, *args, **kwargs):
         services = models.Content.objects.filter(content_type=2, i_user=request.user, i_business=self.get_vendor_business())
@@ -62,18 +62,19 @@ class VendorCreateServices(AuthBaseViews):
                     product_instance.i_user = request.user
                     product_instance.save()
 
+                    create_tags(form.cleaned_data['tags'], product_instance)
                     image_instance = create_content_images(request.FILES.getlist('images'), request.user, 3, self.get_vendor_business(), product_instance)
                     if image_instance:
                         messages.success(request, "Service Added Successfully")
                         return self.redirect(reverse_lazy("list_vendor_services"))
 
                 else:
-                    messages.error(request, "Please correct the errors below")
+                    messages.error(request, self.getCurrentLanguage()['correct_errors'])
                     print(product_form.errors.as_data)
                     return self.render({"form": form})
             
             else:
-                messages.error(request, "Please correct the errors below")
+                messages.error(request, self.getCurrentLanguage()['correct_errors'])
                 return self.render({"form": form})
             
         except Exception:
@@ -89,8 +90,9 @@ class VendorEditServices(AuthBaseViews):
         inst = models.Content.objects.get(id=content_id, content_type=2)
         product_images = models.Images.objects.filter(i_content_id=content_id)
         images_list = list(product_images.values_list('image', flat=True))
+        tags = list(models.Tags.objects.filter(content=inst).values_list('id', flat=True))
         
-        inst.__dict__.update({'i_sub_category': inst.i_sub_category.id})
+        inst.__dict__.update({'i_sub_category': inst.i_sub_category.id, 'tags': tags})
         form = EditServiceForm(data=inst.__dict__, category=list(self.get_vendor_business().i_subcategory.values_list('id', flat=True)), content_id=content_id)
         
         try:
@@ -123,11 +125,11 @@ class VendorEditServices(AuthBaseViews):
                         return self.redirect(reverse_lazy("list_vendor_services"))
 
                 else:
-                    messages.error(request, "Please correct the errors below")
+                    messages.error(request, self.getCurrentLanguage()['correct_errors'])
                     return self.render({"form": form})
             
             else:
-                messages.error(request, "Please correct the errors below")
+                messages.error(request, self.getCurrentLanguage()['correct_errors'])
                 return self.render({"form": form})
             
         except Exception:

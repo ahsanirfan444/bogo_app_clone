@@ -30,28 +30,28 @@ class AdminCreateBannersView(AuthBaseViews):
     TEMPLATE_NAME = "banners/create_banners.html"
 
     def get(self, request, *args, **kwargs):
-        form = CreateBannersForm()
+        form = CreateBannersForm(request, self.getCurrentLanguage())
 
         return self.render({"form": form})
     
     def post(self, request, *args, **kwargs):
         try:
-            form = CreateBannersForm(request.POST, request.FILES)
+            form = CreateBannersForm(request, self.getCurrentLanguage(), request.POST, request.FILES)
             
             if form.is_valid():
                 instance = form.save(commit=False)
                 instance.i_user = request.user
                 instance.save()
 
-                messages.success(request, "Banner Added Successfully")
+                messages.success(request, self.getCurrentLanguage()['add_banner'])
                 return self.redirect(reverse_lazy("list_banners"))
             
             else:
-                messages.error(request, "Please correct the errors below")
+                messages.error(request, self.getCurrentLanguage()['correct_errors'])
                 return self.render({"form": form})
             
         except Exception:
-            messages.error(request, "Something Went Wrong! Unable to Save Banner.")
+            messages.error(request, self.getCurrentLanguage()['something_went_wrong'])
             return self.render({"form": form})
     
 
@@ -61,14 +61,15 @@ class AdminEditBannersView(AuthBaseViews):
 
     def get(self, request, ban_id, *args, **kwargs):
         inst = models.Banner.objects.get(id=ban_id)
-        form = EditBannersForm(instance=inst)
+        form = EditBannersForm(request, self.getCurrentLanguage(), instance=inst)
         return self.render({"form": form})
     
     def post(self, request, ban_id, *args, **kwargs):
         try:
             inst = models.Banner.objects.get(id=ban_id)
-            form = EditBannersForm(request.POST, request.FILES, instance=inst)
+            form = EditBannersForm(request, self.getCurrentLanguage(), request.POST, request.FILES, instance=inst)
             if form.is_valid():
+                print(request.POST)
                 if 'image' in request.POST and request.POST.get('i_subcatagory') is not "":
                     instance = form.save(commit=False)
                     instance.image = None
@@ -77,15 +78,15 @@ class AdminEditBannersView(AuthBaseViews):
                 else:
                     form.save()
                 
-                messages.success(request, "Banner Edited Successfully")
+                messages.success(request, self.getCurrentLanguage()['update_banner'])
                 return self.redirect(reverse_lazy("list_banners"))
             
             else:
-                messages.error(request, "Please correct the errors below")
+                messages.error(request, self.getCurrentLanguage()['correct_errors'])
                 return self.render({"form": form})
         
         except Exception:
-            messages.error(request, "Something Went Wrong! Unable to Save Banner.")
+            messages.error(request, self.getCurrentLanguage()['something_went_wrong'])
             return self.render({"form": form})
     
 
@@ -104,8 +105,8 @@ class AdminDeleteBannersView(DeleteView, AuthBaseViews):
     
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
-        name = self.object.get_position_display()
+        name = self.getCurrentLanguage()[self.object.get_position_display()]
         success_url = self.get_success_url()
         self.object.delete()
-        messages.success(request, f"'{name}' deleted successfully")
+        messages.success(request, f"'{name}' {self.getCurrentLanguage()['delete_success']}")
         return HttpResponseRedirect(success_url)

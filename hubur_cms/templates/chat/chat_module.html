@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load generic %}
+
+{% block extra_css %}
+
+<meta http-equiv="refresh" content="30">
+
+<style>
+    #kt_contacts_main{
+        height: calc(100vh - 15rem) !important;
+    }
+</style>
+
+{% endblock %}
+
+{% block page_content %}
+
+<div id="kt_app_content" class="app-content flex-column-fluid">
+    <!--begin::Content container-->
+    <div id="kt_app_content_container" class="app-container container-xxl">
+        <!--begin::Layout-->
+            <div class="d-flex flex-column flex-lg-row mt-5">
+                <!--begin::Sidebar-->
+                <div class="flex-column flex-lg-row-auto w-100 w-lg-500px w-xl-500px mb-10 mb-lg-0">
+                    <!--begin::Contacts-->
+                    <div class="card card-flush">
+                        <!--begin::Card header-->
+                        <div class="card-header pt-7" id="kt_chat_contacts_header">
+                            <!--begin::Form-->
+                            <form class="w-100 position-relative" autocomplete="off">
+                                <!--begin::Icon-->
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                <span class="svg-icon svg-icon-2 svg-icon-lg-1 svg-icon-gray-500 position-absolute top-50 ms-5 translate-middle-y">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor" />
+                                        <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor" />
+                                    </svg>
+                                </span>
+                                <!--end::Svg Icon-->
+                                <!--end::Icon-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid px-15" name="search" oninput="searchResult(this.value)" placeholder="Search by name" />
+                                <!--end::Input-->
+                            </form>
+                            <!--end::Form-->
+                        </div>
+                        <!--end::Card header-->
+                        <!--begin::Card body-->
+                        <div class="card-body pt-5" id="kt_chat_contacts_body">
+                            <!--begin::List-->
+                            <div class="scroll-y me-n5 pe-5 h-200px h-lg-auto" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_header, #kt_app_header, #kt_toolbar, #kt_app_toolbar, #kt_footer, #kt_app_footer, #kt_chat_contacts_header" data-kt-scroll-wrappers="#kt_content, #kt_app_content, #kt_chat_contacts_body" data-kt-scroll-offset="5px">
+                                {% for obj in channels %}
+                                    <!--begin::User-->
+                                    <div class="d-flex flex-stack py-4" data-role="users">
+                                        <!--begin::Details-->
+                                        <div class="d-flex align-items-center">
+                                            <!--begin::Avatar-->
+                                                <div class="symbol symbol-45px symbol-circle">
+                                                    <img class="h-60px w-60px" alt="Pic" src="{% if obj.user.profile_picture %}{{ obj.user.profile_picture }}{% else %}{% static 'assets/media/misc/image.png' %}{% endif %}" />
+                                                </div>
+                                            <!--end::Avatar-->
+                                            <!--begin::Details-->
+                                            <div class="ms-5">
+                                                <a href="{% url 'chat_detail' user_id=obj.user.id %}" class="fs-5 fw-bold text-gray-1000 text-primary mb-2">{{ obj.user.name }}</a>
+                                                {% if obj.is_read %}
+                                                    <div class="fw-semibold text-muted">{% if obj.last_message|length > 40 %}{{obj.last_message|slice:40}} ... {% else %}{{obj.last_message}}{% endif %}</div>
+                                                {% else %}
+                                                    <div class="fw-semibold text-dark">{% if obj.last_message|length > 40 %}{{obj.last_message|slice:40}} ... {% else %}{{obj.last_message}}{% endif %}</div>
+                                                {% endif %}
+                                            </div>
+                                            <!--end::Details-->
+                                        </div>
+                                        <!--end::Details-->
+                                        {% if obj.count > 0 %}
+                                            <!--begin::Lat seen-->
+                                            <div class="d-flex flex-column align-items-end ms-2">
+                                                <span class="text-muted fs-7 mb-1">{{ obj.last_msg_send|time_since }}</span>
+                                                <span class="badge badge-sm badge-circle badge-light-success">{{obj.count}}</span>
+                                            </div>
+                                            <!--end::Lat seen-->
+                                        {% else %}
+                                            <!--begin::Lat seen-->
+                                            <div class="d-flex flex-column align-items-end ms-2">
+                                                <span class="text-muted fs-7 mb-1">{{ obj.last_msg_send|time_since }}</span>
+                                            </div>
+                                            <!--end::Lat seen-->
+                                        {% endif %}
+                                    </div>
+                                    <!--end::User-->
+                                    <!--begin::Separator-->
+                                    <div class="separator separator-dashed"></div>
+                                    <!--end::Separator-->
+                                {% endfor %}
+                            </div>
+                            <!--end::List-->
+                        </div>
+                        <!--end::Card body-->
+                    </div>
+                    <!--end::Contacts-->
+                </div>
+                <!--end::Sidebar-->
+                <!--begin::Content-->
+                <div class="flex-lg-row-fluid ms-lg-7 ms-xl-10">
+                    <div class="card card-flush h-lg-100" id="kt_contacts_main">
+                        <!--begin::Card body-->
+                        <div class="card-body p-0">
+                            <!--begin::Wrapper-->
+                            <div class="card-px text-center pt-20 mt-10">
+                                <!--begin::Title-->
+                                <h2 class="fs-2x fw-bold mb-10">Start Conversation</h2>
+                                <!--end::Title-->
+                            </div>
+                            <!--end::Wrapper-->
+                            <!--begin::Illustration-->
+                            <div class="text-center">
+                                <img class="mw-100 mh-300px" alt="" src="{% static 'assets/media/illustrations/sigma-1/3.png' %}">
+                            </div>
+                            <!--end::Illustration-->
+                        </div>
+                        <!--end::Card body-->
+                    </div>
+                </div>
+                <!--end::Content-->
+            </div>
+        <!--end::Layout-->
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block extra_script %}
+
+<script>
+    function searchResult(query) {
+        $("div[data-role='users']").filter(function () {
+            var Result = $(this).find('a').val().toLowerCase().indexOf(query.toLowerCase()) > -1;
+            $(this).toggle(Result);
+        });
+
+    }
+</script>
+
+{% endblock %}

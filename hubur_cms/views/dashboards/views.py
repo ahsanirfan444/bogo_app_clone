@@ -1,6 +1,7 @@
 from datetime import datetime
 import json
 from core.base import AuthBaseViews
+from global_methods import AddRewardPoints
 from hubur_apis import models
 from django.conf import settings
 from django.utils.decorators import method_decorator
@@ -14,7 +15,6 @@ class AdminDasboardView(AuthBaseViews):
     TEMPLATE_NAME = "dashboards/admin_dashboard.html"
 
     def get(self, request, *args, **kwargs):
-        
 
         return self.render({
             
@@ -26,7 +26,6 @@ class VendorDasboardView(AuthBaseViews):
     TEMPLATE_NAME = "dashboards/vendor_dashboard.html"
 
     def get(self, request, *args, **kwargs):
-        
 
         return self.render({
             
@@ -43,9 +42,14 @@ class VendorDasboardView(AuthBaseViews):
                 instance.is_redeemed = True
                 instance.save()
 
+                AddRewardPoints(2, instance.i_user, self.get_vendor_business(), instance.i_content)
+
                 title = instance.i_content.name
                 msg = f"you just redeem the offer from {self.get_vendor_business().name}"
-                notifications.sendNotificationToSingleUser(instance.i_user.id, msg, title, request.user.id, instance.i_content.id, 'post_review',notification_type=1, activityAndroid="FLUTTER_NOTIFICATION_CLICK", activityIOS="FLUTTER_NOTIFICATION_CLICK" , **{"sender": str(self.get_vendor_business().id), "sender_name": str(self.get_vendor_business().name), "content": str(instance.i_content.id), "content_image": str(content_image.image.url), "actions": "post_review" })
+                title_ar = instance.i_content.name_ar
+                msg_ar = f"أنت فقط تسترد العرض من {self.get_vendor_business().name}"
+
+                notifications.sendNotificationToSingleUser(instance.i_user.id, msg, msg_ar, title, title_ar, request.user.id, instance.i_content.id, 'post_review',notification_type=1, code=None, activityAndroid="FLUTTER_NOTIFICATION_CLICK", activityIOS="FLUTTER_NOTIFICATION_CLICK" , **{"sender": str(self.get_vendor_business().id), "sender_name": str(self.get_vendor_business().name), "content": str(instance.i_content.id), "content_image": str(content_image.image.url), "actions": "post_review" })
 
                 messages.success(request, "Coupon validated successfully")
                 return self.redirect(reverse_lazy("vendor_dashboard"))

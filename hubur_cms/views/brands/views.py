@@ -30,25 +30,25 @@ class AdminCreateBrandsView(AuthBaseViews):
     TEMPLATE_NAME = "brands/create_brands.html"
 
     def get(self, request, *args, **kwargs):
-        form = CreateBrandForm()
+        form = CreateBrandForm(request, self.getCurrentLanguage())
 
         return self.render({"form": form})
     
     def post(self, request, *args, **kwargs):
         try:
-            form = CreateBrandForm(request.POST, request.FILES)
+            form = CreateBrandForm(request, self.getCurrentLanguage(), request.POST, request.FILES)
             if form.is_valid():
                 form.save()
 
-                messages.success(request, "Brands Added Successfully")
+                messages.success(request, self.getCurrentLanguage()['add_brand'])
                 return self.redirect(reverse_lazy("list_brands"))
             
             else:
-                messages.error(request, "Please correct the errors below")
+                messages.error(request, self.getCurrentLanguage()['correct_errors'])
                 return self.render({"form": form})
             
         except Exception:
-            messages.error(request, "Something Went Wrong! Unable to Save Brands.")
+            messages.error(request, self.getCurrentLanguage()['something_went_wrong'])
             return self.render({"form": form})
     
 
@@ -58,25 +58,25 @@ class AdminEditBrandsView(AuthBaseViews):
 
     def get(self, request, brand_id, *args, **kwargs):
         inst = models.Brand.objects.get(id=brand_id)
-        form = EditBrandForm(instance=inst)
+        form = EditBrandForm(request, self.getCurrentLanguage(), instance=inst)
         return self.render({"form": form})
     
     def post(self, request, brand_id, *args, **kwargs):
         try:
             inst = models.Brand.objects.get(id=brand_id)
-            form = EditBrandForm(request.POST, request.FILES, instance=inst)
+            form = EditBrandForm(request, self.getCurrentLanguage(), request.POST, request.FILES, instance=inst)
             if form.is_valid():
                 form.save()
                 
-                messages.success(request, "Brands Edited Successfully")
+                messages.success(request, self.getCurrentLanguage()['update_brand'])
                 return self.redirect(reverse_lazy("list_brands"))
             
             else:
-                messages.error(request, "Please correct the errors below")
+                messages.error(request, self.getCurrentLanguage()['correct_errors'])
                 return self.render({"form": form})
         
         except Exception:
-            messages.error(request, "Something Went Wrong! Unable to Save Brands.")
+            messages.error(request, self.getCurrentLanguage()['something_went_wrong'])
             return self.render({"form": form})
     
 
@@ -95,8 +95,8 @@ class AdminDeleteBrandsView(DeleteView, AuthBaseViews):
     
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
-        name = self.object.name
+        name = self.object.name if request.user.lang_code == 1 else self.object.name_ar
         success_url = self.get_success_url()
         self.object.delete()
-        messages.success(request, f"'{name}' deleted successfully")
+        messages.success(request, f"'{name}' {self.getCurrentLanguage()['delete_success']}")
         return HttpResponseRedirect(success_url)

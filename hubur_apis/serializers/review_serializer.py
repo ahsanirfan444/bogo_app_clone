@@ -30,9 +30,12 @@ class ReviewsSerializer(serializers.ModelSerializer):
         
         reviewed_content = models.Reviews.objects.filter(i_user=user_obj,i_content=i_content, i_business = i_business, created_at__date=datetime.now().date()).exists()
         if reviewed_content:
-            raise serializers.ValidationError("You have already reviewed this business")
+            raise serializers.ValidationError("You have already reviewed")
         else:
-            return data
+            if i_business.is_active and i_content.is_active:
+                return data
+            else:
+                raise serializers.ValidationError("This business is inactive")
 
 
 class GetAllReviewsSerializer(serializers.ModelSerializer):
@@ -42,10 +45,11 @@ class GetAllReviewsSerializer(serializers.ModelSerializer):
     user_name = serializers.SerializerMethodField()
     profile_pic = serializers.SerializerMethodField()
     content_image = serializers.SerializerMethodField()
+    user_status = serializers.SerializerMethodField('get_user_status')
 
     class Meta:
         model = models.Reviews
-        fields = ("id","review","rate","user_id","user_name","content_id","content_name","profile_pic","content_image","created_at","display_name","display_image",)
+        fields = ("id","review","rate","user_id","user_name","content_id","content_name","profile_pic","content_image","created_at","display_name","display_image", "user_status",)
 
     def get_user_name(self,obj):
         if obj.i_user:
@@ -55,7 +59,7 @@ class GetAllReviewsSerializer(serializers.ModelSerializer):
     
     def get_profile_pic(self,obj):
         if obj.i_user:
-            profile_pic = GetUserProfileSerializer(obj.i_user).data['profile_picture']
+            profile_pic = obj.i_user.profile_picture.url
             return profile_pic
         else:
             return ""
@@ -67,6 +71,13 @@ class GetAllReviewsSerializer(serializers.ModelSerializer):
             return content_image
         else:
             return ""
+        
+
+    def get_user_status(self,obj):
+        try:
+            return obj.i_user.is_active
+        except Exception:
+            return False
 
 
 class AggregateReviewsSerializer(serializers.ModelSerializer):
@@ -122,7 +133,7 @@ class AggregateBusinessReviewsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Business
-        fields = ("id",)
+        fields = ("id", "is_featured",)
 
     
     def to_representation(self, instance):

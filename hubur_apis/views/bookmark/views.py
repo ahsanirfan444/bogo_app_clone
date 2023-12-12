@@ -19,7 +19,7 @@ class MyBookmarkView(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
      
-        all_business_list = list(models.MyBookmark.objects.filter(i_user=request.user).values_list("i_business",flat=True).order_by("-created_at"))
+        all_business_list = list(models.MyBookmark.objects.filter(i_user=request.user, i_business__is_active=True).exclude(i_business__i_user__is_active=False).values_list("i_business",flat=True).order_by("-created_at"))
         all_business_dict = {id_val: pos for pos, id_val in enumerate(all_business_list)}
         whens = [When(id=id_val, then=pos) for id_val, pos in all_business_dict.items()]
         order_by = Case(*whens)

@@ -1,4 +1,5 @@
 
+from global_methods import getCurrentLanguageContextForAppUsers, keyvalue
 from hubur_apis import models
 from rest_framework import serializers
 import notifications
@@ -44,7 +45,7 @@ class ClaimBusinessSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("No Business Found")
 
     def validate_business_email(self,value):
-        business_obj = models.Business.objects.filter(i_user__email=value, is_active=True).exists()
+        business_obj = models.Business.objects.filter(i_user__email=value, is_active=True).exclude(i_user__is_active=False).exists()
         claim_business_obj = models.ClaimBusiness.objects.filter(business_email=value).exists()
         if business_obj:
             raise serializers.ValidationError("Business is already exist with this email")
@@ -63,7 +64,7 @@ class ClaimBusinessSerializer(serializers.ModelSerializer):
 class BusinessListSerializer(serializers.ModelSerializer):
     class Meta:
          model = models.Business
-         fields = ("id","name","place_id",)
+         fields = ("id","name","place_id","is_featured",)
 
 
 
@@ -78,7 +79,8 @@ class BusinessSerializerForTimeOnly(serializers.ModelSerializer):
 
         weekday_names = list(calendar.day_name)
         response = super().to_representation(data)
-
+        request = self.context.get('request')
+        lang_obj = getCurrentLanguageContextForAppUsers(request)
 
         day_name = now.strftime('%A')
         time_str = now.strftime('%H:%M:%S')
@@ -87,7 +89,7 @@ class BusinessSerializerForTimeOnly(serializers.ModelSerializer):
         business_status_obj = models.BusinessSchedule.objects.filter(i_business=data,i_day__name=day_name)
 
         if not business_status_obj:
-            response['status'] = "open"
+            response['status'] = keyvalue(lang_obj, "open")
             response['close_time'] = "24 hours open"
             response['open_time'] =  ""
         else:
@@ -95,7 +97,7 @@ class BusinessSerializerForTimeOnly(serializers.ModelSerializer):
 
             
             if business_status_obj.start_time is None or business_status_obj.end_time is None:
-                response['status'] = "open"
+                response['status'] = keyvalue(lang_obj, "open")
                 response['close_time'] = "24 hours open"
                 response['open_time'] =  ""
             elif business_status_obj.is_active == True:
@@ -103,7 +105,7 @@ class BusinessSerializerForTimeOnly(serializers.ModelSerializer):
                 end_time = datetime.combine(now.date(), business_status_obj.end_time)
             
                 if current_time >= start_time.time() and current_time < end_time.time():
-                    response['status'] = 'open'
+                    response['status'] = keyvalue(lang_obj, "open")
                     response['close_time'] =  end_time.strftime('%I:%M %p')
                     response['open_time'] =  ""
                 else:
@@ -113,11 +115,11 @@ class BusinessSerializerForTimeOnly(serializers.ModelSerializer):
                         ))
                     if business_schedule_obj:
                         business_schedule_obj = business_schedule_obj.first()
-                        response['status'] = "closed"
-                        response['open_time'] =business_schedule_obj.i_day.name +" " +business_schedule_obj.start_time.strftime('%I:%M %p')
+                        response['status'] = keyvalue(lang_obj, "closed")
+                        response['open_time'] = keyvalue(lang_obj, business_schedule_obj.i_day.name) +" " +business_schedule_obj.start_time.strftime('%I:%M %p')
                         response['close_time'] = ""
                     else:
-                        response['status'] = "closed"
+                        response['status'] = keyvalue(lang_obj, "closed")
                         response['open_time'] =""
                         response['close_time'] = ""
             else:
@@ -128,11 +130,11 @@ class BusinessSerializerForTimeOnly(serializers.ModelSerializer):
 
                 if business_schedule_obj:
                     business_schedule_obj = business_schedule_obj.first()
-                    response['status'] = "closed"
-                    response['open_time'] =business_schedule_obj.i_day.name +" " +business_schedule_obj.start_time.strftime('%I:%M %p')
+                    response['status'] = keyvalue(lang_obj, "closed")
+                    response['open_time'] = keyvalue(lang_obj, business_schedule_obj.i_day.name) +" " +business_schedule_obj.start_time.strftime('%I:%M %p')
                     response['close_time'] = ""
                 else:
-                    response['status'] = "closed"
+                    response['status'] = keyvalue(lang_obj, "closed")
                     response['open_time'] =""
                     response['close_time'] = ""
         return response

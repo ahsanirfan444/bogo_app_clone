@@ -38,8 +38,8 @@ class SavedOfferView(viewsets.ModelViewSet):
         user_obj = request.user.username
         if user_obj:
 
-            all_contents_list = list(models.SavedOffers.objects.filter(i_user=request.user).values_list("i_content",flat=True))
-            all_contents = models.Content.objects.filter(id__in=all_contents_list)
+            all_contents_list = list(models.SavedOffers.objects.filter(i_user=request.user, i_business__is_active=True, i_business__i_user__is_active=True).values_list("i_content",flat=True))
+            all_contents = models.Content.objects.filter(id__in=all_contents_list, is_active=True, i_sub_category__is_active=True).exclude(i_brand__is_active=False)
             context = {'request': request}
 
             all_contents = self.paginate_queryset(all_contents)

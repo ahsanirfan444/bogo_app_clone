@@ -44,6 +44,7 @@ class CreateOfferForm(forms.ModelForm):
             "type": forms.Select(attrs={"class": "form-control"}),
             "discount_type": forms.Select(attrs={"class": "form-control"}),
             "i_content": forms.SelectMultiple(attrs={'class': 'searchable-select', 'multiple': 'multiple'}),
+            "is_featured": forms.Select(attrs={"class": "form-control"}, choices=ACTIVE_CHOICES),
             "is_active": forms.Select(attrs={"class": "form-control"}, choices=ACTIVE_CHOICES)
         }
 
@@ -98,5 +99,6 @@ class EditOfferForm(forms.ModelForm):
             "type": forms.Select(attrs={"class": "form-control"}),
             "discount_type": forms.Select(attrs={"class": "form-control"}),
             "i_content": forms.SelectMultiple(attrs={'class': 'searchable-select', 'multiple': 'multiple', 'placeholder': 'Select Products'}),
+            "is_featured": forms.Select(attrs={"class": "form-control"}, choices=ACTIVE_CHOICES),
             "is_active": forms.Select(attrs={"class": "form-control"}, choices=ACTIVE_CHOICES)
         }

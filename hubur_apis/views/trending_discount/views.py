@@ -7,7 +7,7 @@ from hubur_apis.serializers.content_serializer import ContentDetailSerializer
 from hubur_apis.serializers.home_serializer import HomeBusinessWithAddressSerializer
 from datetime import timedelta
 from django.utils import timezone
-from django.db.models import Count, Case, When, Value, IntegerField
+from django.db.models import Count, Case, When, Value, IntegerField,Q
 from hubur_apis.serializers.offer_serializer import HotOffersListSerializer, OffersHomeListSerializer
 from hubur_apis.serializers.trending_discount_serializer import (
     TrendingDiscountSerializer
@@ -22,7 +22,7 @@ class TrendingDiscount(viewsets.ModelViewSet):
     def list(self,request):
         trending_discount_list = models.TrendingDiscount.objects.filter(is_active=True).order_by('-created_at')
         trending_discount_list = self.paginate_queryset(trending_discount_list)
-        trending_discount_serializer = TrendingDiscountSerializer(trending_discount_list, many=True)
+        trending_discount_serializer = TrendingDiscountSerializer(trending_discount_list, context={"request": request}, many=True)
         if trending_discount_serializer:
             return Response({'error': [], 'error_code': '', 'data': trending_discount_serializer.data,'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
         else:
@@ -42,7 +42,7 @@ class TrendingDiscount(viewsets.ModelViewSet):
                 all_businesses_list = list(models.TrendingDiscount.objects.filter(id=pk).values_list('i_business', flat=True))
                 last_week = timezone.now().date() - timedelta(days=7)
                 all_checked_in = list(models.Checkedin.objects.filter(i_business__in=all_businesses_list, created_at__date__gte=last_week)\
-                                .values_list('i_business_id')\
+                                .exclude(Q(i_business__i_user__is_active=False) | Q(i_user__is_active=False)).values_list('i_business_id')\
                                 .annotate(checkin_count=Count('id'))\
                                 .order_by('-checkin_count'))[:5]
                 
@@ -57,9 +57,9 @@ class TrendingDiscount(viewsets.ModelViewSet):
                 
                 if request.user.username:
                     user_cat_list = list(models.UserInterest.objects.filter(i_user=request.user).values_list('i_category',flat=True))
-                    all_businesses = models.Business.objects.filter(id__in=all_businesses_list, is_active=True, i_category__in=user_cat_list).annotate(checkin_count=case_statement,).order_by('-checkin_count')
+                    all_businesses = models.Business.objects.filter(id__in=all_businesses_list, is_active=True, i_category__in=user_cat_list).exclude(i_user__is_active=False).annotate(checkin_count=case_statement,).order_by('-checkin_count')
                 else:
-                    all_businesses = models.Business.objects.filter(is_active=True, id__in=all_businesses_list).annotate(checkin_count=case_statement,).order_by('-checkin_count')
+                    all_businesses = models.Business.objects.filter(is_active=True, id__in=all_businesses_list).exclude(i_user__is_active=False).annotate(checkin_count=case_statement,).order_by('-checkin_count')
                     
                 serializer = HomeBusinessWithAddressSerializer(all_businesses, many=True)
                 
@@ -101,7 +101,7 @@ class AllTrendingDiscount(viewsets.ModelViewSet):
             all_businesses_list = list(models.TrendingDiscount.objects.filter(id=pk).values_list('i_business',flat=True))
             last_week = timezone.now().date() - timedelta(days=7)
             all_checked_in = list(models.Checkedin.objects.filter(i_business__in=all_businesses_list, created_at__date__gte=last_week)\
-                            .values_list('i_business_id')\
+                            .exclude(Q(i_business__i_user__is_active=False) | Q(i_user__is_active=False)).values_list('i_business_id')\
                             .annotate(checkin_count=Count('id'))\
                             .order_by('-checkin_count'))
             
@@ -114,17 +114,17 @@ class AllTrendingDiscount(viewsets.ModelViewSet):
                     
             if request.user.username:
                 user_cat_list = list(models.UserInterest.objects.filter(i_user=request.user).values_list('i_category',flat=True))
-                all_businesses = models.Business.objects.filter(id__in=all_businesses_list, is_active=True, i_category__in=user_cat_list).annotate(checkin_count=case_statement,).order_by('-checkin_count')
+                all_businesses = models.Business.objects.filter(id__in=all_businesses_list, is_active=True, i_category__in=user_cat_list).exclude(i_user__is_active=False).annotate(checkin_count=case_statement,).order_by('-checkin_count')
                 
             else:
-                all_businesses = models.Business.objects.filter(is_active=True, id__in=all_businesses_list).annotate(checkin_count=case_statement,).order_by('-checkin_count')
+                all_businesses = models.Business.objects.filter(is_active=True, id__in=all_businesses_list).exclude(i_user__is_active=False).annotate(checkin_count=case_statement,).order_by('-checkin_count')
             
 
             content_id_list = list(models.Offers.objects.filter(i_business__in=all_businesses, is_active=True, is_expiry=False, type=4)[:10].values_list("i_content",flat=True))
-            content_obj = models.Content.objects.filter(id__in=content_id_list)[:4]
-            content_serializer = ContentDetailSerializer(content_obj, many=True)
+            content_obj = models.Content.objects.filter(id__in=content_id_list, i_sub_category__is_active=True, is_active=True).exclude(i_brand__is_active=False)[:4]
+            content_serializer = ContentDetailSerializer(content_obj, context={"request": request}, many=True)
 
-            business_serializer = HomeBusinessWithAddressSerializer(all_businesses[:4], many=True)
+            business_serializer = HomeBusinessWithAddressSerializer(all_businesses[:4], context={"request": request}, many=True)
             business_serializer = business_serializer.data
             if business_serializer:
                 data_dict = dict()
@@ -133,9 +133,9 @@ class AllTrendingDiscount(viewsets.ModelViewSet):
                 
                 return Response({'error': [], 'error_code': '' ,'data': data_dict,'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
             else:
-                return Response({'error': ['No Data found'], 'error_code': '', 'data': [],'status':status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': [], 'error_code': '', 'data': {"hot_offer":[],"bussiness":[]},'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
         else:
-            return Response({'error': ['No Data found'], 'error_code': '', 'data': [],'status':status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': [], 'error_code': '', 'data': {"hot_offer":[],"bussiness":[]},'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)
         
     def create(self, request, *args, **kwargs):
             return Response({'error': ['Method is not allowed'], 'error_code': '', 'data': [],'status':status.HTTP_405_METHOD_NOT_ALLOWED}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
@@ -182,7 +182,7 @@ class ViewAllTrendingDiscount(viewsets.ModelViewSet):
             all_businesses_list = list(models.TrendingDiscount.objects.filter(id=pk).values_list('i_business',flat=True))
             last_week = timezone.now().date() - timedelta(days=7)
             all_checked_in = list(models.Checkedin.objects.filter(i_business__in=all_businesses_list, created_at__date__gte=last_week)\
-                            .values_list('i_business_id')\
+                            .exclude(Q(i_business__i_user__is_active=False) | Q(i_user__is_active=False)).values_list('i_business_id')\
                             .annotate(checkin_count=Count('id'))\
                             .order_by('-checkin_count'))
             
@@ -195,20 +195,20 @@ class ViewAllTrendingDiscount(viewsets.ModelViewSet):
                     
             if request.user.username:
                 user_cat_list = list(models.UserInterest.objects.filter(i_user=request.user).values_list('i_category',flat=True))
-                all_businesses = models.Business.objects.filter(id__in=all_businesses_list, is_active=True, i_category__in=user_cat_list).annotate(checkin_count=case_statement,).order_by('-checkin_count')
+                all_businesses = models.Business.objects.filter(id__in=all_businesses_list, is_active=True, i_category__in=user_cat_list).exclude(i_user__is_active=False).annotate(checkin_count=case_statement,).order_by('-checkin_count')
                 
             else:
-                all_businesses = models.Business.objects.filter(is_active=True, id__in=all_businesses_list).annotate(checkin_count=case_statement,).order_by('-checkin_count')
+                all_businesses = models.Business.objects.filter(is_active=True, id__in=all_businesses_list).exclude(i_user__is_active=False).annotate(checkin_count=case_statement,).order_by('-checkin_count')
             
             if type_param == 1:
                 content_id_list = list(models.Offers.objects.filter(i_business__in=all_businesses, is_active=True, is_expiry=False, type=4).values_list("i_content",flat=True))
-                content_obj = models.Content.objects.filter(id__in=content_id_list)
+                content_obj = models.Content.objects.filter(id__in=content_id_list, is_active=True).exclude(Q(i_business__is_active=False) | Q(i_business__i_user__is_active=False) | Q(i_sub_category__is_active=False) | Q(i_brand__is_active=False))
                 content_obj = self.paginate_queryset(content_obj)
-                content_serializer = ContentDetailSerializer(content_obj, many=True)
+                content_serializer = ContentDetailSerializer(content_obj, context={"request": request}, many=True)
                 serializer_data = content_serializer.data
             else:
                 all_businesses = self.paginate_queryset(all_businesses)
-                business_serializer = HomeBusinessWithAddressSerializer(all_businesses, many=True)
+                business_serializer = HomeBusinessWithAddressSerializer(all_businesses, context={"request": request}, many=True)
                 serializer_data = business_serializer.data
             
             return Response({'error': [], 'error_code': '' ,'data': serializer_data,'status':status.HTTP_200_OK}, status=status.HTTP_200_OK)

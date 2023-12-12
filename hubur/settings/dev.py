@@ -2,11 +2,13 @@ from .base import *
 import os
 
 #==================================================DEBUG Settings==================================================
-DEBUG = eval(os.getenv("DEBUG"))
+# DEBUG = eval(os.getenv("DEBUG"))
+DEBUG = True
 
 #==================================================Admin Email configuration==================================================
 SERVER_EMAIL = os.getenv("SERVER_EMAIL")
-ADMINS = [('Ahsan Irfan','ahsan.irfan444@gmail.com'),('shahnawaz irfan', 'shahnawazmemon78@gmail.com'),('Syed Mohsin', 'strikersyed73@gmail.com')]
+# ADMINS = [('Ahsan Irfan','ahsan.irfan444@gmail.com'),('shahnawaz irfan', 'shahnawazmemon78@gmail.com'),('Syed Mohsin', 'strikersyed73@gmail.com')]
+ADMINS = [('Ahsan Irfan','ahsan.irfan444@gmail.com')]
 EMAIL_SUBJECT_PREFIX = "Hubur development error"
 
 
@@ -64,7 +66,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'hubur_apis.middlewares.ExceptionMiddleware.ExceptionMiddleware',
+    # 'hubur_apis.middlewares.ExceptionMiddleware.ExceptionMiddleware',
     'hubur_apis.middlewares.HttpsRedirectMiddleware.WWWRedirectMiddleware',
     'corsheaders.middleware.CorsMiddleware',
 ]

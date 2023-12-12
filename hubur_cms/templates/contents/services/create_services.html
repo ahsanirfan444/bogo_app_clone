@@ -19,4 +19,22 @@
 
 {% block extra_script %}
 
+<script>
+	$(".searchable-select").select2({
+		tags: true,
+		placeholder: "Create Tags Here",
+		createTag: function (params) {
+			var term = $.trim(params.term);
+
+			if (term === '') {return null;}
+
+			return {
+				id: term,
+				text: term,
+				newTag: true
+			}
+		}
+	});
+</script>
+
 {% endblock %}

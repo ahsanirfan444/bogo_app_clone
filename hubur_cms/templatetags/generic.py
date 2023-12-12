@@ -17,6 +17,10 @@ def format_time(value):
         return str(datetime.strptime(value, "%H:%M:%S").time())
     except ValueError:
         return ""
+    
+@register.filter(name='parseInt')
+def parseInt(value):
+    return int(value)
 
 @register.filter(name='discountPercentage')
 def discountPercentage(value1, value2):
@@ -53,3 +57,30 @@ def divide(value1, value2):
         return value
     except Exception:
         return 0
+    
+
+@register.filter(name="time_since")
+@stringfilter
+def time_since(value):
+    try:
+        value = datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f%z')
+        if timesince(value) == "0 minutes":
+            return 'now'
+        else:
+            return timesince(value).split(", ")[0]
+        
+    except ValueError:
+        try:
+            value = datetime.strptime(value, '%Y-%m-%d %H:%M:%S.%f%z')
+            if timesince(value) == "0 minutes":
+                return 'now'
+            else:
+                return timesince(value).split(", ")[0]
+            
+        except ValueError:
+            return ""
+        
+
+@register.filter
+def keyvalue(dict, key):    
+    return dict[key]

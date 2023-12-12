@@ -23,7 +23,20 @@ class VotingSerializer(serializers.ModelSerializer):
         if voted_business:
             raise serializers.ValidationError("You have already vote this business")
         else:
-            return data
+            if business.is_active:
+                if business.i_user:
+                    if business.i_user.is_active:
+                        return data
+                    else:
+                        raise serializers.ValidationError("This business is temporary Blocked by Admin")
+                else:
+                    return data
+            else:
+                raise serializers.ValidationError("This business is temporary Blocked by Admin")
+            
+            
+
+
         
 
 

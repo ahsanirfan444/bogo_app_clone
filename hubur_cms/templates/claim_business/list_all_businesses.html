@@ -4,6 +4,8 @@
 
 {% block extra_css %}
 
+<meta http-equiv="refresh" content="30">
+
 <style>
 .dataTables_length{
     display: none !important;
@@ -21,22 +23,22 @@
             <!--begin::Header-->
             <div class="card-header border-0 pt-5">
                 <h3 class="card-title align-items-start flex-column">
-                    <span class="card-label fw-bold fs-3 mb-1">Claim Business</span>
-                    <span class="text-muted mt-1 fw-semibold fs-7">Manage and Control the Claim Business Requests.</span>
+                    <span class="card-label fw-bold fs-3 mb-1">{{current_language|keyvalue:"Claim Business"}}</span>
+                    <span class="text-muted mt-1 fw-semibold fs-7">{{ current_language.claim_tagline }}</span>
                 </h3>
 
                 <div class="card-title">
                     <!--begin::Search-->
                     <div class="d-flex align-items-center position-relative my-1">
                         <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                        <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                        <span class="svg-icon svg-icon-1 position-absolute {% if request.user.lang_code == 1 %} ms-6 {% else %} me-6 {% endif %}">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor" />
                                 <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor" />
                             </svg>
                         </span>
                         <!--end::Svg Icon-->
-                        <input type="text" data-kt-user-table-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Search Claim Request" />
+                        <input type="text" data-kt-user-table-filter="search" class="form-control form-control-solid w-250px {% if request.user.lang_code == 1 %} ps-14 {% else %} pe-14 {% endif %}" placeholder="{{ current_language.search_text }} {{current_language|keyvalue:'Claim Request'}}" />
                     </div>
                     <!--end::Search-->
                 </div>
@@ -48,108 +50,112 @@
                 <div class="table-responsive">
                     <!--begin::Table-->
                     <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4" id="table1">
-                        <!--begin::Table head-->
-                        <thead>
-                            <tr class="fw-bold text-muted">
-                                <th class="min-w-50px">S.No</th>
-                                <th class="min-w-100px">Name</th>
-                                <th class="min-w-100px">Email</th>
-                                <th class="min-w-100px">Business Name</th>
-                                <th class="min-w-100px">License No</th>
-                                <th class="min-w-100px">License</th>
-                                <th class="min-w-100px">Status</th>
-                                <th class="min-w-100px">Actions</th>
-                            </tr>
-                        </thead>
-                        <!--end::Table head-->
-                        <!--begin::Table body-->
-                        <tbody>
-                            {% for business in claim_business_list %}
-                                <tr>
-                                    <td>
-                                        <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
-                                        <span class="fw-semibold  d-block fs-7">{{ forloop.counter }}</span>
-                                    </td>
-                                    <td>
-                                        <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
-                                        <span class="fw-semibold  d-block fs-7">{{ business.first_name }} {{ business.last_name }}</span>
-                                    </td>
-                                    <td>
-                                        <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
-                                        <span class="fw-semibold  d-block fs-7">{{ business.business_email }}</span>
-                                    </td>
-                                    <td>
-                                        <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
-                                        <span class="fw-semibold  d-block fs-7">{{ business.i_business.name }}</span>
-                                    </td>
-                                    <td>
-                                        <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
-                                        <span class="fw-semibold  d-block fs-7">{{ business.trade_license_number }}</span>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            {% if business.extension == '.jpg' or business.extension == '.png'  %}
-                                            <a href="{{ business.trade_license.url }}">
-                                                <div class="symbol symbol-45px me-5">
-                                                    <img src="{{ business.trade_license.url }}" alt="">
-                                                </div>
-                                            </a>
-
-                                            {% elif business.extension == '.xlsx' %}
-                                            <a href="{{ business.trade_license.url }}">
-                                                <div class="symbol symbol-45px me-5">
-                                                    <img src="{% static 'assets/media/icons/excel.jpg' %}" alt="">
-                                                </div>
-                                            </a>
-
-                                            {% elif business.extension == '.pdf' %}
-                                            <a href="{{ business.trade_license.url }}">
-                                                <div class="symbol symbol-45px me-5">
-                                                    <img src="{% static 'assets/media/icons/pdf.png' %}" alt="">
-                                                </div>
-                                            </a>
-
-                                            {% elif business.extension == '.docx' %}
-                                            <a href="{{ business.trade_license.url }}">
-                                                <div class="symbol symbol-45px me-5">
-                                                    <img src="{% static 'assets/media/icons/word.png' %}" alt="">
-                                                </div>
-                                            </a>
-
-
-                                            {% endif %}
-                                        </div>
-                                    </td>
-                                    {% if business.approve %}
+                        {% if not claim_business_list %}
+                            <p class="text-center">{{ current_language.no_claim_request }}</p>
+                        {% else %}
+                            <!--begin::Table head-->
+                            <thead>
+                                <tr class="fw-bold text-muted">
+                                    <th class="min-w-50px">{{ current_language.serial_number }}</th>
+                                    <th class="min-w-100px">{{ current_language.name }}</th>
+                                    <th class="min-w-100px">{{ current_language.email }}</th>
+                                    <th class="min-w-100px">{{ current_language.business_name }}</th>
+                                    <th class="min-w-100px">{{ current_language.license_no }}</th>
+                                    <th class="min-w-100px">{{ current_language.license }}</th>
+                                    <th class="min-w-100px">{{ current_language.status }}</th>
+                                    <th class="min-w-100px">{{ current_language.actions }}</th>
+                                </tr>
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody>
+                                {% for business in claim_business_list %}
+                                    <tr>
                                         <td>
-                                            <span class="fw-semibold  d-block fs-7" style="color:#50cd89">Approved</span>
+                                            <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
+                                            <span class="fw-semibold  d-block fs-7">{{ forloop.counter }}</span>
                                         </td>
-                                    {% else %}
                                         <td>
-                                            <span class="fw-semibold  d-block fs-7" style="color:#f1416c">Pending</span>
+                                            <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
+                                            <span class="fw-semibold  d-block fs-7">{{ business.first_name }} {{ business.last_name }}</span>
                                         </td>
-                                    {% endif %}
-
-                                    {% if business.approve %}
                                         <td>
-                                            <span class="fw-semibold  d-block fs-7">---</span>
+                                            <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
+                                            <span class="fw-semibold  d-block fs-7">{{ business.business_email }}</span>
                                         </td>
-                                    {% else %}
                                         <td>
-                                            <div class="justify-content-between flex-shrink-0">
-                                                <a href="{{business.get_claim_approve_url}}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
-                                                    <i data-feather="check-circle" data-toggle="tooltip" data-placement="top" title="Approve {{ business.first_name }} {{ business.last_name }}"></i>
+                                            <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
+                                            <span class="fw-semibold  d-block fs-7">{{ business.i_business.name }}</span>
+                                        </td>
+                                        <td>
+                                            <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
+                                            <span class="fw-semibold  d-block fs-7">{{ business.trade_license_number }}</span>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                {% if business.extension == '.jpg' or business.extension == '.jpeg' or business.extension == '.png'  %}
+                                                <a href="{{ business.trade_license.url }}">
+                                                    <div class="symbol symbol-45px me-5">
+                                                        <img src="{{ business.trade_license.url }}" alt="">
+                                                    </div>
                                                 </a>
-                                                <a href="{{business.get_claim_reject_url}}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
-                                                    <i data-feather="x-circle" data-toggle="tooltip" data-placement="top" title="Reject {{ business.first_name }} {{ business.last_name }}"></i>
+
+                                                {% elif business.extension == '.xlsx' %}
+                                                <a href="{{ business.trade_license.url }}">
+                                                    <div class="symbol symbol-45px me-5">
+                                                        <img src="{% static 'assets/media/icons/excel.jpg' %}" alt="">
+                                                    </div>
                                                 </a>
+
+                                                {% elif business.extension == '.pdf' %}
+                                                <a href="{{ business.trade_license.url }}">
+                                                    <div class="symbol symbol-45px me-5">
+                                                        <img src="{% static 'assets/media/icons/pdf.png' %}" alt="">
+                                                    </div>
+                                                </a>
+
+                                                {% elif business.extension == '.docx' %}
+                                                <a href="{{ business.trade_license.url }}">
+                                                    <div class="symbol symbol-45px me-5">
+                                                        <img src="{% static 'assets/media/icons/word.png' %}" alt="">
+                                                    </div>
+                                                </a>
+
+
+                                                {% endif %}
                                             </div>
                                         </td>
-                                    {% endif %}
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                        <!--end::Table body-->
+                                        {% if business.approve %}
+                                            <td>
+                                                <span class="fw-semibold  d-block fs-7" style="color:#50cd89">{{ current_language.approved }}</span>
+                                            </td>
+                                        {% else %}
+                                            <td>
+                                                <span class="fw-semibold  d-block fs-7" style="color:#f1416c">{{ current_language.pending }}</span>
+                                            </td>
+                                        {% endif %}
+
+                                        {% if business.approve %}
+                                            <td>
+                                                <span class="fw-semibold  d-block fs-7">---</span>
+                                            </td>
+                                        {% else %}
+                                            <td>
+                                                <div class="justify-content-between flex-shrink-0">
+                                                    <a href="{{business.get_claim_approve_url}}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                                                        <i data-feather="check-circle" data-toggle="tooltip" data-placement="top" title="{{ current_language.approve_request }} {{ business.first_name }} {{ business.last_name }}"></i>
+                                                    </a>
+                                                    <a href="{{business.get_claim_reject_url}}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                                                        <i data-feather="x-circle" data-toggle="tooltip" data-placement="top" title="{{ current_language.reject_request }} {{ business.first_name }} {{ business.last_name }}"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                            <!--end::Table body-->
+                        {% endif %}
                     </table>
                     <!--end::Table-->
                 </div>

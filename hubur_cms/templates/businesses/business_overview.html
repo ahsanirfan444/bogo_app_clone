@@ -1,0 +1,291 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load generic %}
+{% block page_content %}
+<!-- <meta http-equiv="refresh" content="60"> -->
+
+{% if business %}
+    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+        <!--begin::Toolbar container-->
+        <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
+            <!--begin::Page title-->
+            <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                <!--begin::Title-->
+                <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Account Overview</h1>
+                <!--end::Title-->
+            </div>
+            <!--end::Page title-->
+        </div>
+        <!--end::Toolbar container-->
+    </div>
+
+    <div id="kt_app_content" class="app-content flex-column-fluid">
+        <!--begin::Content container-->
+        <div id="kt_app_content_container" class="app-container container-xxl">
+            <!--begin::Navbar-->
+                {% include "businesses/business_profile.html" %}
+            <!--end::Navbar-->
+            <!--begin::details View-->
+            <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
+                <!--begin::Card header-->
+                <div class="card-header cursor-pointer">
+                    <!--begin::Card title-->
+                    <div class="card-title m-0">
+                        <h3 class="fw-bold m-0">Business Details</h3>
+                    </div>
+                    <!--end::Card title-->
+                    <!--begin::Action-->
+                    <a href="{% url 'edit_business_details_by_admin' pk=business.id %}" class="btn btn-primary align-self-center">Edit Profile</a>
+                    <!--end::Action-->
+                </div>
+                <!--begin::Card header-->
+                <!--begin::Card body-->
+                <div class="card-body p-9">
+				<!--begin::Row-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-semibold text-muted">Logo</label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-8">
+						<img class="business-logo" src="{% if business.logo_pic %}{{ business.logo_pic.url }}{% else %}{% static 'assets/media/misc/image.png' %}{% endif %}" alt="image" />
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Row-->
+				<!--begin::Row-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-semibold text-muted">Name</label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-8">
+						<span class="fw-bold fs-6 text-gray-800">{{ business.name }}</span>
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Row-->
+				<!--begin::Input group-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-semibold text-muted">Contact Phone
+					<i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="Phone number must be active"></i></label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-8 d-flex align-items-center">
+						<span class="fw-bold fs-6 text-gray-800 me-2">{{ business.country_code }}-{{ business.contact }}</span>
+						<span class="badge badge-success">Verified</span>
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Input group-->
+				<!--begin::Input group-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-semibold text-muted">Google Maps</label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-8">
+						<a href="https://www.google.com/maps/place/?q=place_id:{{ business.place_id }}" target="_blank" class="fw-semibold fs-6 text-gray-800 text-hover-primary">{{ business.address }}</a>
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Input group-->
+				<!--begin::Input group-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-semibold text-muted">Status</label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-8 d-flex align-items-center">
+						{% if business.is_active %}
+							<span class="badge badge-success">Active</span>
+						{% else %}
+							<span class="badge badge-danger">In-Active</span>
+						{% endif %}
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Input group-->
+				<!--begin::Input group-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-semibold text-muted">Website</label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-8">
+						<a href="{% if business.website %}{{ business.website }}{% else %}#{% endif %}" target="_blank" class="fw-semibold fs-6 text-gray-800 text-hover-primary">{% if business.website %}{{ business.website }}{% else %}---{% endif %}</a>
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Input group-->
+				<!--begin::Input group-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-semibold text-muted">Country
+					<i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="Country of origination"></i></label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-8">
+						<span class="fw-bold fs-6 text-gray-800">United Arab Emirates</span>
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Input group-->
+				<!--begin::Input group-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-semibold text-muted">Category</label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-8">
+						<span class="fw-bold fs-6 text-gray-800">{{ business.i_category.name }}</span>
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Input group-->
+				<!--begin::Input group-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-semibold text-muted">Sub Categories</label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-8">
+						{% for data in business.i_subcategory.all %}
+							<div class="col-sm-6 col-md-6">
+								<li>
+									<span class="fw-bold fs-6 text-gray-800">{{ data.name }}</span>
+								</li>
+							</div>
+						{% endfor %}
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Input group-->
+					{% if business.i_category.name == "Restaurant"  %}
+						<!--begin::Input group-->
+						<div class="row mb-7">
+							<!--begin::Label-->
+							<label class="col-lg-4 fw-semibold text-muted">Attributes</label>
+							<!--end::Label-->
+							<!--begin::Col-->
+							<div class="col-lg-8">
+								{% if business.i_attributes.all %}
+									{% for attr in business.i_attributes.all %}
+											<div class="col-sm-6 col-md-6">
+												<li>
+													<span class="fw-bold fs-6 text-gray-800">{{ attr.name }}</span>
+												</li>
+											</div>
+									{% endfor %}
+								{% else %}
+									<span class="fw-bold fs-6 text-gray-800">None</span>
+								{% endif %}
+							</div>
+							<!--end::Col-->
+						</div>
+						<!--end::Input group-->
+					{% endif %}
+
+				<!--begin::Input group-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-semibold text-muted">Member Since</label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-8">
+						<span class="fw-bold fs-6 text-gray-800">{% if request.user.subscription %}{{ request.user.subscription.start_date }} {% else %} --- {% endif %}</span>
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Input group-->
+
+				<!--begin::Input group-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-semibold text-muted">Membership Status</label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-8 d-flex align-items-center">
+						{% if request.user.subscription.is_active %}
+							<span class="badge badge-success">Active</span>
+						{% else %}
+							<span class="badge badge-danger">In-Active</span>
+						{% endif %}
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Input group-->
+
+				<!--begin::Input group-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-semibold text-muted">Membership Renewal</label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-8">
+						<span class="fw-bold fs-6 text-gray-800">{% if request.user.subscription %}{{ request.user.subscription.end_date }}{% else %} --- {% endif %}</span>
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Input group-->
+
+				<!--begin::Input group-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-semibold text-muted">Amount Received</label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-8">
+						<span class="fw-bold fs-6 text-gray-800">AED {% if request.user.subscription %}{{ request.user.subscription.subscription.price }}{% else %} 0.0 {% endif %} </span>
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Input group-->
+
+				<!--begin::Input group-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-semibold text-muted">Billing Cycle</label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-8">
+						<span class="fw-bold fs-6 text-gray-800">{% if request.user.subscription %}{{ request.user.subscription.subscription.get_subscription_type_display }}{% else %} --- {% endif %}</span>
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Input group-->
+
+				<!--begin::Input group-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-semibold text-muted">Plan</label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-6">
+						<span class="fw-bold fs-6 text-gray-800">{% if request.user.subscription %}{% if request.user.lang_code == 1 %} {{ request.user.subscription.subscription.name }} {% else %} {{ request.user.subscription.subscription.name_ar }} {% endif %} {% else %} --- {% endif %}</span>
+					</div>
+					<!--end::Col-->
+					<!--begin::Col-->
+					<div class="col-lg-2">
+						<span class="fw-bold fs-6 text-gray-800"><a href="{% url 'subscription_plans_by_admin' pk=business.id %}" style="text-decoration: underline;">Change</a></span>
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Input group-->
+
+				
+			</div>
+                <!--end::Card body-->
+            </div>
+            <!--end::details View-->
+        </div>
+        <!--end::Content container-->
+    </div>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_script %}
+
+{% endblock %}

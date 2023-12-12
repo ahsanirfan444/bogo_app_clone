@@ -13,7 +13,7 @@ class UserInfoForChatSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.UserProfile
-        fields = ('id','profile_picture','name','role',"business_id")
+        fields = ('id','profile_picture','name','role',"business_id", "is_active",)
     
     def get_name(self,obj):
         business = models.Business.objects.filter(i_user=obj.id)

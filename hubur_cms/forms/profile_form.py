@@ -1,6 +1,10 @@
 from datetime import datetime
 from django import forms
 from hubur_apis import models
+from hubur_cms.custom_fields import CustomMultipleChoiceField
+from django.db.models import Q
+
+ACTIVE_CHOICES = ((True, 'Yes'), (False, 'No'))
 
 class ProfileDetailsForm(forms.ModelForm):
     username = forms.CharField(widget=forms.HiddenInput(), required=False)
@@ -26,7 +30,7 @@ class ProfileDetailsForm(forms.ModelForm):
     
     class Meta:
         model = models.UserProfile
-        exclude = ('is_active', 'is_staff', 'is_type', 'is_verified', 'is_superuser', 'lat', 'long', 'password', 'groups', 'last_login', 'user_permissions', 'address', 'terms_conditions', 'i_country', 'i_city', 'bg_image',)
+        exclude = ('is_active', 'is_staff', 'is_type', 'is_verified', 'is_superuser', 'lat', 'long', 'password', 'groups', 'last_login', 'user_permissions', 'address', 'terms_conditions', 'i_country', 'i_city', 'bg_image', 'lang_code',)
         labels = {
             "dob": ('Date of Birth'),
         }
@@ -40,11 +44,13 @@ class BusinessDetailsForm(forms.ModelForm):
     lat = forms.FloatField(widget=forms.HiddenInput(), required=False)
     long = forms.FloatField(widget=forms.HiddenInput(), required=False)
     country_code = forms.CharField(widget=forms.HiddenInput(), required=False)
+    tags =  CustomMultipleChoiceField(required=False)
 
     def __init__(self, *args, **kwargs):
         self.category = kwargs.pop('category')
         super().__init__(*args, **kwargs)
         self.fields['i_subcategory'].queryset  = models.SubCategories.objects.filter(i_category=self.category.id)
+        self.fields['tags'].choices = ((choice.id, choice.name) for choice in models.Tags.objects.filter(business=self.instance, is_active=True))
         self.fields['i_category'].disabled = True
 
         fields_to_delete = None
@@ -62,7 +68,7 @@ class BusinessDetailsForm(forms.ModelForm):
         labels = {
             "logo_pic": ('Logo'),
             "i_category": ('Category'),
-            "i_subcategory": ('Sub-Category'),
+            "i_subcategory": ('Sub Category'),
             "i_attributes": ('Attributes')
         }
         widgets = {
@@ -70,8 +76,22 @@ class BusinessDetailsForm(forms.ModelForm):
             'i_category': forms.Select(attrs={'class':'form-control'}),
             'website': forms.TextInput(attrs={'class':'form-control'}),
             'description': forms.Textarea(attrs={"rows":3}),
-            'i_attributes': forms.CheckboxSelectMultiple()
+            'i_attributes': forms.CheckboxSelectMultiple(),
+            'is_featured': forms.Select(attrs={"class": "form-control"}, choices=ACTIVE_CHOICES)
         }
+
+    def clean_tags(self):
+        tags = self.cleaned_data['tags']
+        if tags:
+            for tag in tags:
+                if not tag.isdigit():
+                    try:
+                        new_tag = models.Tags(name=tag, business=self.instance)
+                        new_tag.save()
+                    except Exception as e:
+                        raise forms.ValidationError(str(e))
+                
+        return tags
 
 
 class BusinessCatalogueForm(forms.ModelForm):    

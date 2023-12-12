@@ -21,7 +21,7 @@ class GCMDeviceAuthorizedAPIView(APIView):
             }, status=status.HTTP_200_OK)
         
         except Exception as e:
-            print(e)
+            # print(e)
             return Response({
                 'detail': "Not Found",
                 'status': status.HTTP_400_BAD_REQUEST

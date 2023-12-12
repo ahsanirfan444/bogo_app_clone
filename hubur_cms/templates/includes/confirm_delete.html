@@ -5,7 +5,7 @@
     <div class="card-header cursor-pointer">
         <!--begin::Card title-->
         <div class="card-title m-0">
-        <h3 class="fw-bold m-0">Delete <em><strong>"{{ object.name }}"</strong></em></h3>
+        <h3 class="fw-bold m-0">{{ current_language.delete_text }} <em><strong>"{% if request.user.lang_code == 1 %} {{ object.name }} {% else %} {{ object.name_ar }}  {% endif %}"</strong></em></h3>
         </div>
         <!--end::Card title-->
     </div>
@@ -16,13 +16,13 @@
         <!--begin::Card body-->
         <div class="card-body p-9">
             {% csrf_token %}
-            <p>Are you sure you want to delete "{{ object.name }}"? This action can't be undo.</p>
+            <p>{{ current_language.are_you_sure_text }} "{% if request.user.lang_code == 1 %} {{ object.name }}? {% else %} {{ object.name_ar }}؟  {% endif %}" {{ current_language.action_not_reversed_text }}</p>
         </div>
         <!--end::Card body-->
         <!--begin::Card Footer-->
         <div class="card-footer text-right">
-            <a href="{{ RETURN_URL }}" class="btn btn-primary">Back</a>
-            <input type="submit" value="delete" class="btn btn-danger">
+            <a href="{{ RETURN_URL }}" class="btn btn-primary">{{ current_language.back }}</a>
+            <input type="submit" value="{{ current_language.delete_text }}" class="btn btn-danger">
         </div>
         <!--end::Card Footer-->
     </form>

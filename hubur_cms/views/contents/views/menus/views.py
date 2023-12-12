@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 from core.base import AuthBaseViews
-from global_methods import create_content_images, delete_content_images
+from global_methods import create_content_images, create_tags, delete_content_images
 from hubur_apis import models
 from django.conf import settings
 from django.utils.decorators import method_decorator
@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 class VendorMenuList(AuthBaseViews):
     TEMPLATE_NAME = "contents/menus/list_all_menus.html"
     CREATE_URL = reverse_lazy('create_menu')
-    CREATE_URL_TITLE = "Upload Menu"
+    CREATE_URL_TITLE = "Create Menu"
 
     def get(self, request, *args, **kwargs):
         menus = models.Content.objects.filter(content_type=3, i_user=request.user, i_business=self.get_vendor_business())
@@ -62,18 +62,18 @@ class VendorCreateMenu(AuthBaseViews):
                     product_instance.i_user = request.user
                     product_instance.save()
 
+                    create_tags(form.cleaned_data['tags'], product_instance)
                     image_instance = create_content_images(request.FILES.getlist('images'), request.user, 4, self.get_vendor_business(), product_instance)
                     if image_instance:
                         messages.success(request, "Menu Uploaded Successfully")
                         return self.redirect(reverse_lazy("list_vendor_menus"))
 
                 else:
-                    messages.error(request, "Please correct the errors below")
-                    print(product_form.errors.as_data)
+                    messages.error(request, self.getCurrentLanguage()['correct_errors'])
                     return self.render({"form": form})
             
             else:
-                messages.error(request, "Please correct the errors below")
+                messages.error(request, self.getCurrentLanguage()['correct_errors'])
                 return self.render({"form": form})
             
         except Exception:
@@ -89,8 +89,9 @@ class VendorEditMenu(AuthBaseViews):
         inst = models.Content.objects.get(id=content_id, content_type=3)
         product_images = models.Images.objects.filter(i_content_id=content_id)
         images_list = list(product_images.values_list('image', flat=True))
+        tags = list(models.Tags.objects.filter(content=inst).values_list('id', flat=True))
         
-        inst.__dict__.update({'i_sub_category': inst.i_sub_category.id})
+        inst.__dict__.update({'i_sub_category': inst.i_sub_category.id, 'tags': tags})
         form = EditMenuForm(data=inst.__dict__, category=list(self.get_vendor_business().i_subcategory.values_list('id', flat=True)), content_id=content_id)
         
         try:
@@ -123,11 +124,11 @@ class VendorEditMenu(AuthBaseViews):
                         return self.redirect(reverse_lazy("list_vendor_menus"))
 
                 else:
-                    messages.error(request, "Please correct the errors below")
+                    messages.error(request, self.getCurrentLanguage()['correct_errors'])
                     return self.render({"form": form})
             
             else:
-                messages.error(request, "Please correct the errors below")
+                messages.error(request, self.getCurrentLanguage()['correct_errors'])
                 return self.render({"form": form})
             
         except Exception:

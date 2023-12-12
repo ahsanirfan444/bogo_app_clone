@@ -13,7 +13,7 @@ class SocketSerializer(serializers.ModelSerializer):
     i_subcategory = serializers.IntegerField(required=False, allow_null=True)
     class Meta:
          model = models.Business
-         fields = ("long","lat","i_subcategory",)
+         fields = ("long","lat","i_subcategory","is_featured",)
 
 
 class MapBusinessSerializer(serializers.ModelSerializer):
@@ -21,7 +21,7 @@ class MapBusinessSerializer(serializers.ModelSerializer):
     i_subcategory = serializers.SerializerMethodField()
     class Meta:
         model = models.Business
-        fields = ("id","name","logo_pic","long","lat","i_category","i_subcategory",)
+        fields = ("id","name","logo_pic","long","lat","i_category","i_subcategory","is_featured",)
     
     def get_i_subcategory(self,obj):
         obj_data = list(obj.i_subcategory.all().values_list('name',flat=True))
@@ -62,7 +62,7 @@ class SearchBusinessInMapSerializer(serializers.ModelSerializer):
     i_sub_category = serializers.SerializerMethodField()
     class Meta:
          model = models.Business
-         fields = ("id","name","attributes","address","i_sub_category","logo_pic","i_category","long","lat",)
+         fields = ("id","name","attributes","address","i_sub_category","logo_pic","i_category","long","lat","is_featured",)
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.get('context')
@@ -91,7 +91,7 @@ class SearchBusinessInMapSerializer(serializers.ModelSerializer):
         user_long = self.context.get('user_long')
         user_lat = self.context.get('user_lat')
 
-        total_checkins = models.Checkedin.objects.filter(i_business=data).count()
+        total_checkins = models.Checkedin.objects.filter(i_business=data).exclude(i_user__is_active=False).count()
         total_checkins = format_number(total_checkins)
         response['checkins'] = total_checkins
     

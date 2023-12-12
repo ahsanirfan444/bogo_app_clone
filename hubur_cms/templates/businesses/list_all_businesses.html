@@ -73,8 +73,12 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
-.dataTables_length{
+*[dir="ltr"] .dataTables_length{
     margin: 10px 0px 0px 25px;
+}
+
+*[dir="rtl"] .dataTables_length{
+    margin: 10px 25px 0px 0px;
 }
 
 #kt_customers_table_paginate{
@@ -103,8 +107,8 @@ nav{
             <!--begin::Header-->
             <div class="card-header border-0 pt-5">
                 <h3 class="card-title align-items-start flex-column">
-                    <span class="card-label fw-bold fs-3 mb-1">Businesses</span>
-                    <span class="text-muted mt-1 fw-semibold fs-7">Manage and Control the Business in UAE.</span>
+                    <span class="card-label fw-bold fs-3 mb-1">{{current_language|keyvalue:"Businesses"}}</span>
+                    <span class="text-muted mt-1 fw-semibold fs-7">{{ current_language.business_tagline }}</span>
                     
                 </h3>
 
@@ -113,7 +117,7 @@ nav{
                         <!--begin::Search-->
                         <div class="d-flex align-items-center position-relative my-1">
                             <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                            <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                            <span class="svg-icon svg-icon-1 position-absolute {% if request.user.lang_code == 1 %} ms-6 {% else %} me-6 {% endif %}">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor" />
                                     <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor" />
@@ -121,7 +125,7 @@ nav{
                             </span>
                             <!--end::Svg Icon-->
                             <form>
-                                <input name="search" type="search" value="{{ request.GET.search }}" class="form-control form-control-solid w-250px ps-15" placeholder="Search Business" />
+                                <input name="search" type="search" value="{{ request.GET.search }}" class="form-control form-control-solid w-250px {% if request.user.lang_code == 1 %} ps-14 {% else %} pe-14 {% endif %}" placeholder="{{ current_language.search_text }} {{current_language|keyvalue:'Businesses'}}" />
                             </form>
                         </div>
                         <!--end::Search-->
@@ -148,141 +152,152 @@ nav{
                 <div class="table-responsive">
                     <!--begin::Table-->
                     <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                        <!--begin::Table head-->
-                        <thead>
-                            <tr class="fw-bold text-muted">
-                                <th class="min-w-50px">S.No</th>
-                                <th class="min-w-100px">Logo</th>
-                                <th class="min-w-150px">Name</th>
-                                <th class="min-w-150px">Contact</th>
-                                <th class="min-w-150px">Address</th>
-                                <th class="min-w-100px">Category</th>
-                                <th class="min-w-100px">Is Claimed?</th>
-                                <th class="min-w-100px">Claimed by</th>
-                                <th class="min-w-100px">Claimed at</th>
-                                <th class="min-w-100px">Status</th>
-                            </tr>
-                        </thead>
-                        <!--end::Table head-->
-                        <!--begin::Table body-->
-                        <tbody>
-                            {% for business in businesses_list %}
-                                <tr>
-                                    <td>
-                                        <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
-                                        <span class="fw-semibold  d-block fs-7">{{ forloop.counter }}</span>
-                                    </td>
-
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="symbol symbol-45px me-5">
-                                                <img src="{% if business.logo_pic %}{{ business.logo_pic.url }}{% else %}{% static 'assets/media/misc/image.png' %}{% endif %}" alt="">
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        {% if business.website %}
-                                            <a href="{{ business.website }}" target="_blank" class="text-dark fw-bold text-hover-primary d-block fs-6">
-                                            <span class="fw-semibold  d-block fs-7">{{ business.name }}</span></a>
-                                        {% else %}
-                                            <span class="fw-semibold  d-block fs-7">{{ business.name }}</span>
-                                        {% endif %}
-                                    </td>
-
-                                    <td>
-                                        <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
-                                        <span class="fw-semibold  d-block fs-7">{{ business.country_code }}-{{ business.contact }}</span>
-                                    </td>
-
-                                    <td>
-                                        <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
-                                        <span class="fw-semibold  d-block fs-7">{{ business.address }}</span>
-                                    </td>
-
-                                    <td>
-                                        <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
-                                        <span class="fw-semibold  d-block fs-7">{{ business.i_category }}</span>
-                                    </td>
-
-                                    {% if business.is_claimed == 2 %}
-                                        <td>
-                                            <span class="fw-semibold  d-block fs-7" style="color:#50cd89">Yes</span>
-                                        </td>
-                                    {% else %}
-                                        <td>
-                                            <span class="fw-semibold  d-block fs-7" style="color:#f1416c">No</span>
-                                        </td>
-                                    {% endif %}
-
-                                    <td>
-                                        {% if business.i_user %}
-                                            <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
-                                            <span class="fw-semibold  d-block fs-7">{{ business.i_user.get_name }}</span>
-                                        {% else %}
-                                            <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
-                                            <span class="fw-semibold  d-block fs-7">---</span>
-                                        {% endif %}
-                                    </td>
-
-                                    <td>
-                                        {% if business.i_user %}
-                                            <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
-                                            <span class="fw-semibold  d-block fs-7">{{ business.updated_at }}</span>
-                                        {% else %}
-                                            <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
-                                            <span class="fw-semibold  d-block fs-7">---</span>
-                                        {% endif %}
-                                    </td>
-                                    
-                                    {% if business.is_active and business.is_claimed == 2 %}
-                                        <td>
-                                            <div class="justify-content-between flex-shrink-0">
-                                                <form method="POST" enctype="multipart/form-data">
-                                                    {% csrf_token %}
-                                                    <label class="switch">
-                                                        <input type="checkbox" checked disabled>
-                                                        <span class="slider round" disabled data-toggle="tooltip" data-placement="top" title="Claimed business can't be de-activated."></span>
-                                                    </label>
-                                                    <input type="hidden" name="status" value="False">
-                                                    <input type="hidden" name="business_id" value="{{ business.id }}">
-                                                </form>
-                                            </div>
-                                        </td>
-                                    {% elif business.is_active and business.is_claimed == 1 %}
-                                        <td>
-                                            <div class="justify-content-between flex-shrink-0">
-                                                <form method="POST" enctype="multipart/form-data">
-                                                    {% csrf_token %}
-                                                    <label class="switch">
-                                                        <input type="checkbox" checked>
-                                                        <span class="slider round"></span>
-                                                    </label>
-                                                    <input type="hidden" name="status" value="False">
-                                                    <input type="hidden" name="business_id" value="{{ business.id }}">
-                                                </form>
-                                            </div>
-                                        </td>
-                                    
-                                    {% else %}
-                                        <td>
-                                            <div class="justify-content-between flex-shrink-0">
-                                                <form method="POST" enctype="multipart/form-data">
-                                                    {% csrf_token %}
-                                                    <label class="switch">
-                                                        <input type="checkbox">
-                                                        <span class="slider round"></span>
-                                                    </label>
-                                                    <input type="hidden" name="status" value="True">
-                                                    <input type="hidden" name="business_id" value="{{ business.id }}">
-                                                </form>
-                                            </div>
-                                        </td>
-                                    {% endif %}
+                        {% if not businesses_list %}
+                            <p class="text-center">{{ current_language.no_businesses }}</p>
+                        {% else %}
+                            <!--begin::Table head-->
+                            <thead>
+                                <tr class="fw-bold text-muted">
+                                    <th class="min-w-50px">{{ current_language.serial_number }}</th>
+                                    <th class="min-w-100px">{{ current_language.image }}</th>
+                                    <th class="min-w-150px">{{ current_language.name }}</th>
+                                    <th class="min-w-150px">{{ current_language.contact }}</th>
+                                    <th class="min-w-130px">{{ current_language.address }}</th>
+                                    <th class="min-w-100px">{{ current_language.category }}</th>
+                                    <th class="min-w-80px">{{ current_language.is_claimed }}</th>
+                                    <th class="min-w-100px">{{ current_language.claimed_by }}</th>
+                                    <th class="min-w-100px">{{ current_language.claimed_at }}</th>
+                                    <th class="min-w-50px">{{ current_language.status }}</th>
+                                    <th class="min-w-50px">{{ current_language.view }}</th>
                                 </tr>
-                            {% endfor %}
-                        </tbody>
-                        <!--end::Table body-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody>
+                                {% for business in businesses_list %}
+                                    <tr>
+                                        <td>
+                                            <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
+                                            <span class="fw-semibold  d-block fs-7">{{ forloop.counter }}</span>
+                                        </td>
+
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="symbol symbol-45px me-5">
+                                                    <img src="{% if business.logo_pic %}{{ business.logo_pic.url }}{% else %}{% static 'assets/media/misc/image.png' %}{% endif %}" alt="">
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            {% if business.website %}
+                                                <a href="{{ business.website }}" target="_blank" class="text-dark fw-bold text-hover-primary d-block fs-6">
+                                                <span class="fw-semibold  d-block fs-7">{{ business.name }}</span></a>
+                                            {% else %}
+                                                <span class="fw-semibold  d-block fs-7">{{ business.name }}</span>
+                                            {% endif %}
+                                        </td>
+
+                                        <td>
+                                            <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
+                                            <span class="fw-semibold  d-block fs-7">{{ business.country_code }}-{{ business.contact }}</span>
+                                        </td>
+
+                                        <td>
+                                            <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
+                                            <span class="fw-semibold  d-block fs-7">{{ business.address }}</span>
+                                        </td>
+
+                                        <td>
+                                            <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
+                                            <span class="fw-semibold  d-block fs-7">{% if request.user.lang_code == 1 %} {{ business.i_category.name }} {% else %} {{ business.i_category.name_ar }} {% endif %}</span>
+                                        </td>
+
+                                        {% if business.is_claimed == 2 %}
+                                            <td>
+                                                <span class="fw-semibold  d-block fs-7" style="color:#50cd89">{{ current_language.yes }}</span>
+                                            </td>
+                                        {% else %}
+                                            <td>
+                                                <span class="fw-semibold  d-block fs-7" style="color:#f1416c">{{ current_language.no }}</span>
+                                            </td>
+                                        {% endif %}
+
+                                        <td>
+                                            {% if business.i_user %}
+                                                <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
+                                                <span class="fw-semibold  d-block fs-7">{{ business.i_user.get_name }}</span>
+                                            {% else %}
+                                                <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
+                                                <span class="fw-semibold  d-block fs-7">---</span>
+                                            {% endif %}
+                                        </td>
+
+                                        <td>
+                                            {% if business.i_user %}
+                                                <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
+                                                <span class="fw-semibold  d-block fs-7">{{ business.updated_at }}</span>
+                                            {% else %}
+                                                <a href="#" class="text-dark fw-bold text-hover-primary d-block fs-6"></a>
+                                                <span class="fw-semibold  d-block fs-7">---</span>
+                                            {% endif %}
+                                        </td>
+                                        
+                                        {% if business.is_active and business.is_claimed == 2 %}
+                                            <td>
+                                                <div class="justify-content-between flex-shrink-0">
+                                                    <form method="POST" enctype="multipart/form-data">
+                                                        {% csrf_token %}
+                                                        <label class="switch">
+                                                            <input type="checkbox" checked disabled>
+                                                            <span class="slider round" disabled data-toggle="tooltip" data-placement="top" title="{{ current_language.claimed_deactived_error_text }}"></span>
+                                                        </label>
+                                                        <input type="hidden" name="status" value="False">
+                                                        <input type="hidden" name="business_id" value="{{ business.id }}">
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        {% elif business.is_active and business.is_claimed == 1 %}
+                                            <td>
+                                                <div class="justify-content-between flex-shrink-0">
+                                                    <form method="POST" enctype="multipart/form-data">
+                                                        {% csrf_token %}
+                                                        <label class="switch">
+                                                            <input type="checkbox" checked>
+                                                            <span class="slider round"></span>
+                                                        </label>
+                                                        <input type="hidden" name="status" value="False">
+                                                        <input type="hidden" name="business_id" value="{{ business.id }}">
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        
+                                        {% else %}
+                                            <td>
+                                                <div class="justify-content-between flex-shrink-0">
+                                                    <form method="POST" enctype="multipart/form-data">
+                                                        {% csrf_token %}
+                                                        <label class="switch">
+                                                            <input type="checkbox">
+                                                            <span class="slider round"></span>
+                                                        </label>
+                                                        <input type="hidden" name="status" value="True">
+                                                        <input type="hidden" name="business_id" value="{{ business.id }}">
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        {% endif %}
+
+                                        <td>
+                                            <a href="{% url 'business_detail_by_admin' pk=business.id %}" class="text-dark fw-bold text-hover-primary d-block fs-6">
+                                                <img toggle="#password-field" src="{% static 'assets/media/icons/eye.svg' %}" />
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                            <!--end::Table body-->
+                        {% endif %}
                     </table>
                     <!--end::Table-->
                     

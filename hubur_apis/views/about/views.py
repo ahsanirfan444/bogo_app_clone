@@ -12,7 +12,7 @@ class AboutUsAPIView(APIView):
     permission_classes = []
     def get(self, request, *args, **kwargs):
         about_us = models.Other.objects.all()
-        serializer = AboutUsUsSerializer(about_us, many=True)
+        serializer = AboutUsUsSerializer(about_us, context={"request": request}, many=True)
         if serializer.data:
             data = serializer.data[0]['about_us']
         else:
@@ -25,7 +25,7 @@ class OtherAPIView(APIView):
     permission_classes = []
     def get(self, request, *args, **kwargs):
         other = models.Other.objects.all()
-        serializer = OtherSerializer(other, many=True)
+        serializer = OtherSerializer(other, context={"request": request}, many=True)
         if serializer.data:
             data = serializer.data[0]
         else:

@@ -36,11 +36,11 @@ class AdminEditCategoriesView(AuthBaseViews):
             form = EditCategoryForm(request.POST, request.FILES, instance=inst)
             if form.is_valid():
                 form.save()
-                messages.success(request, "Category Edited Successfully")
+                messages.success(request, self.getCurrentLanguage()['category_success'])
                 return self.redirect(reverse_lazy("list_categories"))
             
             else:
-                messages.error(request, "Please correct the errors below")
+                messages.error(request, self.getCurrentLanguage()['correct_errors'])
                 return self.render({"form": form})
             
         except Exception:

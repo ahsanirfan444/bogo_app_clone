@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load generic %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'stories/css/fontawesome.css' %}">
+<link rel="stylesheet" href="{% static 'stories/css/normalize.css' %}">
+<link rel="stylesheet" href="{% static 'stories/css/style.css' %}">
+
+
+{% endblock %}
+
+{% block page_content %}
+<!-- <meta http-equiv="refresh" content="60"> -->
+
+<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+	<!--begin::Toolbar container-->
+	<div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
+		<!--begin::Page title-->
+		<div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+			<!--begin::Title-->
+			<h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Business In-Active Stories</h1>
+			<!--end::Title-->
+		</div>
+		<!--end::Page title-->
+	</div>
+	<!--end::Toolbar container-->
+</div>
+
+<div id="kt_app_content" class="app-content flex-column-fluid">
+	<!--begin::Content container-->
+	<div id="kt_app_content_container" class="app-container container-xxl">
+		<!--begin::Navbar-->
+			{% include "businesses/business_profile.html" %}
+		<!--end::Navbar-->
+		
+		<!--begin::details View-->
+		<div id="kt_app_content_container" class="app-container container-xxl">
+        <div class="card mb-5 mb-xl-10">
+            <!--begin::Header-->
+            <div class="card-header cursor-pointer">
+				<!--begin::Card title-->
+				<div class="card-title m-0">
+					<h3 class="fw-bold m-0">Business In-Active Stories</h3>
+				</div>
+				<!--end::Card title-->
+				
+			</div>
+            <!--end::Header-->
+            <!--begin::Inactive-Story-Body-->
+            <div class="card-body py-3">
+                <div class="flex-lg-row-fluid">
+                    <!--begin:::Tab content-->
+                    <div class="tab-content" id="myTabContent">
+                        <!--begin:::Tab pane-->
+                        <div class="tab-pane fade show active" id="inactive_stories" role="tabpanel">
+                            <div class="w-content">
+                                <div class="user-content">
+                                    <div class="container">
+                                        <div class="tabs">
+                                            <div class="tab-content">
+                                                <div class="tab tab-stories current">
+                                                    {% if inactive_stories_list %}
+                                                    
+                                                        <ul class="tab-stories-ul gallery-stories">
+                                                            {% for inactive_story in inactive_stories_list %}
+                                                                {% if inactive_story.image %}
+                                                                    <li class="modal-item">
+                                                                        <div class="item"><img src="{{ inactive_story.image.url }}" alt="">
+                                                                            <a>
+                                                                                <p class="show-modal" href="{{ inactive_story.image.url }}" data-slide="0" data-type="photo" data-src="{{ inactive_story.image.url }}" data-title="{{ inactive_story.i_user.get_name }}" data-profile="{{ inactive_story.i_user.profile_picture.url }}" data-location="{{ inactive_story.i_business.name }}" data-caption="{{ inactive_story.caption }}" data-toggle="tooltip" data-placement="top" title="View Story"><i class="fal fa-eye fs-1"></i></p>
+                                                                                <p onclick="location.assign('/businesses/delete-stories-by-admin/{{ inactive_story.id }}/{{ business.id }}/inactive/')" style="margin-left: 10px;" data-toggle="tooltip" data-placement="top" title="Delete Story"><i class="fal fa-trash fs-1"></i></p>
+                                                                            </a>
+                                                                        </div>
+                                                                    </li>
+                                                                {% elif inactive_story.video %}
+                                                                    <li class="modal-item">
+                                                                        <div class="item"><video>
+                                                                                <source src="{{ inactive_story.video.url }}#t=5" type="video/mp4">
+                                                                            </video>
+                                                                            <a>
+                                                                                <p class="show-modal" href="{{ inactive_story.video.url }}" data-slide="0" data-type="video" data-src="{{ inactive_story.video.url }}" data-title="{{ inactive_story.i_user.get_name }}" data-profile="{{ inactive_story.i_user.profile_picture.url }}" data-location="{{ inactive_story.i_business.name }}" data-caption="{{ inactive_story.caption }}" data-toggle="tooltip" data-placement="top" title="View Story"><i class="fal fa-eye fs-1"></i></p>
+                                                                                <p onclick="location.assign('/businesses/delete-stories-by-admin/{{ inactive_story.id }}/{{ business.id }}/inactive/')" style="margin-left: 10px;" data-toggle="tooltip" data-placement="top" title="Delete Story"><i class="fal fa-trash fs-1"></i></p>
+                                                                            </a>
+                                                                        </div>
+                                                                    </li>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </ul>
+                                                    {% else %}
+                                                        <span class="fs-5 text-center d-block mt-5 mb-5">No In-Active stories</span>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="pop-up pop-story" data-slide="">
+                                        <div class="top flex aic jcsb">
+                                            <div class="left flex aic">
+                                                <img class="story-pic">
+                                                <p class="story-name"></p>
+                                            </div>
+                                            <!-- <a class="download">Download</a> -->
+                                            <i class="fal fa-times close"></i>
+                                        </div>
+                                        <div class="pop-content"></div>
+                                        <i class="fal fa-chevron-left"></i>
+                                        <i class="fal fa-chevron-right"></i>
+                                        <div class="caption">
+                                            <p class="story-caption"></p>
+                                        </div>
+                                    </div>
+                                    <div class="md-overlay">
+                                        <i class="fal fa-times close"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end:::Tab content-->
+                </div>
+
+                <div class="col-xl-12">
+                    <nav>
+                      {% if pagination.has_other_pages %}
+                      <ul class="pagination justify-content-end pagination-primary">
+                        {% if pagination.has_previous %}
+                        <li class="page-item"><a class="page-link" href="{% if search %}?page={{ pagination.previous_page_number }}&search={{ search }}{% else %}?page={{ pagination.previous_page_number }}{% endif %}" tabindex="-1"><i class="previous"></i></a></li>
+                        {% else %}
+                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"><i class="previous"></i></a></li>
+                        {% endif %}
+                        {% for i in pagination.paginator.page_range %}
+                          {% if pagination.number == i %}
+                            <li class="page-item active"><a class="page-link">{{ i }}<span class="sr-only">(current)</span></a></li>
+                          {% elif i > pagination.number|add:'-3' and i < pagination.number|add:'3' %}
+                            <li class="page-item"><a class="page-link" href="{% if search %}?page={{ i }}&search={{ search }}{% else %}?page={{ i }}{% endif %}">{{ i }}</a></li>
+                          {% endif %}
+                        {% endfor %}
+                        {% if pagination.has_next %}
+                        <li class="page-item"><a class="page-link" href="{% if search %}?page={{ pagination.next_page_number }}&search={{ search }}{% else %}?page={{ pagination.next_page_number }}{% endif %}" tabindex="-1"><i class="next"></i></a></li>
+                        {% else %}
+                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"><i class="next"></i></a></li>
+                        {% endif %}
+                      </ul>
+                      {% endif %}
+                    </nav>
+                </div>
+            </div>
+            <!--End::Inactive-Story-Body-->
+
+            
+        </div>
+
+    </div>
+		<!--end::details View-->
+
+	</div>
+	<!--end::Content container-->
+</div>
+{% endblock %}
+
+{% block extra_script %}
+
+<script src="{% static 'stories/js/vendor/jquery-3.4.1.min.js' %}"></script>
+<script src="{% static 'stories/js/vendor/axios.min.js' %}"></script>
+<script src="{% static 'stories/js/vendor/jquery.touchSwipe.min.js' %}"></script>
+<script src="{% static 'stories/js/languagesb0f4.js' %}"></script>
+<script src="{% static 'stories/js/main66b1.js' %}"></script>
+
+{% endblock %}

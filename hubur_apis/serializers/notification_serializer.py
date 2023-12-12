@@ -38,10 +38,37 @@ class NotificationSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
     sender_name = serializers.SerializerMethodField()
     content = serializers.SerializerMethodField()
+    is_active = serializers.SerializerMethodField()
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.get('context')
+        super().__init__(*args, **kwargs)
+        
+        try:
+            request = self.context.get('request')
+            if request.user.is_authenticated:
+                if request.user.lang_code == 1:
+                    del self.fields['title_ar']
+                    del self.fields['body_ar']
+                else:
+                    self.fields['title'] = self.fields['title_ar']
+                    self.fields['body'] = self.fields['body_ar']
+
+            else:
+                if request.headers.get('Accept-Language') == str(1):
+                    del self.fields['title_ar']
+                    del self.fields['body_ar']
+                else:
+                    self.fields['title'] = self.fields['title_ar']
+                    self.fields['body'] = self.fields['body_ar']
+
+        except Exception as e:
+            # print(e)
+            pass
 
     class Meta:
         model = models.Notification
-        fields = ('id','user_id','user_name','notification_type','sender_id','sender_name','image','content','title','body','reviewed','action','created_at',)
+        fields = ('id','user_id','user_name','notification_type','code','is_read','sender_id','sender_name','image','content','title', 'title_ar', 'body', 'body_ar','reviewed','action','created_at','is_active',)
 
     def get_user_name(self,obj):
         return obj.user.get_name()
@@ -50,10 +77,24 @@ class NotificationSerializer(serializers.ModelSerializer):
         return obj.sender.get_name()
     
     def get_content(self,obj):
+        request = self.context.get('request')
         if obj.content:
-            return ContentDetailSerializer(obj.content).data
+            return ContentDetailSerializer(obj.content, context={"request": request}).data
         else:
             return {}
     def get_image(self,obj):
         logo_pic = UserPicSerializer(obj.sender).data['profile_picture']
         return logo_pic
+    
+    def get_is_active(self, obj):
+        response = False
+        if obj.content:
+            if obj.content.i_brand:
+                if obj.content.is_active and obj.content.i_business.is_active and obj.content.i_business.i_user.is_active and obj.content.i_brand.is_active:
+                    return True
+            else:
+                if obj.content.is_active and obj.content.i_business.is_active and obj.content.i_business.i_user.is_active:
+                    return True
+            return response
+        else:
+            return obj.sender.is_active
